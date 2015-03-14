@@ -87,7 +87,8 @@ public class UnzipTask extends AsyncTask<Void, Integer, Integer> {
 	@Override
 	protected void onProgressUpdate(Integer... progress) {
 		mUnzipListener.onProgressUpdate(this.progress * 100 / max);
-	}
+        LogUtils.LOGD(TAG, "unzip progress " + (this.progress * 100 / max));
+    }
 
 	@Override
 	protected void onPostExecute(Integer result) {

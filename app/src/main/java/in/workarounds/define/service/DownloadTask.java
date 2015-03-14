@@ -2,6 +2,7 @@ package in.workarounds.define.service;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
@@ -16,11 +17,13 @@ import java.io.OutputStream;
 import in.workarounds.define.api.Client;
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.util.FileUtils;
+import in.workarounds.define.util.LogUtils;
 
 /**
  * Background Async Task to download file
  */
 public class DownloadTask extends AsyncTask<Void, Long, Boolean> {
+    private String TAG = "DownloadTask.class";
     private DownloadListener mDownloadListener;
     private Context mContext;
 
@@ -55,6 +58,7 @@ public class DownloadTask extends AsyncTask<Void, Long, Boolean> {
                     byte[] buff = new byte[1024 * 4];
                     long downloaded = 0;
                     long target = response.body().contentLength();
+                    Log.d(TAG, "target " + target);
 
                     publishProgress(0L, target);
                     while (true) {
@@ -64,12 +68,13 @@ public class DownloadTask extends AsyncTask<Void, Long, Boolean> {
                         }
                         //write buff
                         outputStream.write(buff, 0, readed);
-                        downloaded += readed;
+                        downloaded += (long) readed;
                         publishProgress(downloaded, target);
                         if (isCancelled()) {
                             return false;
                         }
                     }
+                    Log.d(TAG, "target " + target);
                     outputStream.flush();
                     return downloaded == target;
                 } catch (IOException ignore) {
@@ -95,7 +100,7 @@ public class DownloadTask extends AsyncTask<Void, Long, Boolean> {
 
     protected void onProgressUpdate(Long... progress) {
         // setting progress percentage
-        mDownloadListener.onProgressUpdate(progress[0]/progress[1]);
+        mDownloadListener.onProgressUpdate((progress[0] * 100/progress[1]));
     }
 
     /**
