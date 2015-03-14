@@ -1,7 +1,6 @@
 package in.workarounds.define.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -10,9 +9,11 @@ import edu.smu.tspell.wordnet.SynsetType;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import in.workarounds.define.R;
 import in.workarounds.define.util.FileUtils;
+import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
 
-public class WordnetDictionary {
+public class WordnetDictionary implements Dictionary {
+    private static final String TAG = LogUtils.makeLogTag(WordnetDictionary.class);
     private Context mContext;
 
     /**
@@ -33,8 +34,9 @@ public class WordnetDictionary {
      * @param wordForm
      * @return
      */
+    @Override
     public ArrayList<DictResult> getMeanings(String wordForm) {
-        ArrayList<DictResult> results = new ArrayList<DictResult>();
+        ArrayList<DictResult> results = new ArrayList<>();
 
         if (!wordForm.isEmpty()) {
             wordForm = StringUtils.preProcessWord(wordForm);
@@ -44,21 +46,21 @@ public class WordnetDictionary {
 
             // Display the word forms and definitions for synsets retrieved
             if (synsets.length > 0) {
-                for (int i = 0; i < synsets.length; i++) {
-                    String[] synonyms = synsets[i].getWordForms();
-                    String meaning = synsets[i].getDefinition();
-                    String type = typeToString(synsets[i].getType());
-                    String[] usage = synsets[i].getUsageExamples();
+                for (Synset synset : synsets) {
+                    String[] synonyms = synset.getWordForms();
+                    String meaning = synset.getDefinition();
+                    String type = typeToString(synset.getType());
+                    String[] usage = synset.getUsageExamples();
                     DictResult result = new DictResult(wordForm, meaning, type,
                             usage, synonyms);
                     results.add(result);
-                    Log.d("Dictionary", "" + result);
+                    LogUtils.LOGD(TAG, "result: " + result);
                 }
             } else {
-                Log.d("Dictionary", "no meaning found for : " + wordForm);
+                LogUtils.LOGD(TAG, "No meaning found for: " + wordForm);
             }
         } else {
-            Log.d("Dictionary", "no word given");
+            LogUtils.LOGD(TAG, "No word given");
         }
 
         return results;
