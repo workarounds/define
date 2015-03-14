@@ -19,20 +19,22 @@ import java.util.Locale;
 
 import in.workarounds.define.R;
 import in.workarounds.define.model.DictResult;
+import in.workarounds.define.model.Dictionary;
 import in.workarounds.define.model.WordnetDictionary;
 import in.workarounds.define.service.PopupManager;
 import in.workarounds.define.ui.view.FlowLayout;
+import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
 
 public class CardHandler implements OnTouchListener, OnClickListener {
-	public static final String TAG = "CardHandler";
-	private PopupManager mPopupManager;
+    private static final String TAG = LogUtils.makeLogTag(CardHandler.class);
+    private PopupManager mPopupManager;
 	private ViewGroup mCard;
 
 	/**
 	 * instance of dictionary class
 	 */
-	private WordnetDictionary mDictionary;
+	private Dictionary mDictionary;
 
 	/**
 	 * result list

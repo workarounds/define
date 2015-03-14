@@ -9,11 +9,12 @@ import android.util.Log;
 import android.webkit.URLUtil;
 
 import in.workarounds.define.BuildConfig;
+import in.workarounds.define.util.LogUtils;
 
 public class ClipboardService extends Service implements
 		ClipboardManager.OnPrimaryClipChangedListener {
-	public static final String TAG = "ClipboardService";
-	private static boolean isRunning = false;
+    private static final String TAG = LogUtils.makeLogTag(ClipboardService.class);
+    private static boolean isRunning = false;
 
 	@Override
 	public void onCreate() {
