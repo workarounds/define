@@ -17,7 +17,10 @@
         android:layout_height="wrap_content"
         android:indeterminate="false"
         android:max="100"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_above="@+id/download_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/cancel_button"
@@ -25,7 +28,10 @@
         android:layout_height="wrap_content"
         android:onClick="cancelClick"
         android:visibility="gone"
-        android:text="@string/btn_cancel_download" />
+        android:text="@string/btn_cancel_download"
+        android:layout_below="@+id/progress_bar"
+        android:layout_alignRight="@+id/download_button"
+        android:layout_alignEnd="@+id/download_button" />
 
     <EditText
         android:id="@+id/edit_message"
@@ -34,7 +40,6 @@
         android:hint="@string/hint_type_here"
         android:layout_alignBottom="@+id/button_send"
         android:layout_toLeftOf="@+id/button_send"
-        android:layout_toEndOf="@+id/status_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

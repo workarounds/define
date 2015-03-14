@@ -130,8 +130,8 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
             switch (NetworkUtils.checkNetworkStatus(this)) {
                 // using wifi, directly download
                 case NetworkUtils.WIFI:
-                    downloadTask = new DownloadTask(this);
-                    downloadTask.execute(FileUtils.getDictFilePath());
+                    downloadTask = new DownloadTask(this, this);
+                    downloadTask.execute();
                     break;
                 // using 3g, ask user saying 11MB is about to be downloaded
                 case NetworkUtils.MOBILE:
@@ -169,8 +169,8 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         builder.setPositiveButton(R.string.ok,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        downloadTask = new DownloadTask(MainActivity.this);
-                        downloadTask.execute(FileUtils.getDictFilePath());
+                        downloadTask = new DownloadTask(MainActivity.this, MainActivity.this);
+                        downloadTask.execute();
                     }
                 });
         builder.setNegativeButton(R.string.cancel,
@@ -245,7 +245,7 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
      * function called on end of download
      */
     @Override
-    public void onFinishDownload() {
+    public void onFinishDownload(boolean result) {
         new UnzipTask(this).execute();
         TextView statusText = (TextView) findViewById(R.id.status_text);
         statusText.setText("Unzipping status");
@@ -258,9 +258,9 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
      * @param parseInt
      */
     @Override
-    public void onProgressUpdate(int parseInt) {
+    public void onProgressUpdate(long parseInt) {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        progressBar.setProgress(parseInt);
+        progressBar.setProgress((int) parseInt);
     }
 
     /**

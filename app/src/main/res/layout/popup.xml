@@ -36,13 +36,13 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/top_bar" >
 
-            <in.appnow.popup.FlowLayout
+            <in.workarounds.define.ui.view.FlowLayout
                 android:id="@+id/bubble_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/light_gray"
                 android:padding="16dp" >
-            </in.appnow.popup.FlowLayout>
+            </in.workarounds.define.ui.view.FlowLayout>
         </ScrollView>
     </RelativeLayout>
 

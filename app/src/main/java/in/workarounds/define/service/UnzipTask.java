@@ -1,7 +1,6 @@
 package in.workarounds.define.service;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,17 +14,17 @@ import in.workarounds.define.util.LogUtils;
 
 public class UnzipTask extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = LogUtils.makeLogTag(UnzipTask.class);
-    private String _zipFile;
-	private String _location;
-	private int per = 0;
+    private String mZipFile;
+	private String mRootPath;
+	private int progress = 0;
 	private int max = 0;
 	private UnzipListener mUnzipListener;
 
 	public UnzipTask(UnzipListener unzipListener) {
 		this.mUnzipListener = unzipListener;
-		_zipFile = FileUtils.getZipFile().getAbsolutePath();
-		_location = FileUtils.getRootFilePath();
-		_dirChecker("");
+		mZipFile = FileUtils.getZipFile().getAbsolutePath();
+		mRootPath = FileUtils.getRootFilePath();
+		dirChecker("");
 	}
 
 	/**
@@ -40,54 +39,54 @@ public class UnzipTask extends AsyncTask<Void, Integer, Integer> {
 	@Override
 	protected Integer doInBackground(Void... param) {
 		try {
-			ZipFile zip = new ZipFile(_zipFile);
+			ZipFile zip = new ZipFile(mZipFile);
 			max = zip.size();
-			FileInputStream fin = new FileInputStream(_zipFile);
+			FileInputStream fin = new FileInputStream(mZipFile);
 			ZipInputStream zin = new ZipInputStream(fin);
-			ZipEntry ze = null;
-			while ((ze = zin.getNextEntry()) != null) {
-
-				Log.v("Decompress", "Unzipping " + ze.getName());
-				if (ze.isDirectory()) {
-					_dirChecker(ze.getName());
+			ZipEntry zipEntry = null;
+			while ((zipEntry = zin.getNextEntry()) != null) {
+                LogUtils.LOGV(TAG, "Unzipping " + zipEntry.getName());
+				if (zipEntry.isDirectory()) {
+					dirChecker(zipEntry.getName());
 				} else {
-					// Here I am doing the update of my progress bar
+					progress++;
+					publishProgress(progress);
 
-					per++;
-					publishProgress(per);
-
-					FileOutputStream fout = new FileOutputStream(_location
-							+ ze.getName());
+					FileOutputStream outputStream = new FileOutputStream(mRootPath + File.separator
+							+ zipEntry.getName());
 
 					byte[] buf = new byte[4096];
 					int r;
 					while ((r = zin.read(buf)) != -1) {
-						fout.write(buf, 0, r);
+						outputStream.write(buf, 0, r);
 					}
 					zin.closeEntry();
-					fout.close();
+					outputStream.close();
 				}
 			}
 			zin.close();
 			zip.close();
 		} catch (Exception e) {
-			Log.e("Decompress", "unzip", e);
+            LogUtils.LOGE(TAG, "unzip erro", e);
 		}
 
-		return per;
+		return progress;
 	}
 
-	private void _dirChecker(String dir) {
-		File f = new File(_location + dir);
+	private void dirChecker(String dir) {
+		File f = new File(mRootPath + File.separator + dir);
 
 		if (!f.isDirectory()) {
-			f.mkdirs();
+            LogUtils.LOGD(TAG, "Creating file: " + f.getAbsolutePath());
+            if(!f.mkdirs()) {
+                LogUtils.LOGE(TAG, "Unable to create: " + f.getAbsolutePath());
+            }
 		}
 	}
 
 	@Override
 	protected void onProgressUpdate(Integer... progress) {
-		mUnzipListener.onProgressUpdate(per * 100 / max);
+		mUnzipListener.onProgressUpdate(this.progress * 100 / max);
 	}
 
 	@Override
@@ -98,7 +97,7 @@ public class UnzipTask extends AsyncTask<Void, Integer, Integer> {
 
     public interface UnzipListener {
         public void onInitUnzip();
-        public void onProgressUpdate(int progress);
+        public void onProgressUpdate(long progress);
         public void onFinishUnzip();
     }
 }
