@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<in.workarounds.define.ui.view.PopupRoot xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:id="@+id/top_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
+
+        <RelativeLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/darker_gray"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" >
+
+            <ImageButton
+                android:id="@+id/action_copy"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@android:color/transparent"
+                android:padding="8dp"
+                android:src="@drawable/ic_action_copy" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/bubble_card_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/top_bar" >
+
+            <in.appnow.popup.FlowLayout
+                android:id="@+id/bubble_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/light_gray"
+                android:padding="16dp" >
+            </in.appnow.popup.FlowLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/close_area"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/meaning_card"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/close_area"
+        android:layout_below="@id/top_container"
+        android:layout_margin="8dp"
+        android:background="@color/light_gray"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:padding="16dp"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:typeface="serif" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/word" >
+
+            <LinearLayout
+                android:id="@+id/meanings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</in.workarounds.define.ui.view.PopupRoot>

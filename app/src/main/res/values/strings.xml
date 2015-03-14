@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Define</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="wordnet_database_dir">wordnet.database.dir</string>
+
+    <string name="word">Lorem Ipsum</string>
+
+    <string name="selection">We wanted to put together a small corner in the Medium universe that’s maybe a bit like a library, and maybe a bit like a museum, but much more lively, and much more forward-looking</string>
+
+    <string name="ok">Yes</string>
+
+    <string name="cancel">No</string>
+</resources>
