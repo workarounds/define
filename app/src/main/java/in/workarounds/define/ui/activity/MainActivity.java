@@ -1,9 +1,12 @@
 package in.workarounds.define.ui.activity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 import in.workarounds.define.R;
 import in.workarounds.define.model.WordnetDictionary;
@@ -29,13 +34,16 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
 
     private WordnetDictionary dictionary = null;
     private DownloadTask downloadTask;
-
+    private TextToSpeech mTextToSpeechObject;
+    private static final String TTS_ID = "selected_word";
+    private EditText mSelectedWord ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mSelectedWord = (EditText) findViewById(R.id.edit_message);
+        setUpTextToSpeechObject();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -78,13 +87,13 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         FileUtils.createRootFile();
     }
 
-
     @Override
     protected void onStart() {
         startClipboardService();
         super.onStart();
         // The activity is about to become visible.
     }
+
 
     @Override
     protected void onResume() {
@@ -110,6 +119,10 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
     protected void onDestroy() {
         super.onDestroy();
         // The activity is about to be destroyed.
+        if(mTextToSpeechObject!=null) {
+            mTextToSpeechObject.stop();
+            mTextToSpeechObject.shutdown();
+        }
     }
 
     /**
@@ -206,11 +219,39 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
     public void meaningClick(View v) {
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String wordForm = editText.getText().toString();
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            mTextToSpeechObject.speak(wordForm, TextToSpeech.QUEUE_FLUSH, null, TTS_ID);
+        } else {
+            mTextToSpeechObject.speak(wordForm, TextToSpeech.QUEUE_FLUSH, null);
+        }
         if (dictionary != null) {
             dictionary.getMeanings(wordForm);
         }
     }
 
+    public void setAmericanAccent(View v) {
+        String wordForm = mSelectedWord.getText().toString();
+        if(mTextToSpeechObject!=null) {
+            mTextToSpeechObject.setLanguage(Locale.US);
+            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                mTextToSpeechObject.speak(wordForm, TextToSpeech.QUEUE_FLUSH, null, TTS_ID);
+            } else {
+                mTextToSpeechObject.speak(wordForm, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        }
+    }
+
+    public void setBritishAccent(View v) {
+        String wordForm = mSelectedWord.getText().toString();
+        if(mTextToSpeechObject!=null) {
+            mTextToSpeechObject.setLanguage(Locale.UK);
+            if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                mTextToSpeechObject.speak(wordForm, TextToSpeech.QUEUE_FLUSH, null, TTS_ID);
+            } else {
+                mTextToSpeechObject.speak(wordForm, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        }
+    }
     /**
      * hides the download button and shows download progress
      */
@@ -287,6 +328,17 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         Toast toast = Toast.makeText(this, "starting unzipping",
                 Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    private void setUpTextToSpeechObject() {
+        mTextToSpeechObject = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    mTextToSpeechObject.setLanguage(Locale.UK);
+                }
+            }
+        });
     }
 
 }
