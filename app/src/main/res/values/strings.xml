@@ -7,10 +7,13 @@
     <string name="wordnet_database_dir">wordnet.database.dir</string>
 
     <string name="word">Lorem Ipsum</string>
-
     <string name="selection">We wanted to put together a small corner in the Medium universe that’s maybe a bit like a library, and maybe a bit like a museum, but much more lively, and much more forward-looking</string>
 
     <string name="ok">Yes</string>
-
     <string name="cancel">No</string>
+
+    <string name="btn_download_data">Download Data</string>
+    <string name="btn_cancel_download">Cancel Download</string>
+    <string name="btn_find_meaning">Find Meaning</string>
+    <string name="hint_type_here">Type the word here</string>
 </resources>
