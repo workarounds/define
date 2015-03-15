@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import in.workarounds.define.util.FileUtils;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.NetworkUtils;
 import in.workarounds.define.util.NotificationUtils;
+import in.workarounds.define.util.PrefUtils;
 
 
 public class MainActivity extends ActionBarActivity implements DownloadTask.DownloadListener, UnzipTask.UnzipListener {
@@ -40,11 +43,13 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
     private TextToSpeech mTextToSpeechObject;
     private static final String TTS_ID = "selected_word";
     private EditText mSelectedWord ;
+    private CheckBox mIsSilentMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mSelectedWord = (EditText) findViewById(R.id.edit_message);
+        setup();
         setUpTextToSpeechObject();
 
         ActionBar actionBar = getSupportActionBar();
@@ -337,6 +342,17 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         Toast toast = Toast.makeText(this, "starting unzipping",
                 Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    private void setup() {
+        mSelectedWord = (EditText) findViewById(R.id.edit_message);
+        mIsSilentMode = (CheckBox) findViewById(R.id.cb_is_silent_mode);
+        mIsSilentMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                PrefUtils.setIsSilentMode(MainActivity.this, isChecked);
+            }
+        });
     }
 
     private void setUpTextToSpeechObject() {
