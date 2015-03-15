@@ -31,7 +31,7 @@
         </service>
 
         <service
-            android:name="in.workarounds.define.service.PopupManager"
+            android:name=".service.ActionResolver"
             android:enabled="true"
             android:exported="false">
         </service>

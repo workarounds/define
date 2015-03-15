@@ -28,8 +28,8 @@ import in.workarounds.define.util.LogUtils;
  * @author manidesto
  * 
  */
-public class PopupManager extends Service implements PopupRoot.OnCloseDialogsListener {
-    private static final String TAG = LogUtils.makeLogTag(PopupManager.class);
+public class ActionResolver extends Service implements PopupRoot.OnCloseDialogsListener {
+    private static final String TAG = LogUtils.makeLogTag(ActionResolver.class);
 
     public static final String INTENT_EXTRA_CLIPTEXT = "clip_text";
 

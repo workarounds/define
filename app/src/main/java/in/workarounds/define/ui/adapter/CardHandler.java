@@ -20,14 +20,14 @@ import in.workarounds.define.R;
 import in.workarounds.define.model.DictResult;
 import in.workarounds.define.model.Dictionary;
 import in.workarounds.define.model.WordnetDictionary;
-import in.workarounds.define.service.PopupManager;
+import in.workarounds.define.service.ActionResolver;
 import in.workarounds.define.ui.view.FlowLayout;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
 
 public class CardHandler implements OnTouchListener, OnClickListener {
     private static final String TAG = LogUtils.makeLogTag(CardHandler.class);
-    private PopupManager mPopupManager;
+    private ActionResolver mActionResolver;
 	private ViewGroup mCard;
 
 	/**
@@ -40,15 +40,15 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	 */
 	private DictResult[] mResultList;
 
-	public CardHandler(PopupManager popupManager) {
-		mPopupManager = popupManager;
-		mCard = mPopupManager.getBubbleCardView();
-		mDictionary = new WordnetDictionary(mPopupManager);
+	public CardHandler(ActionResolver actionResolver) {
+		mActionResolver = actionResolver;
+		mCard = mActionResolver.getBubbleCardView();
+		mDictionary = new WordnetDictionary(mActionResolver);
 		initialize();
 	}
 
 	private void initialize() {
-		View root = mPopupManager.getRootView();
+		View root = mActionResolver.getRootView();
 		View copyButton = root
 				.findViewById((R.id.action_copy));
 		copyButton.setOnClickListener(this);
@@ -62,7 +62,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	 * @param words array containing each word in the text of the ClipData
 	 */
 	public void showBubbles(String[] words) {
-		FlowLayout card = (FlowLayout) mPopupManager.getBubbleCardView();
+		FlowLayout card = (FlowLayout) mActionResolver.getBubbleCardView();
 		card.removeAllViews();
 
 		for (String word : words) {
@@ -88,7 +88,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 				}
 			}
 		}
-		mPopupManager.setBubbleCardScrollHeight();
+		mActionResolver.setBubbleCardScrollHeight();
 	}
 
 	/**
@@ -102,11 +102,9 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	 *            FlowLayout, false otherwise
 	 */
 	private void addTextView(String text, boolean newLine) {
-		FlowLayout card = (FlowLayout) mPopupManager.getBubbleCardView();
+		FlowLayout card = (FlowLayout) mActionResolver.getBubbleCardView();
 
-		Resources res = mPopupManager.getResources();
-//		int horizontal_spacing = res
-//				.getDimensionPixelSize(R.dimen.bubble_horizontal_spacing);
+		Resources res = mActionResolver.getResources();
 		int vertical_spacing = res
 				.getDimensionPixelSize(R.dimen.bubble_vertical_spacing);
         int horizontal_spacing = 0;
@@ -116,7 +114,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 		FlowLayout.LayoutParams paramsNewLine = new FlowLayout.LayoutParams(
 				horizontal_spacing, vertical_spacing, true);
 
-		LayoutInflater inflater = mPopupManager.getInflater();
+		LayoutInflater inflater = mActionResolver.getInflater();
 
 		View v = inflater.inflate(R.layout.text_bubble, card, false);
 		TextView tv = (TextView) v.findViewById(R.id.text_bubble);
@@ -137,7 +135,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	public void showMeanings(String wordForm) {
 		mResultList = new DictResult[] {};
 
-		ViewGroup meaningCard = mPopupManager.getMeaningCard();
+		ViewGroup meaningCard = mActionResolver.getMeaningCard();
 		meaningCard.setVisibility(View.VISIBLE);
 
 		ViewGroup meanings = (ViewGroup) meaningCard
@@ -162,7 +160,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	private void addMeaningsToScrollView(ViewGroup meanings) {
 		meanings.removeAllViews();
 		for (DictResult dr : mResultList) {
-			View meaningRow = mPopupManager.getInflater().inflate(
+			View meaningRow = mActionResolver.getInflater().inflate(
 					R.layout.meaning_row, meanings, false);
 			TextView def = (TextView) meaningRow.findViewById(R.id.definition);
 			def.setText(dr.getMeaning());
@@ -247,7 +245,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	}
 
 	private void clearTags() {
-		ViewGroup card = mPopupManager.getBubbleCardView();
+		ViewGroup card = mActionResolver.getBubbleCardView();
 		int n = card.getChildCount();
 		for (int i = 0; i < n; i++) {
 			View v = card.getChildAt(i);
@@ -256,7 +254,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	}
 
 	private void clearSelected() {
-		ViewGroup card = mPopupManager.getBubbleCardView();
+		ViewGroup card = mActionResolver.getBubbleCardView();
 		int n = card.getChildCount();
 		for (int i = 0; i < n; i++) {
 			View v = card.getChildAt(i);
@@ -326,7 +324,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	}
 
 	private String extractTextFromCard() {
-		ViewGroup card = mPopupManager.getBubbleCardView();
+		ViewGroup card = mActionResolver.getBubbleCardView();
 		int n = card.getChildCount();
 		String extractedText = "";
 		for (int i = 0; i < n; i++) {
@@ -349,7 +347,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	}
 
 	private void clipText(String text) {
-		ClipboardManager clipboardManager = (ClipboardManager) mPopupManager
+		ClipboardManager clipboardManager = (ClipboardManager) mActionResolver
 				.getSystemService(Context.CLIPBOARD_SERVICE);
 		ClipData clip = ClipData.newPlainText("RECOPY", text);
 		clipboardManager.setPrimaryClip(clip);
