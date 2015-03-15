@@ -1,13 +1,14 @@
 package in.workarounds.define.ui.activity;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -45,6 +46,11 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         setContentView(R.layout.activity_main);
         mSelectedWord = (EditText) findViewById(R.id.edit_message);
         setUpTextToSpeechObject();
+
+        ActionBar actionBar = getSupportActionBar();
+        int themeColor = getResources().getColor(R.color.theme_primary);
+        Drawable bg = new ColorDrawable(themeColor);
+        actionBar.setBackgroundDrawable(bg);
     }
 
     @Override
