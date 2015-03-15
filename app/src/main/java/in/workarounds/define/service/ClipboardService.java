@@ -10,6 +10,7 @@ import android.webkit.URLUtil;
 
 import in.workarounds.define.BuildConfig;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.util.PrefUtils;
 
 public class ClipboardService extends Service implements
 		ClipboardManager.OnPrimaryClipChangedListener {
@@ -49,7 +50,8 @@ public class ClipboardService extends Service implements
 	@Override
 	public void onPrimaryClipChanged() {
 		if(!PopupManager.isPopupShown()) showPopupIfClipIsText();
-	}
+        LogUtils.LOGD(TAG, "isSilentMode " + PrefUtils.getIsSilentMode(this));
+    }
 
 	private void showPopupIfClipIsText() {		
 		ClipData clipData = getClipboardManager().getPrimaryClip();

@@ -21,4 +21,6 @@
 
     <string name="hint_multiple_words_selected">Multiple words selected. Click to choose a single word</string>
     <string name="hint_no_meaning">No meaning found</string>
+
+    <string name="silent_mode">Silent Mode</string>
 </resources>
