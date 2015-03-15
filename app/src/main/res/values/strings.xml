@@ -16,4 +16,6 @@
     <string name="btn_cancel_download">Cancel Download</string>
     <string name="btn_find_meaning">Find Meaning</string>
     <string name="hint_type_here">Type the word here</string>
+    <string name="btn_set_american">American</string>
+    <string name="btn_set_british">British</string>
 </resources>
