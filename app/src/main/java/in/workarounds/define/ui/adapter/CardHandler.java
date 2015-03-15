@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 
 	private void initialize() {
 		View root = mPopupManager.getRootView();
-		ImageButton copyButton = (ImageButton) root
+		View copyButton = root
 				.findViewById((R.id.action_copy));
 		copyButton.setOnClickListener(this);
 	}
@@ -182,6 +181,12 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 				uses += use + ", ";
 			}
 			usage.setText(uses);
+            /*Making usage text view disappear if the length of `uses` is 0*/
+            if(uses.length() == 0){
+                usage.setVisibility(View.GONE);
+            }else{
+                usage.setVisibility(View.VISIBLE);
+            }
 
 			def.setText(dr.getMeaning());
 			meanings.addView(meaningRow);
