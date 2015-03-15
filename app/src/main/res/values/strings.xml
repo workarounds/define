@@ -11,9 +11,12 @@
 
     <string name="ok">Yes</string>
     <string name="cancel">No</string>
+    <string name="close">CLOSE</string>
 
     <string name="btn_download_data">Download Data</string>
     <string name="btn_cancel_download">Cancel Download</string>
     <string name="btn_find_meaning">Find Meaning</string>
     <string name="hint_type_here">Type the word here</string>
+
+    <string name="label_synonyms">synonyms : </string>
 </resources>

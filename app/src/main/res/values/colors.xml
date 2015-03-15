@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="light_gray">#FFEFEFEF</color>
     <color name="dim">#80000000</color>
     <color name="light_blue">#FF91DEFF</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <!--Grays-->
+    <color name="dark_gray">#444444</color>
+    <color name="medium_gray">#777777</color>
+    <color name="light_gray">#AAAAAA</color>
 </resources>
