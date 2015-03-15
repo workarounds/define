@@ -2,6 +2,7 @@ package in.workarounds.define.ui.activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -27,6 +28,7 @@ import in.workarounds.define.service.UnzipTask;
 import in.workarounds.define.util.FileUtils;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.NetworkUtils;
+import in.workarounds.define.util.NotificationUtils;
 
 
 public class MainActivity extends ActionBarActivity implements DownloadTask.DownloadListener, UnzipTask.UnzipListener {
@@ -217,8 +219,7 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
      * @param v
      */
     public void meaningClick(View v) {
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String wordForm = editText.getText().toString();
+        String wordForm = mSelectedWord.getText().toString();
         if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
             mTextToSpeechObject.speak(wordForm, TextToSpeech.QUEUE_FLUSH, null, TTS_ID);
         } else {
@@ -227,6 +228,8 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         if (dictionary != null) {
             dictionary.getMeanings(wordForm);
         }
+        Intent intent = new Intent(this, MainActivity.class);
+        NotificationUtils.setNotification(this, intent);
     }
 
     public void setAmericanAccent(View v) {

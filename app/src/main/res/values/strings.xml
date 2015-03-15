@@ -18,4 +18,7 @@
     <string name="hint_type_here">Type the word here</string>
     <string name="btn_set_american">American</string>
     <string name="btn_set_british">British</string>
+
+    <string name="hint_multiple_words_selected">Multiple words selected. Click to choose a single word</string>
+    <string name="hint_no_meaning">No meaning found</string>
 </resources>
