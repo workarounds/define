@@ -1,6 +1,7 @@
 package in.workarounds.define.model;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,13 @@ public class WordnetDictionary implements Dictionary {
         if (!wordForm.isEmpty()) {
             wordForm = StringUtils.preProcessWord(wordForm);
             // Get the synsets containing the wrod form
-            WordNetDatabase database = WordNetDatabase.getFileInstance();
+            WordNetDatabase database;
+            try {
+                database = WordNetDatabase.getFileInstance();
+            } catch (Exception e){
+                Toast.makeText(mContext, "No dictionary found", Toast.LENGTH_SHORT).show();
+                return results;
+            }
             Synset[] synsets = database.getSynsets(wordForm);
 
             // Display the word forms and definitions for synsets retrieved
