@@ -52,6 +52,7 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 		View copyButton = root
 				.findViewById((R.id.action_copy));
 		copyButton.setOnClickListener(this);
+        root.findViewById(R.id.iv_define_icon).setOnClickListener(this);
 	}
 
 	/**
