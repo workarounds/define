@@ -51,7 +51,7 @@ public class WordnetDictionary implements Dictionary {
             }
             Synset[] synsets = database.getSynsets(wordForm);
 
-            // Display the word forms and definitions for synsets retrieved
+            // Display the word forms and definitions for synset retrieved
             if (synsets.length > 0) {
                 for (Synset synset : synsets) {
                     String[] synonyms = synset.getWordForms();
