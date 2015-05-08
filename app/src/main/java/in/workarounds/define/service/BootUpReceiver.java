@@ -3,13 +3,15 @@ package in.workarounds.define.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+
+import in.workarounds.define.util.LogUtils;
 
 public class BootUpReceiver extends BroadcastReceiver {
+	private static final String TAG = LogUtils.makeLogTag(BootUpReceiver.class);
 
 	@Override
 	public void onReceive(Context arg0, Intent arg1) {
-		Log.d("testing", "recieved broadcast");
+		LogUtils.LOGD(TAG, "Received broadcast");
 		boolean serviceUp = ClipboardService.isRunning();
 		if(!serviceUp){
 			Intent intent = new Intent(arg0, ClipboardService.class);
