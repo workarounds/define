@@ -68,6 +68,8 @@ public class ClipboardService extends Service implements
             Intent intent = new Intent(this, PopupManager.class);
             intent.putExtra(PopupManager.INTENT_EXTRA_CLIPTEXT, text);
             getBaseContext().startService(intent);
+//            Intent intent = new Intent(this, TestUIService.class);
+//            getBaseContext().startService(intent);
         }
     }
 }

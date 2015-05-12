@@ -36,6 +36,12 @@
             android:exported="false">
         </service>
 
+        <service
+            android:name="in.workarounds.define.service.TestUIService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
         <receiver
             android:name="in.workarounds.define.service.BootUpReceiver"
             android:enabled="true"
