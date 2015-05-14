@@ -9,4 +9,11 @@
 
     </style>
 
+    <style name="BaseHeader" parent="TextAppearance.AppCompat">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">@dimen/font_medium</item>
+        <item name="android:layout_margin">@dimen/margin_regular</item>
+    </style>
+
 </resources>

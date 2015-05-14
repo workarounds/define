@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import in.workarounds.define.BuildConfig;
 import in.workarounds.define.R;
 import in.workarounds.define.model.WordnetDictionary;
 import in.workarounds.define.service.ClipboardService;
@@ -61,7 +63,11 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        if(BuildConfig.DEBUG){
+            inflater.inflate(R.menu.menu_debug, menu);
+        }
         return true;
     }
 
@@ -73,9 +79,14 @@ public class MainActivity extends ActionBarActivity implements DownloadTask.Down
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_test:
+                startActivity(new Intent(this, TestActivity.class));
+                return true;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
