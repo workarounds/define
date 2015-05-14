@@ -1,7 +1,6 @@
 package in.workarounds.define.service;
 
 import android.content.Intent;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import in.workarounds.define.R;
@@ -22,27 +21,37 @@ public class TestUIService extends UIService{
     }
 
     @Override
-    protected View onCreateBubble() {
-        View bubbleView = LayoutInflater.from(this).inflate(R.layout.layout_test_bubble, null, false);
-        bubbleView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleCard();
-            }
-        });
-        return bubbleView;
+    protected void onCreateBubble() {
+        super.onCreateBubble();
+        setBubbleView(R.layout.layout_test_bubble);
     }
 
     @Override
-    protected View onCreateCard() {
-        View cardView = LayoutInflater.from(this).inflate(R.layout.layout_test_card, null, false);
+    protected void onBubbleCreated(View bubbleView) {
+        super.onBubbleCreated(bubbleView);
+        bubbleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToState(STATE_CARD);
+            }
+        });
+    }
+
+    @Override
+    protected void onCreateCard() {
+        super.onCreateCard();
+        setCardView(R.layout.layout_test_card);
+    }
+
+    @Override
+    protected void onCardCreated(View cardView) {
+        super.onCardCreated(cardView);
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopSelf();
+                goToState(STATE_WAITING);
             }
         });
-        return cardView;
     }
 
     private void toggleCard(){

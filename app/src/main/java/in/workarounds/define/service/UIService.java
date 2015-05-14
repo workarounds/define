@@ -5,10 +5,17 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.IntDef;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.FrameLayout;
 
 import in.workarounds.define.util.LogUtils;
 
@@ -54,7 +61,12 @@ public abstract class UIService extends Service {
      */
     public static final int STATE_CARD = 2;
 
-    private int mState = STATE_WAITING;
+    @IntDef({STATE_WAITING, STATE_BUBBLE, STATE_CARD})
+    public @interface UIState {
+    }
+
+    private @UIState
+    int mState = STATE_WAITING;
 
     private WindowManager mWindowManager;
 
@@ -62,13 +74,18 @@ public abstract class UIService extends Service {
 
     private View mBubbleView;
 
+    private @LayoutRes int mBubbleViewResId;
+
     private View mCardView;
+
+    private @LayoutRes int mCardViewResId;
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    @UIState
     public int getState(){
         return mState;
     }
@@ -87,7 +104,7 @@ public abstract class UIService extends Service {
         goToState(STATE_WAITING);
     }
 
-    protected void goToState(int state){
+    protected void goToState(@UIState int state){
         switch (mState){
             case STATE_WAITING:
                 goToStateFromWaiting(state);
@@ -104,26 +121,45 @@ public abstract class UIService extends Service {
         mState = state;
     }
 
-    protected abstract View onCreateBubble();
-
-    protected void onBubbleCreated(){
-
+    protected void onCreateBubble(){
     }
 
-    protected abstract View onCreateCard();
-
-    protected void onCardCreated(){
-
+    @Nullable
+    protected View onCreateBubbleView(){
+        return null;
     }
 
-    protected void onResumeCard(Bundle savedInstaceState){
-
+    protected void onBubbleCreated(View bubbleView){
     }
 
-    protected void onHideCard(Bundle savedInstanceState){
-
+    protected void setBubbleView(@LayoutRes int bubbleViewResId){
+        mBubbleViewResId = bubbleViewResId;
+        mBubbleView = LayoutInflater.from(this).inflate(mBubbleViewResId, getFakeRoot(), false);
     }
 
+    protected void onCreateCard(){
+    }
+
+    @Nullable
+    protected View onCreateCardView(){
+        return null;
+    }
+
+    protected void onCardCreated(View cardView){
+    }
+
+    protected void setCardView(@LayoutRes int cardViewResId){
+        mCardViewResId = cardViewResId;
+        mCardView = LayoutInflater.from(this).inflate(mCardViewResId, getFakeRoot(), false);
+    }
+
+    protected void onResumeCard(@NonNull Bundle savedInstaceState){
+    }
+
+    protected void onHideCard(@NonNull Bundle savedInstanceState){
+    }
+
+    @NonNull
     protected LayoutParams getBubbleParams(){
         LayoutParams params = new LayoutParams();
         params.type = LayoutParams.TYPE_SYSTEM_ALERT;
@@ -137,6 +173,7 @@ public abstract class UIService extends Service {
         return params;
     }
 
+    @NonNull
     protected LayoutParams getCardParams(){
         LayoutParams params = new LayoutParams();
         params.type = LayoutParams.TYPE_PRIORITY_PHONE;
@@ -148,7 +185,7 @@ public abstract class UIService extends Service {
         return params;
     }
 
-    private void goToStateFromWaiting(int state){
+    private void goToStateFromWaiting(@UIState int state){
         switch (state){
             case STATE_WAITING:
                 LogUtils.LOGD(TAG, "Already in waiting state");
@@ -166,7 +203,7 @@ public abstract class UIService extends Service {
         }
     }
 
-    private void goToStateFromBubble(int state){
+    private void goToStateFromBubble(@UIState int state){
         switch (state) {
             case STATE_WAITING:
                 removeBubble();
@@ -183,7 +220,7 @@ public abstract class UIService extends Service {
         }
     }
 
-    private void goToStateFromCard(int state){
+    private void goToStateFromCard(@UIState int state){
         switch (state){
             case STATE_WAITING:
                 removeCard();
@@ -202,18 +239,37 @@ public abstract class UIService extends Service {
     }
 
     private void addBubble(){
-        mBubbleView = onCreateBubble();
+        onCreateBubble();
+        View bubbleView = onCreateBubbleView();
+        if(bubbleView != null) {
+            mBubbleView = bubbleView;
+        }
+
+        if(mBubbleView == null) {
+            return;
+        }
+
         LayoutParams bubbleParams = getBubbleParams();
         mWindowManager.addView(mBubbleView, bubbleParams);
-        onBubbleCreated();
+        onBubbleCreated(mBubbleView);
     }
 
     private void addCard(){
-        mCardView = onCreateCard();
+        onCreateCard();
+        View cardView = onCreateCardView();
+        if(cardView != null) {
+            mCardView = cardView;
+        }
+
+        if(mCardView == null) {
+            //TODO: throw an exception?
+            return;
+        }
+
         LayoutParams cardParams = getCardParams();
         mWindowManager.addView(mCardView, cardParams);
         mCardView.requestFocus();
-        onCardCreated();
+        onCardCreated(mCardView);
         onResumeCard(mSavedInstanceState);
     }
 
@@ -226,4 +282,8 @@ public abstract class UIService extends Service {
         mWindowManager.removeView(mBubbleView);
     }
 
+    @NonNull
+    private ViewGroup getFakeRoot(){
+        return new FrameLayout(this);
+    }
 }
