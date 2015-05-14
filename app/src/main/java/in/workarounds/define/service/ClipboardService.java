@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.webkit.URLUtil;
 
+import in.workarounds.define.ui.activity.TestActivity;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.util.PrefUtils;
 
 public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
@@ -65,11 +67,18 @@ public class ClipboardService extends Service implements
 
     private void startActionResolver(String text) {
         if (text != null) {
-            Intent intent = new Intent(this, PopupManager.class);
+            Intent intent;
+            boolean useUIService = PrefUtils.getSharedPreferences(this)
+                    .getBoolean(TestActivity.KEY_USE_UI_SERVICE, false);
+            if(useUIService) {
+                intent = new Intent(this, TestUIService.class);
+                getBaseContext().startService(intent);
+                return;
+            }
+
+            intent = new Intent(this, PopupManager.class);
             intent.putExtra(PopupManager.INTENT_EXTRA_CLIPTEXT, text);
             getBaseContext().startService(intent);
-//            Intent intent = new Intent(this, TestUIService.class);
-//            getBaseContext().startService(intent);
         }
     }
 }

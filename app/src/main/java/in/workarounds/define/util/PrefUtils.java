@@ -2,7 +2,6 @@ package in.workarounds.define.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * Created by mouli on 15/3/15.
