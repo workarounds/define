@@ -1,23 +1,29 @@
 package in.workarounds.define.model;
 
+import android.text.TextUtils;
+
+import java.util.List;
+
+import in.workarounds.define.util.StringUtils;
+
 /**
  * result object of the dictionary, the following
  * are the properties of the object:
  * String word
  * String meaning
  * String type
- * String[] usage
- * String[] synonyms
+ * List usage
+ * List synonyms
  */
 public class DictResult {
 	private String word;
 	private String meaning;
-	private String[] synonyms;
+	private List<String> synonyms;
 	private String type;
-	private String[] usage;
+	private List<String> usage;
 
-	public DictResult(String word, String meaning, String type, String[] usage,
-                      String[] synonyms) {
+	public DictResult(String word, String meaning, String type,  List<String> usage,
+                      List<String> synonyms) {
 		this.word = word;
 		this.meaning = meaning;
 		this.usage = usage;
@@ -32,14 +38,10 @@ public class DictResult {
 		result += "Meaning: " + meaning + "\n";
 		result += "Type: " + type + "\n";
 		result += "Synonyms: ";
-		for (String syn : synonyms) {
-			result += syn + ", ";
-		}
+        result += TextUtils.join(", ",synonyms);
 		result += "\n";
 		result += "Usage: ";
-		for (String use : usage) {
-			result += use + ", ";
-		}
+        result += TextUtils.join(", ",usage);
 		return result;
 	}
 
@@ -59,11 +61,11 @@ public class DictResult {
 		this.meaning = meaning;
 	}
 
-	public String[] getSynonyms() {
+	public List<String> getSynonyms() {
 		return synonyms;
 	}
 
-	public void setSynonyms(String[] synonyms) {
+	public void setSynonyms( List<String> synonyms) {
 		this.synonyms = synonyms;
 	}
 
@@ -75,11 +77,11 @@ public class DictResult {
 		this.type = type;
 	}
 
-	public String[] getUsage() {
+	public  List<String> getUsage() {
 		return usage;
 	}
 
-	public void setUsage(String[] usage) {
+	public void setUsage( List<String> usage) {
 		this.usage = usage;
 	}
 }

@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -170,18 +172,17 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 			TextView type = (TextView) meaningRow
 					.findViewById(R.id.meaning_type);
 			type.setText(dr.getType());
+            LinearLayout synonyms_layout = (LinearLayout) meaningRow.findViewById(R.id.synonyms_layout);
 			TextView synonyms = (TextView) meaningRow
 					.findViewById(R.id.synonyms);
-			String syns = "";
-			for (String syn : dr.getSynonyms()) {
-				syns += syn + ", ";
-			}
-			synonyms.setText(syns);
+            String syns = TextUtils.join(", ", dr.getSynonyms());
+            synonyms.setText(syns);
+            /*Making synonyms text view appear if the length of `syns` is > 0*/
+            if(syns.length() > 0){
+                synonyms_layout.setVisibility(View.VISIBLE);
+            }
 			TextView usage = (TextView) meaningRow.findViewById(R.id.usage);
-			String uses = "";
-			for (String use : dr.getUsage()) {
-				uses += use + ", ";
-			}
+			String uses = TextUtils.join(", ",dr.getUsage());
 			usage.setText(uses);
             /*Making usage text view disappear if the length of `uses` is 0*/
             if(uses.length() == 0){
