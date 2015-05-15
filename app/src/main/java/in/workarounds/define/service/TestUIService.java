@@ -1,7 +1,9 @@
 package in.workarounds.define.service;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.WindowManager;
 
 import in.workarounds.define.R;
 
@@ -37,6 +39,14 @@ public class TestUIService extends UIService{
         });
     }
 
+    @NonNull
+    @Override
+    protected WindowManager.LayoutParams getBubbleParams() {
+        WindowManager.LayoutParams params = super.getBubbleParams();
+        params.windowAnimations = R.style.BubbleAnimations;
+        return params;
+    }
+
     @Override
     protected void onCreateCard() {
         super.onCreateCard();
@@ -52,6 +62,14 @@ public class TestUIService extends UIService{
                 goToState(STATE_WAITING);
             }
         });
+    }
+
+    @NonNull
+    @Override
+    protected WindowManager.LayoutParams getCardParams() {
+        WindowManager.LayoutParams params = super.getCardParams();
+        params.windowAnimations = R.style.CardAnimations;
+        return params;
     }
 
     private void toggleCard(){

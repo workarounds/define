@@ -16,4 +16,13 @@
         <item name="android:layout_margin">@dimen/margin_regular</item>
     </style>
 
+    <style name="BubbleAnimations">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_left</item>
+    </style>
+
+    <style name="CardAnimations">
+        <item name="android:windowEnterAnimation">@anim/card_entry</item>
+        <item name="android:windowExitAnimation">@anim/card_exit</item>
+    </style>
 </resources>
