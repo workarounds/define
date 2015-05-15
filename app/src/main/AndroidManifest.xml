@@ -40,7 +40,7 @@
         </service>
 
         <service
-            android:name="in.workarounds.define.service.TestUIService"
+            android:name="in.workarounds.define.service.DefineUIService"
             android:enabled="true"
             android:exported="false">
         </service>
