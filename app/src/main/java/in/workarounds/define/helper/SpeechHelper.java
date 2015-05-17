@@ -10,6 +10,17 @@ import in.workarounds.define.util.LogUtils;
 
 /**
  * Created by madki on 14/05/15.
+ * Helps manage a TextToSpeech object and handles switching locale for
+ * British and American pronunciations.
+ * <p>
+ *     How to use: <br/>
+ *     create the instance of SpeechHelper in onCreate (it takes time to create the object)
+ *     use speechHelper.speakBritish() and speechHelper.speakAmerican()
+ *     call speechHelper.destroy() in onDestroy() of the activity or service
+ * </p>
+ * <p>
+ *     TODO check availability of TTS service and show page to install if not present
+ * </p>
  */
 public class SpeechHelper {
     private static final String TAG = LogUtils.makeLogTag(SpeechHelper.class);
