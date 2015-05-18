@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dm_title">Define</string>
+    <string name="dm_description">Downloading additional data</string>
+
+    <!-- wordnet strings -->
+    <string name="dm_title_wordnet">Wordnet Dictionary</string>
+    <string name="dm_description_wordnet">Downloading Wordnet Dictionary for Define</string>
+    <string name="dm_url_wordnet">http://workarounds.in/dict.zip</string>
+</resources>
