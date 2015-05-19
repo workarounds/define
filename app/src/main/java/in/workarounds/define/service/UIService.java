@@ -104,6 +104,14 @@ public abstract class UIService extends Service {
         goToState(STATE_WAITING);
     }
 
+    protected View getBubbleView(){
+        return mBubbleView;
+    }
+
+    protected View getCardView(){
+        return mCardView;
+    }
+
     protected void goToState(@UIState int state){
         switch (mState){
             case STATE_WAITING:

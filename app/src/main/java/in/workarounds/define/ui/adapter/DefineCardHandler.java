@@ -1,7 +1,5 @@
 package in.workarounds.define.ui.adapter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
@@ -9,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,7 +20,7 @@ import in.workarounds.define.ui.view.FlowLayout;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
 
-public class DefineCardHandler implements OnTouchListener, OnClickListener {
+public class DefineCardHandler implements OnTouchListener{
     private static final String TAG = LogUtils.makeLogTag(DefineCardHandler.class);
     private Context mContext;
     private View mRoot;
@@ -42,10 +39,6 @@ public class DefineCardHandler implements OnTouchListener, OnClickListener {
         mCard.setVisibility(View.GONE);
         mCard.setOnTouchListener(this);
 
-        View copyButton = mRoot
-                .findViewById((R.id.action_copy));
-        copyButton.setOnClickListener(this);
-        mRoot.findViewById(R.id.iv_define_icon).setOnClickListener(this);
     }
 
     /**
@@ -298,7 +291,7 @@ public class DefineCardHandler implements OnTouchListener, OnClickListener {
         return null;
     }
 
-    private String extractTextFromCard() {
+    public String extractTextFromCard() {
         ViewGroup card = mCard;
         int n = card.getChildCount();
         String extractedText = "";
@@ -311,22 +304,6 @@ public class DefineCardHandler implements OnTouchListener, OnClickListener {
             extractedText = extractedText.substring(0,
                     extractedText.length() - 1);
         return extractedText;
-    }
-
-    @Override
-    public void onClick(View v) {
-        String extractedText = extractTextFromCard();
-        if (!extractedText.isEmpty()) {
-            clipText(extractedText);
-        }
-    }
-
-    private void clipText(String text) {
-        ClipboardManager clipboardManager = (ClipboardManager) mContext
-                .getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("RECOPY", text);
-        clipboardManager.setPrimaryClip(clip);
-        // Give some feedback
     }
 
     /**

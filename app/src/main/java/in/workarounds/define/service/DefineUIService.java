@@ -1,7 +1,11 @@
 package in.workarounds.define.service;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,26 +30,28 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
     private String mClipText;
     private Dictionary mDictionary;
     private String mWordForm;
-    private ArrayList<DictResult> mResultsList;
-    private boolean mResultListUpdated = false;
+    private boolean mIgnoreIntent = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mDictionary = new WordnetDictionary(this);
+        setBubbleView(R.layout.layout_test_bubble);
+        setCardView(R.layout.card_define_service);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        goToState(STATE_BUBBLE);
-        mClipText = intent.getStringExtra(INTENT_EXTRA_CLIPTEXT);
+        if(!mIgnoreIntent){
+            goToState(STATE_BUBBLE);
+            mClipText = intent.getStringExtra(INTENT_EXTRA_CLIPTEXT);
+            View cardView = getCardView();
+            initCard(cardView);
+            handleClipText(mClipText);
+        } else {
+            mIgnoreIntent = false;
+        }
         return START_NOT_STICKY;
-    }
-
-    @Override
-    protected void onCreateBubble() {
-        super.onCreateBubble();
-        setBubbleView(R.layout.layout_test_bubble);
     }
 
     @Override
@@ -65,24 +71,6 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
         WindowManager.LayoutParams params = super.getBubbleParams();
         params.windowAnimations = R.style.BubbleAnimations;
         return params;
-    }
-
-    @Override
-    protected void onCreateCard() {
-        super.onCreateCard();
-        setCardView(R.layout.card_define_service);
-    }
-
-    @Override
-    protected void onCardCreated(View cardView) {
-        super.onCardCreated(cardView);
-        initCard(cardView);
-        if(mResultListUpdated){
-            mCardHandler.showMeanings(mWordForm, mResultsList);
-            mResultListUpdated = false;
-        } else {
-            handleClipText(mClipText);
-        }
     }
 
     @NonNull
@@ -110,12 +98,22 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
                         onCloseDialogs();
                         v.performClick();
                     default:
-                    break;
+                        break;
                 }
                 return true;
             }
         });
         mCardHandler = new DefineCardHandler(this, root, this);
+        View copyButton = root
+                .findViewById((R.id.iv_define_icon));
+        copyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIgnoreIntent = true;
+                clipText(mCardHandler.extractTextFromCard());
+                onCloseDialogs();
+            }
+        });
 
         PopupRoot popupRoot = (PopupRoot) popup;
         popupRoot.registerOnCloseDialogsListener(this);
@@ -140,7 +138,14 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
     @Override
     public void onCloseDialogs() {
         goToState(STATE_WAITING);
-        stopSelf();
+        int animTime = getResources().getInteger(R.integer.default_anim_time);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                stopSelf();
+            }
+        }, animTime);
     }
 
     @Override
@@ -150,14 +155,16 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
         }
     }
 
+    private void clipText(String text) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("RECOPY", text);
+        clipboardManager.setPrimaryClip(clip);
+        // Give some feedback
+    }
+
     private void onResultListUpdated(String wordForm, ArrayList<DictResult> results){
         mWordForm = wordForm;
-        mResultsList = results;
-        if(getState() == STATE_CARD){
-            mCardHandler.showMeanings(wordForm, results);
-        } else {
-            mResultListUpdated = true;
-        }
+        mCardHandler.showMeanings(wordForm, results);
     }
 
     private class MeaningsTask extends AsyncTask<String, Integer, ArrayList<DictResult>> {
