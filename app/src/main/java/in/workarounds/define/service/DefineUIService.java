@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +16,22 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 
 import in.workarounds.define.R;
+import in.workarounds.define.handler.LifeHandler;
 import in.workarounds.define.model.DictResult;
 import in.workarounds.define.model.Dictionary;
 import in.workarounds.define.model.WordnetDictionary;
+import in.workarounds.define.ui.activity.TransparentActivity;
 import in.workarounds.define.ui.adapter.DefineCardHandler;
 import in.workarounds.define.ui.view.PopupRoot;
+import in.workarounds.define.util.NotificationUtils;
 
 /**
  * Created by manidesto on 15/05/15.
  */
-public class DefineUIService extends UIService implements PopupRoot.OnCloseDialogsListener, DefineCardHandler.SelectedTextChangedListener{
+public abstract class DefineUIService extends UIService implements PopupRoot.OnCloseDialogsListener, DefineCardHandler.SelectedTextChangedListener{
     public static final String INTENT_EXTRA_CLIPTEXT = "intent_clip_text";
+    public static final String INTENT_EXTRA_FROM_NOTIFICATION = "intent_from_notification";
+    protected LifeHandler mHandler;
     private DefineCardHandler mCardHandler;
     private String mClipText;
     private Dictionary mDictionary;
@@ -35,6 +41,7 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
     @Override
     public void onCreate() {
         super.onCreate();
+        mHandler = new LifeHandler(this);
         mDictionary = new WordnetDictionary(this);
         setBubbleView(R.layout.layout_test_bubble);
         setCardView(R.layout.card_define_service);
@@ -43,11 +50,7 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(!mIgnoreIntent){
-            goToState(STATE_BUBBLE);
-            mClipText = intent.getStringExtra(INTENT_EXTRA_CLIPTEXT);
-            View cardView = getCardView();
-            initCard(cardView);
-            handleClipText(mClipText);
+            handleIntent(intent);
         } else {
             mIgnoreIntent = false;
         }
@@ -60,7 +63,7 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
         bubbleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToState(STATE_CARD);
+                onBubbleClicked(v);
             }
         });
     }
@@ -85,7 +88,7 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
      * sets up touch listeners for the popup and card so that touch outside the
      * card dismisses the popup and touch on the card consumes the touch
      */
-    private void initCard(View root) {
+    protected void initCard(View root) {
         ViewGroup popup = (ViewGroup) root.findViewById(R.id.popup);
 
         popup.setOnTouchListener(new View.OnTouchListener() {
@@ -109,7 +112,6 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
         copyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mIgnoreIntent = true;
                 clipText(mCardHandler.extractTextFromCard());
                 onCloseDialogs();
             }
@@ -125,7 +127,7 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
      * @param clipText
      *            text that is copied into the clipboard
      */
-    public void handleClipText(String clipText) {
+    public void handleClipText(@NonNull String clipText) {
         String[] words = clipText.split(" ");
 
         if (words.length > 1) {
@@ -148,6 +150,18 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
         }, animTime);
     }
 
+    public void onStayAlive(){
+
+    }
+
+    public void onDieOut(){
+
+    }
+
+    protected void onBubbleClicked(View bubble){
+        toggleCard();
+    }
+
     @Override
     public void onSelectedTextChanged(String selectedText) {
         if(!selectedText.equals(mWordForm)) {
@@ -155,11 +169,47 @@ public class DefineUIService extends UIService implements PopupRoot.OnCloseDialo
         }
     }
 
-    private void clipText(String text) {
+    protected void clipText(String text) {
+        mIgnoreIntent = true;
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("RECOPY", text);
         clipboardManager.setPrimaryClip(clip);
         // Give some feedback
+    }
+
+    protected abstract void handleIntent(Intent intent);
+
+    @Nullable
+    protected String getClipTextFromIntent(Intent intent){
+        String clipText = intent.getStringExtra(INTENT_EXTRA_CLIPTEXT);
+        if(clipText != null){
+            mClipText = clipText;
+        }
+        return clipText;
+    }
+
+    protected void toggleCard(){
+        if(getState() == STATE_CARD){
+            goToState(STATE_BUBBLE);
+        } else {
+            goToState(STATE_CARD);
+        }
+    }
+
+    private void showCard(String clipText){
+        if(mCardHandler == null){
+            initCard(getCardView());
+            handleClipText(clipText);
+        }
+        goToState(STATE_CARD);
+    }
+
+    private void showNotification(String clipText){
+        String title = "Select a word";
+        Intent intent = new Intent(this, TransparentActivity.class);
+        intent.putExtra(INTENT_EXTRA_FROM_NOTIFICATION, true);
+        intent.putExtra(INTENT_EXTRA_CLIPTEXT, clipText);
+        NotificationUtils.setNotification(this, intent, title, clipText);
     }
 
     private void onResultListUpdated(String wordForm, ArrayList<DictResult> results){
