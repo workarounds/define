@@ -27,7 +27,8 @@ public class DownloadHelper {
             request = new DownloadManager.Request(uri);
             request.setTitle(getTitle(suffix, context));
             request.setDescription(getDescription(suffix, context));
-            request.setDestinationInExternalPublicDir(FileHelper.getDownloadPath(), getFileNameFromURL(URL));
+            request.setDestinationInExternalPublicDir(FileHelper.getDownloadPath(),
+                    FileHelper.getDownloadFileName(suffix));
             request.setVisibleInDownloadsUi(false);
         } else {
             LogUtils.LOGE(TAG, "No URL provided for download : " + suffix);

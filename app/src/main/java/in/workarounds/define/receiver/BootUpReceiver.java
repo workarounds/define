@@ -1,9 +1,10 @@
-package in.workarounds.define.service;
+package in.workarounds.define.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.util.LogUtils;
 
 public class BootUpReceiver extends BroadcastReceiver {

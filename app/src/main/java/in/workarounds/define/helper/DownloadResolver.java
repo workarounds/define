@@ -4,7 +4,11 @@ package in.workarounds.define.helper;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import in.workarounds.define.api.Constants;
+import in.workarounds.define.service.UnzipService;
 import in.workarounds.define.ui.activity.MainActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
@@ -15,14 +19,13 @@ import in.workarounds.define.util.PrefUtils;
 public class DownloadResolver {
     private static final String TAG = LogUtils.makeLogTag(DownloadResolver.class);
 
-    public static final String WORDNET_DOWNLOAD = "wordnet";
-    public static final String[] ALL_DOWNLOADS = new String[] {WORDNET_DOWNLOAD};
+    public static final String[] ALL_DOWNLOADS = new String[] {Constants.WORDNET};
 
     public static DownloadManager.Request getDownloadRequest(String id, Context context) {
         DownloadManager.Request request;
         switch (id) {
-            case WORDNET_DOWNLOAD:
-                request = DownloadHelper.getRelevantRequest(WORDNET_DOWNLOAD, context);
+            case Constants.WORDNET:
+                request = DownloadHelper.getRelevantRequest(Constants.WORDNET, context);
                 break;
             default:
                 request = null;
@@ -39,7 +42,7 @@ public class DownloadResolver {
      */
     private static void onNotificationClicked(String id, Context context) {
         switch (id) {
-            case WORDNET_DOWNLOAD:
+            case Constants.WORDNET:
                 Intent activityIntent = new Intent(context, MainActivity.class);
                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(activityIntent);
@@ -57,8 +60,10 @@ public class DownloadResolver {
      */
     private static void onDownloadFinished(String id, Context context) {
         switch (id) {
-            case WORDNET_DOWNLOAD:
-                // TODO start unzipping service
+            case Constants.WORDNET:
+                Intent intent = new Intent(context, UnzipService.class);
+                intent.putExtra(UnzipService.INTENT_KEY_DICT_NAME, id);
+                context.startService(intent);
                 break;
             default:
                 LogUtils.LOGW(TAG, "No relevant download found for " + id + " doing nothing on download complete");
@@ -94,6 +99,25 @@ public class DownloadResolver {
         }
     }
 
+    /**
+     * sets up a thread to track download status and post to given progress bar and TextView
+     * @param id local string id reference to download
+     * @param progressBar progress bar with max set to 100
+     * @param statusView textView that will show status
+     * @param context context
+     * @return a handle to the thread created (close it in onDestroy of activity)
+     */
+    public static DownloadProgressThread setUpProgress(String id, ProgressBar progressBar, TextView statusView, Context context) {
+        DownloadProgressThread progressThread = new DownloadProgressThread(id, progressBar, statusView, context);
+        progressThread.start();
+        return progressThread;
+    }
+
+    /**
+     * method called by DownloadReceiver when Notification is clicked
+     * @param downloadId the first downloadId passed by list of longs
+     * @param context context
+     */
     public static void onNotificationClicked(long downloadId, Context context) {
         String id = DownloadHelper.getStringId(downloadId, context);
         if(id != null) {
@@ -103,6 +127,11 @@ public class DownloadResolver {
         }
     }
 
+    /**
+     * method called by DownloadReceiver when download is finished
+     * @param downloadId id of the finished download
+     * @param context context
+     */
     public static void onDownloadFinished(long downloadId, Context context) {
         String id = DownloadHelper.getStringId(downloadId, context);
         if(id != null) {
@@ -111,6 +140,5 @@ public class DownloadResolver {
             LogUtils.LOGE(TAG, "No download present with downloadId " + downloadId + "doing nothing on Download finish");
         }
     }
-
 
 }

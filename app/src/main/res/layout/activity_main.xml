@@ -25,18 +25,6 @@
         android:padding="5dp"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/download_button"
-        android:layout_alignRight="@+id/download_button"
-        android:layout_below="@+id/progress_bar"
-        android:layout_centerHorizontal="true"
-        android:onClick="cancelClick"
-        android:text="@string/btn_cancel_download"
-        android:visibility="gone" />
-
     <EditText
         android:id="@+id/edit_message"
         android:layout_width="224dp"
@@ -59,13 +47,24 @@
         android:onClick="meaningClick"
         android:text="@string/btn_find_meaning" />
 
+
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="cancelClick"
+        android:text="@string/btn_cancel_download" />
+
     <Button
         android:id="@+id/download_button"
         android:layout_width="164dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
+        android:layout_above="@id/cancel_button"
         android:layout_marginBottom="66dp"
         android:layout_weight="0.09"
         android:onClick="downloadClick"
@@ -81,13 +80,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/btn_set_american"
-                android:onClick="setAmericanAccent"/>
+                android:onClick="speakAmerican"/>
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/btn_set_british"
-                android:onClick="setBritishAccent"/>
+                android:onClick="speakBritish"/>
     </LinearLayout>
 
     <CheckBox

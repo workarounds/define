@@ -2,29 +2,26 @@ package in.workarounds.define.helper;
 
 import java.io.File;
 
+import in.workarounds.define.api.Constants;
 import in.workarounds.define.util.FileUtils;
 import in.workarounds.define.util.LogUtils;
 
 public class FileHelper {
     private static final String TAG = LogUtils.makeLogTag(FileHelper.class);
 
-    /**
-     * String constants for easy access
-     */
-    // dictionaryName
-    public static final String WORDNET    = "wordnet";
-    public static final String WIKTIONARY = "wiktionary";
     // zip file extension
-    public static final String ZIP_EXT    = ".zip";
+    private static final String ZIP_EXT    = ".zip";
 
     /**
      * File paths
      */
     // currently can only be a direct folder in sdcard
-    public static final String ROOT_PATH        = "sdcard/Define";
-    public static final String WORDNET_PATH     = ROOT_PATH + "/Wordnet";
-    public static final String WIKTIONARY_PATH  = ROOT_PATH + "/Wiktionary";
-    public static final String DOWNLOAD_PATH    = "/Define";
+    public static final String ROOT_PATH         = "sdcard/Define";
+    public static final String WORDNET_FOLDER    = "Wordnet";
+    public static final String WIKTIONARY_FOLDER = "Wiktionary";
+    public static final String WORDNET_PATH      = ROOT_PATH + "/" + WORDNET_FOLDER;
+    public static final String WIKTIONARY_PATH   = ROOT_PATH + "/" + WIKTIONARY_FOLDER;
+    public static final String DOWNLOAD_PATH     = "/Define";
 
     /**
      * helper method to access the filePath of dictionary
@@ -33,9 +30,9 @@ public class FileHelper {
      */
     public static String getDictFilePath(String dictionaryName) {
         switch (dictionaryName) {
-            case WORDNET:
+            case Constants.WORDNET:
                 return FileUtils.getFilePathFromString(WORDNET_PATH);
-            case WIKTIONARY:
+            case Constants.WIKTIONARY:
                 return FileUtils.getFilePathFromString(WIKTIONARY_PATH);
             default:
                 return null;
@@ -109,7 +106,27 @@ public class FileHelper {
         FileUtils.assertDir(getRootFilePath());
     }
 
+    /**
+     * @return file path to be given to download manager
+     */
     public static String getDownloadPath() {
         return FileUtils.getFilePathFromString(DOWNLOAD_PATH);
     }
+
+    /**
+     * @param dictionaryName constants WORDNET or WIKTIONARY
+     * @return name of the download file to be given to DownloadManager
+     */
+    public static String getDownloadFileName(String dictionaryName) {
+        switch (dictionaryName) {
+            case Constants.WORDNET:
+                return WORDNET_FOLDER + ZIP_EXT;
+            case Constants.WIKTIONARY:
+                return WIKTIONARY_FOLDER + ZIP_EXT;
+            default:
+                LogUtils.LOGE(TAG, "No such dictionary " + dictionaryName);
+                return null;
+        }
+    }
+
 }
