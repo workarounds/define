@@ -101,7 +101,9 @@ public abstract class UIService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        goToState(STATE_WAITING);
+        if(getState() != STATE_WAITING) {
+            goToState(STATE_WAITING);
+        }
     }
 
     protected View getBubbleView(){
@@ -200,10 +202,12 @@ public abstract class UIService extends Service {
                 break;
             case STATE_BUBBLE:
                 addBubble();
+                LogUtils.LOGD(TAG, "To bubble state");
                 break;
             case STATE_CARD:
                 addBubble();
                 addCard();
+                LogUtils.LOGD(TAG, "To card state");
                 break;
             default:
                 LogUtils.LOGE(TAG, "Unknown state:" + state);
@@ -215,12 +219,14 @@ public abstract class UIService extends Service {
         switch (state) {
             case STATE_WAITING:
                 removeBubble();
+                LogUtils.LOGD(TAG, "To waiting state");
                 break;
             case STATE_BUBBLE:
                 LogUtils.LOGD(TAG, "Already in bubble state");
                 break;
             case STATE_CARD:
                 addCard();
+                LogUtils.LOGD(TAG, "To card state");
                 break;
             default:
                 LogUtils.LOGE(TAG, "Unknown state:" + state);
@@ -233,9 +239,11 @@ public abstract class UIService extends Service {
             case STATE_WAITING:
                 removeCard();
                 removeBubble();
+                LogUtils.LOGD(TAG, "To waiting state");
                 break;
             case STATE_BUBBLE:
                 removeCard();
+                LogUtils.LOGD(TAG, "To bubble state");
                 break;
             case STATE_CARD:
                 LogUtils.LOGD(TAG, "Already in card state");
