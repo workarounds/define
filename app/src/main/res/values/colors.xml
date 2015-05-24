@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="theme_primary">#f5b906</color>
-    <color name="theme_primary_dark">#c99805</color>
+    <color name="theme_primary">#edbe2e</color>
+    <color name="theme_primary_dark">#e4b62c</color>
 
     <color name="dim">#80000000</color>
     <color name="light_blue">#FF91DEFF</color>

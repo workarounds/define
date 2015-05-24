@@ -10,6 +10,8 @@ public class PrefUtils {
     private static final String FILE_NAME = "default.prefs";
     public static final String KEY_NOTIF_ONLY = "key_notif_only";
 
+    private static final String DM = "dm_";
+
     private static SharedPreferences mSharedPreferences;
 
     public static SharedPreferences getSharedPreferences(Context context) {
@@ -31,4 +33,22 @@ public class PrefUtils {
         return sharedPreferences.getBoolean(KEY_NOTIF_ONLY, false);
     }
 
+    public static long getDownloadId(String key, Context context) {
+        SharedPreferences preferences = PrefUtils.getSharedPreferences(context);
+        return preferences.getLong(DM + key, 0);
+    }
+
+    public static void setDownloadId(String key, long downloadId, Context context) {
+        SharedPreferences preferences = PrefUtils.getSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(DM + key, downloadId);
+        editor.apply();
+    }
+
+    public static void removeDownloadId(String key, Context context) {
+        SharedPreferences preferences = PrefUtils.getSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(DM + key);
+        editor.apply();
+    }
 }

@@ -12,7 +12,8 @@ import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.SynsetType;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import in.workarounds.define.R;
-import in.workarounds.define.util.FileUtils;
+import in.workarounds.define.api.Constants;
+import in.workarounds.define.helper.FileHelper;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
 
@@ -28,7 +29,7 @@ public class WordnetDictionary implements Dictionary {
      */
     public WordnetDictionary(Context context) {
         mContext = context;
-        System.setProperty(context.getResources().getString(R.string.wordnet_database_dir), FileUtils.getDictFilePath());
+        System.setProperty(context.getResources().getString(R.string.wordnet_database_dir), FileHelper.getDictFilePath(Constants.WORDNET));
     }
 
     /**

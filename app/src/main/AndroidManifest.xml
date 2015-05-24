@@ -37,7 +37,13 @@
         </service>
 
         <service
-            android:name="in.workarounds.define.service.PopupManager"
+            android:name=".service.PopupManager"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
+        <service
+            android:name=".service.UnzipService"
             android:enabled="true"
             android:exported="false">
         </service>
@@ -49,7 +55,7 @@
         </service>
 
         <receiver
-            android:name="in.workarounds.define.service.BootUpReceiver"
+            android:name=".receiver.BootUpReceiver"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
@@ -58,5 +64,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".receiver.DownloadReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

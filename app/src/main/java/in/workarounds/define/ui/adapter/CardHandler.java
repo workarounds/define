@@ -108,8 +108,6 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 		FlowLayout card = (FlowLayout) mPopupManager.getBubbleCardView();
 
 		Resources res = mPopupManager.getResources();
-//		int horizontal_spacing = res
-//				.getDimensionPixelSize(R.dimen.bubble_horizontal_spacing);
 		int vertical_spacing = res
 				.getDimensionPixelSize(R.dimen.bubble_vertical_spacing);
         int horizontal_spacing = 0;

@@ -1,0 +1,256 @@
+package in.workarounds.define.service;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
+import in.workarounds.define.helper.FileHelper;
+import in.workarounds.define.ui.activity.MainActivity;
+import in.workarounds.define.util.FileUtils;
+import in.workarounds.define.util.LogUtils;
+
+/**
+ * Created by madki on 14/05/15.
+ */
+public class UnzipService extends Service {
+    private static final String TAG = LogUtils.makeLogTag(UnzipService.class);
+
+    /**
+     * constants for messages
+     */
+    public static final int MSG_UNZIP      = 1;
+    public static final int MSG_REGISTER   = 2;
+    public static final int MSG_UNREGISTER = 3;
+
+    /**
+     * intent key to send the dictionary to unzip
+     */
+    public static final String INTENT_KEY_DICT_NAME = "intent_key_dict_name";
+
+    /**
+     * messenger that is used by activities to communicate to Service
+     * activities use this to post messages to service
+     */
+    private Messenger mMessenger = new Messenger(new IncomingHandler(this));
+
+    /**
+     * messenger that is handled by activities
+     * use this to post commands to activity
+     */
+    private Messenger mActivity;
+
+    /**
+     * true if service is bound to some activity
+     */
+    private boolean mBound;
+    /**
+     * a map of dictionary name and async task handling
+     * the unzipping of that dictionary
+     */
+    private HashMap<String, AsyncTask> mTasks = new HashMap<>();
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mMessenger.getBinder();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if(intent != null) {
+            String dictName = intent.getStringExtra(INTENT_KEY_DICT_NAME);
+            if(dictName != null) {
+                startUnzipTask(dictName);
+            } else {
+                LogUtils.LOGE(TAG, "No dictionary name sent to unzip");
+            }
+        } else {
+            LogUtils.LOGE(TAG, "Intent is null !");
+        }
+        return Service.START_STICKY;
+    }
+
+    /**
+     * set the activity messenger
+     * @param messenger messenger to pass messages to activity
+     */
+    public void setActivity(Messenger messenger) {
+        mActivity = messenger;
+        mBound = true;
+    }
+
+    /**
+     * remove the messenger to activity
+     */
+    public void unsetActivity() {
+        mActivity = null;
+        mBound = false;
+    }
+
+    /**
+     * helper method to send a message to connected activity
+     * @param message to be sent to activity
+     */
+    public void sendToActivity(Message message) {
+        if(!mBound) {
+            LogUtils.LOGE(TAG, "No activity bound to send message");
+        } else {
+            try {
+                mActivity.send(message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void startUnzipTask(String dictName) {
+        if(mTasks.containsKey(dictName)) {
+            LogUtils.LOGW(TAG, "Unzipping already in progress. Ignoring unzip command");
+        } else {
+            UnzipTask asyncTask = new UnzipTask();
+            mTasks.put(dictName, asyncTask);
+            asyncTask.execute(dictName);
+        }
+    }
+
+    /**
+     * method to check if the service can be terminated. If yes, stops the
+     * service
+     */
+    private void checkForTermination() {
+        if(!mBound && (mTasks.size()==0)) {
+            stopSelf();
+        } else {
+            if(mBound) {
+                LogUtils.LOGD(TAG, "An activity is still bound not stopping service");
+            }
+            if(mTasks.size() != 0) {
+                LogUtils.LOGD(TAG, "Tasks still in progress not stopping service");
+            }
+        }
+    }
+
+    /**
+     * Handler of incoming messages from clients.
+     */
+    private static class IncomingHandler extends Handler {
+        private WeakReference<UnzipService> mService;
+
+        public IncomingHandler(UnzipService unzipService) {
+            mService = new WeakReference<UnzipService>(unzipService);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            UnzipService service = mService.get();
+            if(service != null) {
+                switch (msg.what) {
+                    case MSG_REGISTER:
+                        service.setActivity((Messenger) msg.obj);
+                        break;
+                    case MSG_UNZIP:
+                        Toast.makeText(service.getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
+                        Message message = Message.obtain(null, MainActivity.MSG_UNZIP_PROGRESS, 20, 0);
+                        service.sendToActivity(message);
+                        break;
+                    case MSG_UNREGISTER:
+                        service.unsetActivity();
+                        service.checkForTermination();
+                        break;
+                    default:
+                        super.handleMessage(msg);
+                }
+            } else {
+                LogUtils.LOGE(TAG, "no service to deliver messages");
+            }
+        }
+    }
+
+    private class UnzipTask extends AsyncTask<String, Float, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            float progress = 0;
+            float max = 0;
+            File zipFile = FileHelper.getZipFile(params[0]);
+            if(zipFile != null) {
+                try {
+                    ZipFile zip = new ZipFile(zipFile);
+                    max = zip.size();
+                    FileInputStream fin = new FileInputStream(zipFile);
+                    ZipInputStream zin = new ZipInputStream(fin);
+                    ZipEntry zipEntry = null;
+                    while ((zipEntry = zin.getNextEntry()) != null) {
+                        LogUtils.LOGV(TAG, "Unzipping " + zipEntry.getName());
+                        if (zipEntry.isDirectory()) {
+                            FileUtils.assertDir(FileHelper.getRootFile() + File.separator
+                                    + zipEntry.getName());
+                        } else {
+                            progress++;
+                            publishProgress(progress * 100f / max);
+
+                            FileOutputStream outputStream = new FileOutputStream(FileHelper.getRootFile() + File.separator
+                                    + zipEntry.getName());
+
+                            byte[] buf = new byte[4096];
+                            int r;
+                            while ((r = zin.read(buf)) != -1) {
+                                outputStream.write(buf, 0, r);
+                            }
+                            zin.closeEntry();
+                            outputStream.close();
+                        }
+                    }
+                    zin.close();
+                    zip.close();
+                } catch (Exception e) {
+                    LogUtils.LOGE(TAG, "unzip error", e);
+                }
+            } else {
+                LogUtils.LOGE(TAG, "Zip file not found for " + params[0]);
+            }
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(String dictName) {
+            super.onPostExecute(dictName);
+            File zipFile = FileHelper.getZipFile(dictName);
+            if(zipFile != null) {
+                if(zipFile.delete()) {
+                    LogUtils.LOGD(TAG, "deleted zip file for " + dictName);
+                } else {
+                    LogUtils.LOGE(TAG, "Couldn't delete zip file for " + dictName);
+                }
+            }
+            mTasks.remove(dictName);
+            checkForTermination();
+        }
+
+        @Override
+        protected void onProgressUpdate(Float... values) {
+            super.onProgressUpdate(values);
+            Message msg = Message.obtain(null, MainActivity.MSG_UNZIP_PROGRESS, Math.round(values[0]), 0);
+            sendToActivity(msg);
+        }
+    }
+}
