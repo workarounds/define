@@ -18,4 +18,12 @@
         android:layout_margin="@dimen/margin_regular"
         android:text="@string/label_ui_service"
         />
+    <CheckBox
+        android:id="@+id/checkbox_notification_only"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_regular"
+        android:text="@string/label_notification_only"
+        />
+
 </LinearLayout>
