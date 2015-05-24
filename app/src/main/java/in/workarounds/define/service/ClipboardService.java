@@ -48,7 +48,7 @@ public class ClipboardService extends Service implements
 
     @Override
     public void onPrimaryClipChanged() {
-        if (!ActionResolver.isPopupShown()) {
+        if (!PopupManager.isPopupShown()) {
             String text = getClipData();
             startActionResolver(text);
         }
@@ -74,8 +74,8 @@ public class ClipboardService extends Service implements
                 intent = new Intent(this, DefineUIService.class);
                 intent.putExtra(DefineUIService.INTENT_EXTRA_CLIPTEXT, text);
             } else {
-                intent = new Intent(this, ActionResolver.class);
-                intent.putExtra(ActionResolver.INTENT_EXTRA_CLIPTEXT, text);
+                intent = new Intent(this, PopupManager.class);
+                intent.putExtra(PopupManager.INTENT_EXTRA_CLIPTEXT, text);
             }
             getBaseContext().startService(intent);
         }
