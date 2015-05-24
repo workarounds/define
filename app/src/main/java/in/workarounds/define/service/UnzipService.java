@@ -1,8 +1,10 @@
 package in.workarounds.define.service;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -117,14 +119,31 @@ public class UnzipService extends Service {
         }
     }
 
+    /**
+     * helper method to start the async task
+     * @param dictName name of dictionary
+     */
     private void startUnzipTask(String dictName) {
         if(mTasks.containsKey(dictName)) {
             LogUtils.LOGW(TAG, "Unzipping already in progress. Ignoring unzip command");
         } else {
             UnzipTask asyncTask = new UnzipTask();
             mTasks.put(dictName, asyncTask);
-            asyncTask.execute(dictName);
+            startTask(asyncTask, dictName);
         }
+    }
+
+    /**
+     * helper method to start async task in a separate thread
+     * @param asyncTask task to be started
+     * @param dictName param to be passed
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
+    void startTask(UnzipTask asyncTask, String dictName) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dictName);
+        else
+            asyncTask.execute(dictName);
     }
 
     /**
