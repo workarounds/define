@@ -1,8 +1,12 @@
 package in.workarounds.define.model;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.SynsetType;
@@ -42,18 +46,29 @@ public class WordnetDictionary implements Dictionary {
         if (!wordForm.isEmpty()) {
             wordForm = StringUtils.preProcessWord(wordForm);
             // Get the synsets containing the wrod form
-            WordNetDatabase database = WordNetDatabase.getFileInstance();
+            WordNetDatabase database;
+            try {
+                database = WordNetDatabase.getFileInstance();
+            } catch (Exception e){
+                Toast.makeText(mContext, "No dictionary found", Toast.LENGTH_SHORT).show();
+                return results;
+            }
             Synset[] synsets = database.getSynsets(wordForm);
 
-            // Display the word forms and definitions for synsets retrieved
+            // Display the word forms and definitions for synset retrieved
             if (synsets.length > 0) {
                 for (Synset synset : synsets) {
                     String[] synonyms = synset.getWordForms();
+                    List<String> synonymsList = new ArrayList<>(Arrays.asList(synonyms));
+                    synonymsList.remove(wordForm); // removing the word itself from the list of synonyms
+                    synonymsList.remove(StringUtils.makeFirstLetterLowerCase(wordForm));
                     String meaning = synset.getDefinition();
                     String type = typeToString(synset.getType());
                     String[] usage = synset.getUsageExamples();
+                    List<String> usagesList = new ArrayList<>(Arrays.asList(usage));
+
                     DictResult result = new DictResult(wordForm, meaning, type,
-                            usage, synonyms);
+                            usagesList, synonymsList);
                     results.add(result);
                     LogUtils.LOGD(TAG, "result: " + result);
                 }

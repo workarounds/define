@@ -71,6 +71,7 @@
             android:layout_gravity="center_vertical"
             android:background="@color/light_gray"/>
         <ImageView
+            android:id="@+id/iv_define_icon"
             android:layout_width="@dimen/icon_small"
             android:layout_height="@dimen/icon_small"
             android:layout_marginLeft="@dimen/margin_regular"

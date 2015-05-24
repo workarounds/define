@@ -27,4 +27,9 @@
     <string name="hint_no_meaning">No meaning found</string>
 
     <string name="silent_mode">Silent Mode</string>
+
+    <!-- Debug-->
+    <string name="action_test">Test</string>
+    <string name="label_toggles">Toggles</string>
+    <string name="label_ui_service">UI Service</string>
 </resources>

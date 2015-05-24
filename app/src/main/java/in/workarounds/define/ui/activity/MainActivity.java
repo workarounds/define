@@ -14,12 +14,16 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import java.lang.ref.WeakReference;
 
+import in.workarounds.define.BuildConfig;
 import in.workarounds.define.R;
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.helper.DownloadProgressThread;
@@ -88,6 +92,38 @@ public class MainActivity extends ActionBarActivity {
 
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mThread = DownloadResolver.setUpProgress(Constants.WORDNET, progressBar, null, this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        if(BuildConfig.DEBUG){
+            inflater.inflate(R.menu.menu_debug, menu);
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_test:
+                startActivity(new Intent(this, TestActivity.class));
+                return true;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**

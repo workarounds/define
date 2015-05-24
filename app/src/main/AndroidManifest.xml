@@ -24,6 +24,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.TestActivity"
+                  android:label="@string/app_name"/>
+
         <service
             android:name="in.workarounds.define.service.ClipboardService"
             android:enabled="true"
@@ -38,6 +41,12 @@
 
         <service
             android:name=".service.UnzipService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
+        <service
+            android:name="in.workarounds.define.service.DefineUIService"
             android:enabled="true"
             android:exported="false">
         </service>
