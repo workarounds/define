@@ -20,10 +20,8 @@ import in.workarounds.define.handler.LifeHandler;
 import in.workarounds.define.model.DictResult;
 import in.workarounds.define.model.Dictionary;
 import in.workarounds.define.model.WordnetDictionary;
-import in.workarounds.define.ui.activity.TransparentActivity;
 import in.workarounds.define.ui.adapter.DefineCardHandler;
 import in.workarounds.define.ui.view.PopupRoot;
-import in.workarounds.define.util.NotificationUtils;
 
 /**
  * Created by manidesto on 15/05/15.
@@ -202,14 +200,6 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
             handleClipText(clipText);
         }
         goToState(STATE_CARD);
-    }
-
-    private void showNotification(String clipText){
-        String title = "Select a word";
-        Intent intent = new Intent(this, TransparentActivity.class);
-        intent.putExtra(INTENT_EXTRA_FROM_NOTIFICATION, true);
-        intent.putExtra(INTENT_EXTRA_CLIPTEXT, clipText);
-        NotificationUtils.setNotification(this, intent, title, clipText);
     }
 
     private void onResultListUpdated(String wordForm, ArrayList<DictResult> results){

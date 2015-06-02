@@ -71,13 +71,23 @@ public class ClipboardService extends Service implements
             boolean useUIService = PrefUtils.getSharedPreferences(this)
                     .getBoolean(TestActivity.KEY_USE_UI_SERVICE, false);
             if(useUIService) {
-                intent = new Intent(this, ChatHeadService.class);
+                intent = getUIServiceIntent();
                 intent.putExtra(DefineUIService.INTENT_EXTRA_CLIPTEXT, text);
             } else {
                 intent = new Intent(this, PopupManager.class);
                 intent.putExtra(PopupManager.INTENT_EXTRA_CLIPTEXT, text);
             }
             getBaseContext().startService(intent);
+        }
+    }
+
+    private Intent getUIServiceIntent(){
+        boolean notify = PrefUtils.getSharedPreferences(this)
+                .getBoolean(PrefUtils.KEY_NOTIF_ONLY, false);
+        if(notify){
+            return new Intent(this, NotificationUIService.class);
+        } else {
+            return new Intent(this, ChatHeadService.class);
         }
     }
 }
