@@ -11,9 +11,12 @@ import in.workarounds.define.util.LogUtils;
 
 /**
  * Created by manidesto on 02/06/15.
+ * The service that should be triggered when user clips a text
+ * and has a preference set to show notification(Heads up/ Silent)
  */
 public class NotificationUIService extends DefineUIService{
     private static String TAG = LogUtils.makeLogTag(NotificationUIService.class);
+    public static final int NOTIFICATION_ID = 1;
     public static final String INTENT_EXTRA_NOTIFICATION_CLICKED = "intent_extra_notification_clicked";
     public static final String INTENT_EXTRA_NOTIFICATION_DISMISSED = "intent_extra_notification_dismissed";
 
@@ -51,14 +54,20 @@ public class NotificationUIService extends DefineUIService{
 
         NotificationManager manager = (NotificationManager)
                 getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(1, builder.build());
+        manager.notify(NOTIFICATION_ID, builder.build());
     }
 
     private void removeNotification(){
         ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE))
-                .cancel(1);
+                .cancel(NOTIFICATION_ID);
     }
 
+    /**
+     * Sets the correct title and content based the clipped text
+     * @param builder Notification Builder object
+     * @param clipText Clipped Text by the user
+     * @return Notification Builder object with content set
+     */
     private NotificationCompat.Builder buildContent(NotificationCompat.Builder builder, String clipText){
         String title = "Select a word";
 
@@ -68,6 +77,11 @@ public class NotificationUIService extends DefineUIService{
                 .setSmallIcon(R.mipmap.ic_launcher);
     }
 
+    /**
+     * Sets the click and delete intents for the notification
+     * @param builder Notification Builder object
+     * @return Notification Builder object with Intents set
+     */
     private NotificationCompat.Builder buildIntents(NotificationCompat.Builder builder){
         PendingIntent pendingClickIntent = getClickIntent();
         PendingIntent pendingDismissIntent = getDismissIntent();
@@ -77,6 +91,12 @@ public class NotificationUIService extends DefineUIService{
                 .setDeleteIntent(pendingDismissIntent);
     }
 
+    /**
+     * Returns the PendingIntent to be triggered when notification
+     * is clicked
+     * @return The PendingIntent to be triggered when notification
+     * is clicked
+     */
     private PendingIntent getClickIntent(){
         Intent clickIntent = new Intent(this, NotificationUIService.class);
         clickIntent.putExtra(INTENT_EXTRA_NOTIFICATION_CLICKED, true);
@@ -85,6 +105,12 @@ public class NotificationUIService extends DefineUIService{
                 .getService(this, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * Returns the PendingIntent to be triggered when notification
+     * is dismissed
+     * @return The PendingIntent to be triggered when notification
+     * is dismissed
+     */
     private PendingIntent getDismissIntent(){
         Intent dismissIntent = new Intent(this, NotificationUIService.class);
         dismissIntent.putExtra(INTENT_EXTRA_NOTIFICATION_DISMISSED, true);
@@ -93,6 +119,11 @@ public class NotificationUIService extends DefineUIService{
                 .getService(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * Sets the correct priority to the notification based on user preferences
+     * @param builder Notification Builder object
+     * @return Notification Builder object with priority set
+     */
     private NotificationCompat.Builder buildPriority(NotificationCompat.Builder builder){
         //TODO: get user preferences and set priority accordingly
 
