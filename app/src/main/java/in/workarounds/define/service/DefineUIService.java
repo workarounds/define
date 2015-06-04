@@ -28,7 +28,6 @@ import in.workarounds.define.ui.view.PopupRoot;
  */
 public abstract class DefineUIService extends UIService implements PopupRoot.OnCloseDialogsListener, DefineCardHandler.SelectedTextChangedListener{
     public static final String INTENT_EXTRA_CLIPTEXT = "intent_clip_text";
-    public static final String INTENT_EXTRA_FROM_NOTIFICATION = "intent_from_notification";
     protected LifeHandler mHandler;
     private DefineCardHandler mCardHandler;
     private String mClipText;
