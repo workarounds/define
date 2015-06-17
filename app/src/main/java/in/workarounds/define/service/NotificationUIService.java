@@ -17,6 +17,8 @@ import in.workarounds.define.util.LogUtils;
 public class NotificationUIService extends DefineUIService{
     private static String TAG = LogUtils.makeLogTag(NotificationUIService.class);
     public static final int NOTIFICATION_ID = 1;
+    public static final int NOTIFICATION_CLICKED_REQUEST_ID = 11;
+    public static final int NOTIFICATION_DISMISSED_REQUEST_ID = 10;
     public static final String INTENT_EXTRA_NOTIFICATION_CLICKED = "intent_extra_notification_clicked";
     public static final String INTENT_EXTRA_NOTIFICATION_DISMISSED = "intent_extra_notification_dismissed";
 
@@ -102,7 +104,7 @@ public class NotificationUIService extends DefineUIService{
         clickIntent.putExtra(INTENT_EXTRA_NOTIFICATION_CLICKED, true);
 
         return PendingIntent
-                .getService(this, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                .getService(this, NOTIFICATION_CLICKED_REQUEST_ID, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     /**
@@ -116,7 +118,7 @@ public class NotificationUIService extends DefineUIService{
         dismissIntent.putExtra(INTENT_EXTRA_NOTIFICATION_DISMISSED, true);
 
         return PendingIntent
-                .getService(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                .getService(this, NOTIFICATION_DISMISSED_REQUEST_ID, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     /**
