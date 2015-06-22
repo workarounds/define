@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -16,18 +17,25 @@ import android.view.WindowManager;
 import java.util.ArrayList;
 
 import in.workarounds.define.R;
+import in.workarounds.define.api.UrbanDictionaryClient;
 import in.workarounds.define.handler.LifeHandler;
 import in.workarounds.define.model.DictResult;
 import in.workarounds.define.model.Dictionary;
 import in.workarounds.define.model.WordnetDictionary;
+import in.workarounds.define.model.urbandictionary.Term;
 import in.workarounds.define.ui.adapter.DefineCardHandler;
 import in.workarounds.define.ui.view.PopupRoot;
+import in.workarounds.define.util.LogUtils;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by manidesto on 15/05/15.
  */
 public abstract class DefineUIService extends UIService implements PopupRoot.OnCloseDialogsListener, DefineCardHandler.SelectedTextChangedListener{
     public static final String INTENT_EXTRA_CLIPTEXT = "intent_clip_text";
+    private static String TAG = LogUtils.makeLogTag(DefineUIService.class);
     protected LifeHandler mHandler;
     private DefineCardHandler mCardHandler;
     private String mClipText;
@@ -131,6 +139,7 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
             mCardHandler.showBubbles(words);
         } else {
             new MeaningsTask().execute(words[0]);
+            getUrbanDictionaryMeanings(words[0]);
         }
     }
 
@@ -163,6 +172,7 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
     public void onSelectedTextChanged(String selectedText) {
         if(!selectedText.equals(mWordForm)) {
             new MeaningsTask().execute(selectedText);
+            getUrbanDictionaryMeanings(selectedText);
         }
     }
 
@@ -206,6 +216,13 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
         mCardHandler.showMeanings(wordForm, results);
     }
 
+    private void onUrbanDictResultListUpdated(String wordForm, Term results){
+
+        if (mWordForm.equals(wordForm)) {
+            mCardHandler.addUrbanDictMeaningsToScrollView(results);
+        }
+    }
+
     private class MeaningsTask extends AsyncTask<String, Integer, ArrayList<DictResult>> {
         private String wordForm;
         @Override
@@ -219,4 +236,29 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
             onResultListUpdated(wordForm, results);
         }
     }
+
+    private void getUrbanDictionaryMeanings(final String wordForm) {
+
+        if (!wordForm.isEmpty()) {
+
+            UrbanDictionaryClient urbanDictionaryClient = new UrbanDictionaryClient();
+
+            UrbanDictionaryClient.UrbanDictionaryService service = urbanDictionaryClient.service;
+
+            service.term(wordForm, new Callback<Term>() {
+                @Override
+                public void success(Term term, Response response) {
+                    onUrbanDictResultListUpdated(wordForm, term);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    //Do nothing
+                    LogUtils.LOGD(TAG, error.toString());
+                }
+            });
+        }
+    }
+
+
 }
