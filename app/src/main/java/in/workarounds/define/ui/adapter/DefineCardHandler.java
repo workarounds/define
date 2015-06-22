@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,16 +14,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import in.workarounds.define.R;
 import in.workarounds.define.model.DictResult;
-import in.workarounds.define.model.Dictionary;
 import in.workarounds.define.model.urbandictionary.Definition;
-import in.workarounds.define.model.urbandictionary.Term;
+import in.workarounds.define.model.urbandictionary.UrbanDictResult;
 import in.workarounds.define.ui.view.FlowLayout;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
@@ -170,7 +166,7 @@ public class DefineCardHandler implements OnTouchListener{
         }
     }
 
-    public void addUrbanDictMeaningsToScrollView(Term results) {
+    public void addUrbanDictMeaningsToScrollView(UrbanDictResult results) {
 
         TextView urbanHeadingTextView = new TextView(mContext);
         urbanHeadingTextView.setTextSize(15);

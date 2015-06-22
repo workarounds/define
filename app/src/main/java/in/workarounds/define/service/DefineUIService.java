@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -22,7 +21,7 @@ import in.workarounds.define.handler.LifeHandler;
 import in.workarounds.define.model.DictResult;
 import in.workarounds.define.model.Dictionary;
 import in.workarounds.define.model.WordnetDictionary;
-import in.workarounds.define.model.urbandictionary.Term;
+import in.workarounds.define.model.urbandictionary.UrbanDictResult;
 import in.workarounds.define.ui.adapter.DefineCardHandler;
 import in.workarounds.define.ui.view.PopupRoot;
 import in.workarounds.define.util.LogUtils;
@@ -216,7 +215,7 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
         mCardHandler.showMeanings(wordForm, results);
     }
 
-    private void onUrbanDictResultListUpdated(String wordForm, Term results){
+    private void onUrbanDictResultListUpdated(String wordForm, UrbanDictResult results){
 
         if (mWordForm != null && mWordForm.equals(wordForm)) {
             mCardHandler.addUrbanDictMeaningsToScrollView(results);
@@ -245,10 +244,10 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
 
             UrbanDictionaryClient.UrbanDictionaryService service = urbanDictionaryClient.service;
 
-            service.term(wordForm, new Callback<Term>() {
+            service.term(wordForm, new Callback<UrbanDictResult>() {
                 @Override
-                public void success(Term term, Response response) {
-                    onUrbanDictResultListUpdated(wordForm, term);
+                public void success(UrbanDictResult urbanDictResult, Response response) {
+                    onUrbanDictResultListUpdated(wordForm, urbanDictResult);
                 }
 
                 @Override

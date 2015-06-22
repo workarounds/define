@@ -12,7 +12,7 @@ import java.util.ListIterator;
 
 import in.workarounds.define.model.DictResult;
 
-public class Term
+public class UrbanDictResult
 {
     private List<String> tags;
     @SerializedName("result_type")
