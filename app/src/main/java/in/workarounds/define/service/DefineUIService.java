@@ -218,7 +218,7 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
 
     private void onUrbanDictResultListUpdated(String wordForm, Term results){
 
-        if (mWordForm != null && mWordForm.equals(wordForm)) {
+        if (mWordForm.equals(wordForm)) {
             mCardHandler.addUrbanDictMeaningsToScrollView(results);
         }
     }

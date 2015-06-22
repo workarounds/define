@@ -5,14 +5,12 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -175,19 +173,12 @@ public class DefineCardHandler implements OnTouchListener{
         TextView urbanHeadingTextView = new TextView(mContext);
         urbanHeadingTextView.setTextSize(15);
         urbanHeadingTextView.setTypeface(urbanHeadingTextView.getTypeface(), Typeface.BOLD_ITALIC);
-        urbanHeadingTextView.setTextColor(mContext.getResources().getColor(R.color.black));
         urbanHeadingTextView.setText("Urban Dictionary Meanings");
-        urbanHeadingTextView.setPadding(25,25,25,25);
-        //TODO: Remove magic numbers, can't rely on them
-        urbanHeadingTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-
         if (results.getDefinitions().size() != 0) { mMeanings.addView(urbanHeadingTextView);}
 
         for (Definition dr : results.getDefinitions()) {
             View meaningRow = LayoutInflater.from(mContext).inflate(
                     R.layout.urban_meaning_row, mMeanings, false);
-
             TextView def = (TextView) meaningRow.findViewById(R.id.definition);
             def.setText(dr.getDefinition());
             TextView synonyms = (TextView) meaningRow
