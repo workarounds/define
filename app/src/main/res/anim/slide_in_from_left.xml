@@ -4,5 +4,5 @@
         android:fromXDelta="-100%"
         android:toXDelta="0%"
         android:duration="@integer/default_anim_time"
-        android:interpolator="@android:anim/overshoot_interpolator"/>
+        android:interpolator="@anim/overshoot"/>
 </set>

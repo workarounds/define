@@ -2,13 +2,16 @@ package in.workarounds.define.ui.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,6 +19,8 @@ import java.util.Locale;
 
 import in.workarounds.define.R;
 import in.workarounds.define.model.DictResult;
+import in.workarounds.define.model.urbandictionary.Definition;
+import in.workarounds.define.model.urbandictionary.UrbanDictResult;
 import in.workarounds.define.ui.view.FlowLayout;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
@@ -25,6 +30,7 @@ public class DefineCardHandler implements OnTouchListener{
     private Context mContext;
     private View mRoot;
     private ViewGroup mCard;
+    private  ViewGroup mMeanings;
     private SelectedTextChangedListener mSelectedTextChangedListener;
 
     public DefineCardHandler(@NonNull Context context, @NonNull View root, @NonNull SelectedTextChangedListener listener) {
@@ -120,29 +126,26 @@ public class DefineCardHandler implements OnTouchListener{
         ViewGroup meaningCard = (ViewGroup) getMeaningCard();
         meaningCard.setVisibility(View.VISIBLE);
 
-        ViewGroup meanings = (ViewGroup) meaningCard
+        mMeanings = (ViewGroup) meaningCard
                 .findViewById(R.id.meanings);
 
         TextView word = (TextView) meaningCard.findViewById(R.id.word);
         String wordText = capitalizeFirstLetter(StringUtils.preProcessWord(wordForm));
         word.setText(wordText);
 
-        addMeaningsToScrollView(meanings, results);
+        addMeaningsToScrollView(results);
     }
 
     /**
      * This function does basically does tha work of an adapter. It populates
      * the meanings ScrollView with all the meanings from the DictResults[]
      *
-     * @param meanings
-     *            The ViewGroup(ScrollView) to which the meanings should be
-     *            added and displayed
      */
-    private void addMeaningsToScrollView(ViewGroup meanings, ArrayList<DictResult> results) {
-        meanings.removeAllViews();
+    private void addMeaningsToScrollView(ArrayList<DictResult> results) {
+        mMeanings.removeAllViews();
         for (DictResult dr : results) {
             View meaningRow = LayoutInflater.from(mContext).inflate(
-                    R.layout.meaning_row, meanings, false);
+                    R.layout.meaning_row, mMeanings, false);
             TextView def = (TextView) meaningRow.findViewById(R.id.definition);
             def.setText(dr.getMeaning());
             TextView type = (TextView) meaningRow
@@ -150,26 +153,53 @@ public class DefineCardHandler implements OnTouchListener{
             type.setText(dr.getType());
             TextView synonyms = (TextView) meaningRow
                     .findViewById(R.id.synonyms);
-            String syns = "";
-            for (String syn : dr.getSynonyms()) {
-                syns += syn + ", ";
-            }
-            synonyms.setText(syns);
+            synonyms.setText(TextUtils.join(", ", dr.getSynonyms()));
             TextView usage = (TextView) meaningRow.findViewById(R.id.usage);
-            String uses = "";
-            for (String use : dr.getUsage()) {
-                uses += use + ", ";
-            }
-            usage.setText(uses);
+            usage.setText(TextUtils.join(", ", dr.getUsage()));
             /*Making usage text view disappear if the length of `uses` is 0*/
-            if(uses.length() == 0){
+            if(dr.getUsage().size() == 0){
                 usage.setVisibility(View.GONE);
             }else{
                 usage.setVisibility(View.VISIBLE);
             }
+            mMeanings.addView(meaningRow);
+        }
+    }
 
-            def.setText(dr.getMeaning());
-            meanings.addView(meaningRow);
+    public void addUrbanDictMeaningsToScrollView(UrbanDictResult results) {
+
+        TextView urbanHeadingTextView = new TextView(mContext);
+        urbanHeadingTextView.setTextSize(15);
+        urbanHeadingTextView.setTypeface(urbanHeadingTextView.getTypeface(), Typeface.BOLD_ITALIC);
+        urbanHeadingTextView.setTextColor(mContext.getResources().getColor(R.color.black));
+        urbanHeadingTextView.setText("Urban Dictionary Meanings");
+        urbanHeadingTextView.setPadding(25,25,25,25);
+        //TODO: Remove magic numbers, can't rely on them
+        urbanHeadingTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        if (results.getDefinitions().size() != 0) { mMeanings.addView(urbanHeadingTextView);}
+
+        for (Definition dr : results.getDefinitions()) {
+            View meaningRow = LayoutInflater.from(mContext).inflate(
+                    R.layout.urban_meaning_row, mMeanings, false);
+
+            TextView def = (TextView) meaningRow.findViewById(R.id.definition);
+            def.setText(dr.getDefinition());
+            TextView synonyms = (TextView) meaningRow
+                    .findViewById(R.id.synonyms);
+            synonyms.setText(TextUtils.join(", ", results.getTags()));
+            TextView usage = (TextView) meaningRow.findViewById(R.id.usage);
+            usage.setText(dr.getExample());
+            TextView author = (TextView) meaningRow.findViewById(R.id.author);
+            author.setText("-"+ dr.getAuthor());
+            /*Making usage text view disappear if the length of `uses` is 0*/
+            if(dr.getExample().isEmpty()){
+                usage.setVisibility(View.GONE);
+            }else{
+                usage.setVisibility(View.VISIBLE);
+            }
+            mMeanings.addView(meaningRow);
         }
     }
 

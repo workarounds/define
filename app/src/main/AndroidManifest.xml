@@ -46,7 +46,13 @@
         </service>
 
         <service
-            android:name="in.workarounds.define.service.DefineUIService"
+            android:name="in.workarounds.define.service.ChatHeadService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
+        <service
+            android:name="in.workarounds.define.service.NotificationUIService"
             android:enabled="true"
             android:exported="false">
         </service>
