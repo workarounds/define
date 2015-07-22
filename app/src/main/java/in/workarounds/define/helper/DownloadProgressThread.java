@@ -39,17 +39,21 @@ public class DownloadProgressThread extends Thread {
         final ProgressBar progressBar = mProgressBar.get();
         final TextView textView = mTextView.get();
 
+        DownloadManager.Query q = new DownloadManager.Query();
+        q.setFilterById(mDownloadReference);
+        int bytes_downloaded;
+        int bytes_total;
+        Cursor cursor;
+
         while (mRunning && downloading && mDownloadReference != 0) {
 
-            DownloadManager.Query q = new DownloadManager.Query();
-            q.setFilterById(mDownloadReference);
-
-            final Cursor cursor = mDownloadManager.query(q);
+            cursor = mDownloadManager.query(q);
             if(cursor.moveToFirst()) {
 
-                int bytes_downloaded = cursor.getInt(cursor
+                bytes_downloaded = cursor.getInt(cursor
                         .getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
-                int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                final String status = getStatusMessage(cursor);
 
                 if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
                     downloading = false;
@@ -73,7 +77,7 @@ public class DownloadProgressThread extends Thread {
                     textView.post(new Runnable() {
                         @Override
                         public void run() {
-                            textView.setText(getStatusMessage(cursor));
+                            textView.setText(status);
                         }
                     });
                 }
