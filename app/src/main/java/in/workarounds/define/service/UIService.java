@@ -135,8 +135,8 @@ public abstract class UIService extends Service {
     }
 
     @Nullable
-    protected View onCreateBubbleView(){
-        return null;
+    protected View onCreateBubbleView(@Nullable View bubbleView){
+        return bubbleView;
     }
 
     protected void onBubbleCreated(View bubbleView){
@@ -151,8 +151,8 @@ public abstract class UIService extends Service {
     }
 
     @Nullable
-    protected View onCreateCardView(){
-        return null;
+    protected View onCreateCardView(@Nullable View cardView){
+        return cardView;
     }
 
     protected void onCardCreated(View cardView){
@@ -256,7 +256,7 @@ public abstract class UIService extends Service {
 
     private void addBubble(){
         onCreateBubble();
-        View bubbleView = onCreateBubbleView();
+        View bubbleView = onCreateBubbleView(mBubbleView);
         if(bubbleView != null) {
             mBubbleView = bubbleView;
         }
@@ -272,7 +272,7 @@ public abstract class UIService extends Service {
 
     private void addCard(){
         onCreateCard();
-        View cardView = onCreateCardView();
+        View cardView = onCreateCardView(mCardView);
         if(cardView != null) {
             mCardView = cardView;
         }
