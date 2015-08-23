@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.FrameLayout;
 
+import in.workarounds.define.ui.view.PopupRoot;
 import in.workarounds.define.util.LogUtils;
 
 /**
@@ -29,7 +30,7 @@ import in.workarounds.define.util.LogUtils;
  *
  * Created by manidesto on 09/05/15.
  */
-public abstract class UIService extends Service {
+public abstract class UIService extends Service implements PopupRoot.OnCloseDialogsListener {
     private static String TAG = LogUtils.makeLogTag(UIService.class);
     /**
      * Service starts with this state.
@@ -80,6 +81,8 @@ public abstract class UIService extends Service {
 
     private @LayoutRes int mCardViewResId;
 
+    private PopupRoot mCardViewWrapper;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -104,6 +107,11 @@ public abstract class UIService extends Service {
         if(getState() != STATE_WAITING) {
             goToState(STATE_WAITING);
         }
+    }
+
+    @Override
+    public void onCloseDialogs() {
+
     }
 
     protected View getBubbleView(){
@@ -283,7 +291,10 @@ public abstract class UIService extends Service {
         }
 
         LayoutParams cardParams = getCardParams();
-        mWindowManager.addView(mCardView, cardParams);
+        mCardViewWrapper = new PopupRoot(this);
+        mCardViewWrapper.addView(mCardView);
+        mWindowManager.addView(mCardViewWrapper, cardParams);
+        registerCloseCallbacks(mCardViewWrapper);
         mCardView.requestFocus();
         onCardCreated(mCardView);
         onResumeCard(mSavedInstanceState);
@@ -291,7 +302,8 @@ public abstract class UIService extends Service {
 
     private void removeCard(){
         onHideCard(mSavedInstanceState);
-        mWindowManager.removeView(mCardView);
+        unregisterCloseCallbacks(mCardViewWrapper);
+        mWindowManager.removeView(mCardViewWrapper);
     }
 
     private void removeBubble(){
@@ -301,5 +313,15 @@ public abstract class UIService extends Service {
     @NonNull
     private ViewGroup getFakeRoot(){
         return new FrameLayout(this);
+    }
+
+    private void registerCloseCallbacks(@NonNull PopupRoot cardViewWrapper){
+        LogUtils.LOGD(TAG, "registered close callbacks");
+        cardViewWrapper.registerOnCloseDialogsListener(this);
+    }
+
+    private void unregisterCloseCallbacks(@NonNull PopupRoot cardViewWrapper){
+        LogUtils.LOGD(TAG, "unregistered close callbacks");
+        cardViewWrapper.removeOnCloseDialogsListener();
     }
 }

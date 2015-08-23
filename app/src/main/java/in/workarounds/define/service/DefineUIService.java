@@ -120,9 +120,6 @@ public abstract class DefineUIService extends UIService implements PopupRoot.OnC
                 onCloseDialogs();
             }
         });
-
-        PopupRoot popupRoot = (PopupRoot) popup;
-        popupRoot.registerOnCloseDialogsListener(this);
     }
 
     /**
