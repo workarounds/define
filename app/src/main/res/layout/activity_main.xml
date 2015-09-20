@@ -97,4 +97,11 @@
         android:layout_marginTop="5dp"
         android:layout_below="@+id/ll_accent_buttons"/>
 
+    <in.workarounds.typography.EditText
+        android:id="@+id/sample_text"
+        android:layout_below="@id/cb_is_silent_mode"
+        android:text="Here is some text that you can copy and see how it is working out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

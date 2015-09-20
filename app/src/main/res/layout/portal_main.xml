@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_main_portal_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/translucent_gray"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+
+        <ScrollView
+            android:id="@+id/sv_text_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/top_bar">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cv_text_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_regular"
+                android:layout_marginRight="@dimen/margin_regular"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="2dp">
+
+                <in.workarounds.define.ui.view.SelectableTextView
+                    android:id="@+id/tv_clip_text"
+                    android:textIsSelectable="true"
+                    android:layout_margin="@dimen/margin_medium"
+                    android:textColor="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.v7.widget.CardView>
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_meaning_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_close_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <in.workarounds.typography.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/close"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_regular" />
+
+    </FrameLayout>
+
+</LinearLayout>

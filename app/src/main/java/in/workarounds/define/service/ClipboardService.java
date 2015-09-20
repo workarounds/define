@@ -4,12 +4,14 @@ import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.webkit.URLUtil;
 
-import in.workarounds.define.ui.activity.TestActivity;
+import in.workarounds.define.ui.MainPortal;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
+import in.workarounds.portal.Portal;
 
 public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
@@ -66,19 +68,9 @@ public class ClipboardService extends Service implements
     }
 
     private void startActionResolver(String text) {
-        if (text != null) {
-            Intent intent;
-            boolean useUIService = PrefUtils.getSharedPreferences(this)
-                    .getBoolean(TestActivity.KEY_USE_UI_SERVICE, false);
-            if(useUIService) {
-                intent = getUIServiceIntent();
-                intent.putExtra(DefineUIService.INTENT_EXTRA_CLIPTEXT, text);
-            } else {
-                intent = new Intent(this, PopupManager.class);
-                intent.putExtra(PopupManager.INTENT_EXTRA_CLIPTEXT, text);
-            }
-            getBaseContext().startService(intent);
-        }
+        Bundle bundle = new Bundle();
+        bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
+        Portal.with(this).type(MainPortal.class).data(bundle).open();
     }
 
     private Intent getUIServiceIntent(){
