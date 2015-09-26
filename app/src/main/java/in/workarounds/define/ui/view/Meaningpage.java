@@ -8,13 +8,12 @@ import javax.inject.Inject;
 
 import in.workarounds.define.R;
 import in.workarounds.define.portal.ComponentProvider;
-import in.workarounds.define.wordnet.Wordnet;
 
 /**
  * Created by madki on 26/09/15.
  */
 public class MeaningPage extends RelativeLayout {
-    @Inject @Wordnet
+    @Inject
     MeaningPresenter presenter;
 
     public MeaningPage(Context context) {

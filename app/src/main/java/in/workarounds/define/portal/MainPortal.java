@@ -6,14 +6,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import in.workarounds.define.R;
-import in.workarounds.define.network.DaggerNetworkComponent;
-import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.ui.view.MeaningPage;
 import in.workarounds.define.ui.view.SelectableTextView;
-import in.workarounds.define.urban.DaggerUrbanDictionaryComponent;
-import in.workarounds.define.urban.UrbanDictionaryComponent;
+import in.workarounds.define.urban.UrbanComponent;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.wordnet.DaggerWordnetComponent;
 import in.workarounds.define.wordnet.WordnetComponent;
 import in.workarounds.portal.Portal;
 
@@ -28,7 +24,7 @@ public class MainPortal extends Portal implements ComponentProvider {
     private View mPortalContainer;
     private PortalComponent component;
     private WordnetComponent wordnetComponent;
-    private UrbanDictionaryComponent urbanDictionaryComponent;
+    private UrbanComponent urbanComponent;
     private MeaningPage meaningPage;
 
 
@@ -48,12 +44,12 @@ public class MainPortal extends Portal implements ComponentProvider {
 
     private void initComponents() {
         component = DaggerPortalComponent.create();
-        wordnetComponent = DaggerWordnetComponent.create();
-        urbanDictionaryComponent = DaggerUrbanDictionaryComponent.builder()
-                .networkComponent(DaggerNetworkComponent.builder()
-                        .networkModule(new NetworkModule(this))
-                        .build())
-                .build();
+//        wordnetComponent = DaggerWordnetComponent.create();
+//        urbanComponent = DaggerUrbanComponent.builder()
+//                .networkComponent(DaggerNetworkComponent.builder()
+//                        .networkModule(new NetworkModule(this))
+//                        .build())
+//                .build();
     }
 
     @Override
@@ -68,7 +64,7 @@ public class MainPortal extends Portal implements ComponentProvider {
                 wordnetComponent.inject(meaningPage);
                 break;
             case R.id.urban_page:
-                urbanDictionaryComponent.inject(meaningPage);
+                urbanComponent.inject(meaningPage);
                 break;
             default:
                 throw new IllegalArgumentException("Meaning page must have a id. Either wordnet_page or urban_page");
@@ -85,7 +81,7 @@ public class MainPortal extends Portal implements ComponentProvider {
                 finish();
             }
         });
-        meaningPage = (MeaningPage) findViewById(R.id.meaning_container);
+        meaningPage = (MeaningPage) findViewById(R.id.wordnet_page);
 
         mTvClipText.setOnWordSelectedListener(new SelectableTextView.OnWordSelectedListener() {
             @Override

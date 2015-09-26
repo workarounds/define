@@ -10,7 +10,7 @@ import retrofit.RestAdapter;
  * Created by madki on 26/09/15.
  */
 @Module
-public class UrbanDictionaryModule {
+public class UrbanModule {
 
     @Provides @PerPortal
     public Dictionary provideDictionary(UrbanDictionary dictionary) {
@@ -18,11 +18,11 @@ public class UrbanDictionaryModule {
     }
 
     @Provides @PerPortal
-    public UrbanDictionaryApi provideUrbanApi() {
+    public UrbanApi provideUrbanApi() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://api.urbandictionary.com/v0")
                 .build();
 
-        return restAdapter.create(UrbanDictionaryApi.class);
+        return restAdapter.create(UrbanApi.class);
     }
 }

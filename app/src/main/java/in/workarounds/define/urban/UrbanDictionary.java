@@ -15,7 +15,7 @@ import in.workarounds.define.portal.PerPortal;
 public class UrbanDictionary implements Dictionary {
 
     @Inject
-    public UrbanDictionary(UrbanDictionaryApi api) {
+    public UrbanDictionary(UrbanApi api) {
 
     }
 

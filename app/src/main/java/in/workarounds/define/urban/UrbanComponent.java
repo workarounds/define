@@ -10,8 +10,8 @@ import in.workarounds.define.ui.view.MeaningPage;
  * Created by madki on 26/09/15.
  */
 @PerPortal
-@Component(modules = {UrbanDictionaryModule.class}, dependencies = {NetworkComponent.class})
-public interface UrbanDictionaryComponent {
+@Component(modules = {UrbanModule.class}, dependencies = {NetworkComponent.class})
+public interface UrbanComponent {
     Dictionary dictionary();
     void inject(MeaningPage meaningPage);
 }
