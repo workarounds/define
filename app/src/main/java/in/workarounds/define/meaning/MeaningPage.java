@@ -40,7 +40,7 @@ public class MeaningPage extends RelativeLayout {
 
     private void init() {
         // inflate the view
-        inflate(getContext(), R.layout.layout_meaning_page, this);
+        inflate(getContext(), R.layout.view_meaning_page, this);
 
         // inject Presenter
         inject();
@@ -53,6 +53,9 @@ public class MeaningPage extends RelativeLayout {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         meanings.setLayoutManager(layoutManager);
         meanings.setAdapter(presenter.adapter());
+
+        // set title
+        title(presenter.word());
     }
 
     private void inject() {

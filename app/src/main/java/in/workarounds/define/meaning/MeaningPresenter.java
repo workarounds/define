@@ -24,8 +24,6 @@ public class MeaningPresenter {
     private String word;
     private MeaningsAdapter adapter = new MeaningsAdapter();
 
-    private boolean old;
-
     @Inject
     public MeaningPresenter(Dictionary dictionary) {
         this.dictionary = dictionary;
@@ -33,31 +31,25 @@ public class MeaningPresenter {
 
     public void addView(MeaningPage view) {
         this.meaningPage = view;
-        if(old) {
-            restoreView();
-        }
     }
 
     public void dropView() {
         this.meaningPage = null;
-        old = true;
     }
 
     public void word(String word) {
+        if(word != null && !word.equals(this.word)) {
+            adapter.update(new ArrayList<Result>());
+        }
         this.word = word;
+        if(meaningPage != null) {
+            meaningPage.title(word);
+        }
         new MeaningsTask().execute(word);
     }
 
     public String word() {
         return word;
-    }
-
-    public boolean old() {
-        return old;
-    }
-
-    private void restoreView() {
-        meaningPage.title(word);
     }
 
     public MeaningsAdapter adapter() {

@@ -30,32 +30,31 @@
 
                 <in.workarounds.define.ui.view.SelectableTextView
                     android:id="@+id/tv_clip_text"
-                    android:textIsSelectable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
                     android:textColor="@color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:textIsSelectable="true" />
             </android.support.v7.widget.CardView>
         </ScrollView>
 
     </RelativeLayout>
 
-    <in.workarounds.define.meaning.MeaningPage
-        android:id="@+id/wordnet_page"
+    <LinearLayout
+        android:id="@+id/ll_meaning_pages_container"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginLeft="@dimen/margin_regular"
         android:layout_marginRight="@dimen/margin_regular"
-        android:layout_height="0dp"
-        android:layout_weight="3" />
+        android:layout_weight="6"
+        android:orientation="vertical">
 
-    <in.workarounds.define.meaning.MeaningPage
-        android:id="@+id/urban_page"
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/margin_regular"
-        android:layout_marginLeft="@dimen/margin_regular"
-        android:layout_marginRight="@dimen/margin_regular"
-        android:layout_height="0dp"
-        android:layout_weight="3" />
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_pages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fl_close_container"

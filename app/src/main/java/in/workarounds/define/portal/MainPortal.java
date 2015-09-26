@@ -2,13 +2,15 @@ package in.workarounds.define.portal;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.Toast;
 
 import in.workarounds.define.R;
+import in.workarounds.define.meaning.MeaningPage;
+import in.workarounds.define.meaning.MeaningPagerAdapter;
+import in.workarounds.define.meaning.MeaningPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-import in.workarounds.define.meaning.MeaningPage;
 import in.workarounds.define.ui.view.SelectableTextView;
 import in.workarounds.define.urban.DaggerUrbanComponent;
 import in.workarounds.define.urban.UrbanComponent;
@@ -24,14 +26,17 @@ public class MainPortal extends Portal implements ComponentProvider {
     private static final String TAG = LogUtils.makeLogTag(MainPortal.class);
     public static final String BUNDLE_KEY_CLIP_TEXT = "bundle_key_clip_text";
     private String mClipText;
+
     private SelectableTextView mTvClipText;
+    private ViewPager pager;
+
     private View mPortalContainer;
     private PortalComponent component;
     private WordnetComponent wordnetComponent;
     private UrbanComponent urbanComponent;
-    private MeaningPage wordnetPage;
-    private MeaningPage urbanPage;
 
+    private MeaningPresenter wordnetPresenter;
+    private MeaningPresenter urbanPresenter;
 
     public MainPortal(Context base) {
         super(base);
@@ -55,6 +60,9 @@ public class MainPortal extends Portal implements ComponentProvider {
                         .networkModule(new NetworkModule(this))
                         .build())
                 .build();
+
+        wordnetPresenter = wordnetComponent.presenter();
+        urbanPresenter   = urbanComponent.presenter();
     }
 
     @Override
@@ -86,15 +94,14 @@ public class MainPortal extends Portal implements ComponentProvider {
                 finish();
             }
         });
-        wordnetPage = (MeaningPage) findViewById(R.id.wordnet_page);
-        urbanPage = (MeaningPage) findViewById(R.id.urban_page);
+        pager = (ViewPager) findViewById(R.id.vp_pages);
+        pager.setAdapter(new MeaningPagerAdapter());
 
         mTvClipText.setOnWordSelectedListener(new SelectableTextView.OnWordSelectedListener() {
             @Override
             public void onWordSelected(String word) {
-                Toast.makeText(MainPortal.this, "Word clicked: " + word, Toast.LENGTH_LONG).show();
-                wordnetPage.setWord(word);
-                urbanPage.setWord(word);
+                wordnetPresenter.word(word);
+                urbanPresenter.word(word);
             }
         });
     }
