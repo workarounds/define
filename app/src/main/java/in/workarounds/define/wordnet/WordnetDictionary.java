@@ -50,7 +50,7 @@ public class WordnetDictionary implements Dictionary {
         Result result = new Result();
         List<String> synonyms = new ArrayList<>(Arrays.asList(synset.getWordForms()));
         result.synonyms(synonyms);
-        result.meaning(synset.getDefinition());
+        result.definition(synset.getDefinition());
         List<String> usages = new ArrayList<>(Arrays.asList(synset.getUsageExamples()));
         result.usages(usages);
         result.type(convertType(synset.getType()));

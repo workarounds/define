@@ -1,8 +1,14 @@
 package in.workarounds.define.meaning;
 
+import android.os.AsyncTask;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import in.workarounds.define.dictionary.Dictionary;
+import in.workarounds.define.dictionary.Result;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 
@@ -16,6 +22,7 @@ public class MeaningPresenter {
     private Dictionary dictionary;
     private MeaningPage meaningPage;
     private String word;
+    private MeaningsAdapter adapter = new MeaningsAdapter();
 
     private boolean old;
 
@@ -38,7 +45,7 @@ public class MeaningPresenter {
 
     public void word(String word) {
         this.word = word;
-        LogUtils.LOGD(TAG, "word set in presenter : " + word);
+        new MeaningsTask().execute(word);
     }
 
     public String word() {
@@ -53,5 +60,23 @@ public class MeaningPresenter {
         meaningPage.title(word);
     }
 
+    public MeaningsAdapter adapter() {
+        return adapter;
+    }
 
+    private void onResultsUpdated(List<Result> results) {
+        adapter.update(results);
+    }
+
+    private class MeaningsTask extends AsyncTask<String, Integer, ArrayList<Result>> {
+        @Override
+        protected ArrayList<Result> doInBackground(String... params) {
+            return dictionary.results(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Result> results) {
+            onResultsUpdated(results);
+        }
+    }
 }

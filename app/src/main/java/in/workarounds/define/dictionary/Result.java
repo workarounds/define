@@ -14,7 +14,7 @@ public class Result {
     public static final String TYPE_NONE = "unkonwn";
 
     protected String word;
-    protected String meaning;
+    protected String definition;
     protected List<String> synonyms;
     protected String type;
     protected List<String> usages;
@@ -27,12 +27,12 @@ public class Result {
         this.word = word;
     }
 
-    public String meaning() {
-        return meaning;
+    public String definition() {
+        return definition;
     }
 
-    public void meaning(String meaning) {
-        this.meaning = meaning;
+    public void definition(String meaning) {
+        this.definition = meaning;
     }
 
     public List<String> synonyms() {

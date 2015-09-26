@@ -34,7 +34,7 @@ public class WordnetDictionary implements Dictionary {
 
     /**
      * given a word, returns an array of DictResult returns an array with no
-     * elements if meaning isn't found
+     * elements if definition isn't found
      *
      * @param wordForm
      * @return
@@ -73,7 +73,7 @@ public class WordnetDictionary implements Dictionary {
                     LogUtils.LOGD(TAG, "result: " + result);
                 }
             } else {
-                LogUtils.LOGD(TAG, "No meaning found for: " + wordForm);
+                LogUtils.LOGD(TAG, "No definition found for: " + wordForm);
             }
         } else {
             LogUtils.LOGD(TAG, "No word given");

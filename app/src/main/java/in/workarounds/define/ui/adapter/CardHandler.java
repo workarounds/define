@@ -130,10 +130,10 @@ public class CardHandler implements OnTouchListener, OnClickListener {
 	}
 
 	/**
-	 * Searches for the meaning and displays the results in meanings card
+	 * Searches for the definition and displays the results in meanings card
 	 * 
 	 * @param wordForm
-	 *            the word of whose meaning the user is looking for
+	 *            the word of whose definition the user is looking for
 	 */
 	public void showMeanings(String wordForm) {
 		mResultList = new DictResult[] {};
