@@ -2,6 +2,8 @@ package in.workarounds.define.wordnet;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import in.workarounds.define.file.FileHelper;
 import in.workarounds.define.util.FileUtils;
 
@@ -11,6 +13,11 @@ import in.workarounds.define.util.FileUtils;
 public class WordnetFileHelper extends FileHelper {
     public static final String WORDNET_FOLDER    = "Wordnet";
     public static final String WORDNET_PATH      = ROOT_PATH + "/" + WORDNET_FOLDER;
+
+    @Inject
+    public WordnetFileHelper() {
+
+    }
 
     @Override
     public String dictFilePath() {

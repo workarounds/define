@@ -2,12 +2,16 @@ package in.workarounds.define.ui.view;
 
 import android.view.View;
 
+import javax.inject.Inject;
+
 import in.workarounds.define.dictionary.Dictionary;
+import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 
 /**
  * Created by madki on 26/09/15.
  */
+@PerPortal
 public class MeaningPresenter {
     private static final String TAG = LogUtils.makeLogTag(MeaningPresenter.class);
 
@@ -17,6 +21,7 @@ public class MeaningPresenter {
 
     private boolean old;
 
+    @Inject
     public MeaningPresenter(Dictionary dictionary) {
         this.dictionary = dictionary;
     }

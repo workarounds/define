@@ -10,7 +10,11 @@ import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.ui.view.MeaningPage;
 import in.workarounds.define.ui.view.SelectableTextView;
+import in.workarounds.define.urban.DaggerUrbanDictionaryComponent;
+import in.workarounds.define.urban.UrbanDictionaryComponent;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.wordnet.DaggerWordnetComponent;
+import in.workarounds.define.wordnet.WordnetComponent;
 import in.workarounds.portal.Portal;
 
 /**
@@ -23,6 +27,8 @@ public class MainPortal extends Portal implements ComponentProvider {
     private SelectableTextView mTvClipText;
     private View mPortalContainer;
     private PortalComponent component;
+    private WordnetComponent wordnetComponent;
+    private UrbanDictionaryComponent urbanDictionaryComponent;
     private MeaningPage meaningPage;
 
 
@@ -41,14 +47,32 @@ public class MainPortal extends Portal implements ComponentProvider {
     }
 
     private void initComponents() {
-        component = DaggerPortalComponent.builder()
-                .networkComponent(DaggerNetworkComponent.builder().networkModule(new NetworkModule(this)).build())
+        component = DaggerPortalComponent.create();
+        wordnetComponent = DaggerWordnetComponent.create();
+        urbanDictionaryComponent = DaggerUrbanDictionaryComponent.builder()
+                .networkComponent(DaggerNetworkComponent.builder()
+                        .networkModule(new NetworkModule(this))
+                        .build())
                 .build();
     }
 
     @Override
     public PortalComponent component() {
         return component;
+    }
+
+    @Override
+    public void inject(MeaningPage meaningPage) {
+        switch (meaningPage.getId()) {
+            case R.id.wordnet_page:
+                wordnetComponent.inject(meaningPage);
+                break;
+            case R.id.urban_page:
+                urbanDictionaryComponent.inject(meaningPage);
+                break;
+            default:
+                throw new IllegalArgumentException("Meaning page must have a id. Either wordnet_page or urban_page");
+        }
     }
 
     private void initViews() {

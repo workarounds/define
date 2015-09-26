@@ -41,7 +41,7 @@ public class MeaningPage extends RelativeLayout {
 
     private void inject() {
         if(!isInEditMode()) {
-            ((ComponentProvider) getContext()).component().inject(this);
+            ((ComponentProvider) getContext()).inject(this);
         }
     }
 

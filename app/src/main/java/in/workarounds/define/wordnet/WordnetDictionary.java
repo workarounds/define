@@ -12,7 +12,6 @@ import edu.smu.tspell.wordnet.SynsetType;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import in.workarounds.define.dictionary.Dictionary;
 import in.workarounds.define.dictionary.Result;
-import in.workarounds.define.file.FileHelper;
 import in.workarounds.define.util.LogUtils;
 
 /**
@@ -24,7 +23,7 @@ public class WordnetDictionary implements Dictionary {
     private WordNetDatabase database;
 
     @Inject
-    public WordnetDictionary(@Wordnet FileHelper wordnetFileHelper) {
+    public WordnetDictionary (WordnetFileHelper wordnetFileHelper) {
         System.setProperty(WORDNET_DATABASE_DIR, wordnetFileHelper.dictFilePath());
         try {
             database = WordNetDatabase.getFileInstance();
