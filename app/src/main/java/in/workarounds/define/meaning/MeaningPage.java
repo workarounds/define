@@ -1,8 +1,9 @@
-package in.workarounds.define.ui.view;
+package in.workarounds.define.meaning;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -15,6 +16,8 @@ import in.workarounds.define.portal.ComponentProvider;
 public class MeaningPage extends RelativeLayout {
     @Inject
     MeaningPresenter presenter;
+
+    private TextView title;
 
     public MeaningPage(Context context) {
         super(context);
@@ -36,6 +39,7 @@ public class MeaningPage extends RelativeLayout {
 
     private void init() {
         inflate(getContext(), R.layout.layout_meaning_page, this);
+        title = (TextView) findViewById(R.id.tv_title);
     }
 
     private void inject() {
@@ -62,6 +66,14 @@ public class MeaningPage extends RelativeLayout {
         if(!isInEditMode()) {
             presenter.dropView();
         }
+    }
+
+    public void title(String heading) {
+        title.setText(heading);
+    }
+
+    public String title() {
+        return title.getText().toString();
     }
 
 

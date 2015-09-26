@@ -40,7 +40,7 @@
 
     </RelativeLayout>
 
-    <in.workarounds.define.ui.view.MeaningPage
+    <in.workarounds.define.meaning.MeaningPage
         android:id="@+id/wordnet_page"
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/margin_regular"
@@ -48,7 +48,7 @@
         android:layout_height="0dp"
         android:layout_weight="3" />
 
-    <in.workarounds.define.ui.view.MeaningPage
+    <in.workarounds.define.meaning.MeaningPage
         android:id="@+id/urban_page"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/margin_regular"

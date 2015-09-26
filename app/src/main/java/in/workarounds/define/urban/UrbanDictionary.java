@@ -21,6 +21,6 @@ public class UrbanDictionary implements Dictionary {
 
     @Override
     public ArrayList<Result> results(String word) {
-        return null;
+        return new ArrayList<>();
     }
 }

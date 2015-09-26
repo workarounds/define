@@ -8,7 +8,7 @@ import android.widget.Toast;
 import in.workarounds.define.R;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-import in.workarounds.define.ui.view.MeaningPage;
+import in.workarounds.define.meaning.MeaningPage;
 import in.workarounds.define.ui.view.SelectableTextView;
 import in.workarounds.define.urban.DaggerUrbanComponent;
 import in.workarounds.define.urban.UrbanComponent;

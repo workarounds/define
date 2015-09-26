@@ -1,6 +1,4 @@
-package in.workarounds.define.ui.view;
-
-import android.view.View;
+package in.workarounds.define.meaning;
 
 import javax.inject.Inject;
 
@@ -16,7 +14,7 @@ public class MeaningPresenter {
     private static final String TAG = LogUtils.makeLogTag(MeaningPresenter.class);
 
     private Dictionary dictionary;
-    private View view;
+    private MeaningPage meaningPage;
     private String word;
 
     private boolean old;
@@ -26,12 +24,15 @@ public class MeaningPresenter {
         this.dictionary = dictionary;
     }
 
-    public void addView(View view) {
-        this.view = view;
+    public void addView(MeaningPage view) {
+        this.meaningPage = view;
+        if(old) {
+            restoreView();
+        }
     }
 
     public void dropView() {
-        this.view = null;
+        this.meaningPage = null;
         old = true;
     }
 
@@ -47,5 +48,10 @@ public class MeaningPresenter {
     public boolean old() {
         return old;
     }
+
+    private void restoreView() {
+        meaningPage.title(word);
+    }
+
 
 }
