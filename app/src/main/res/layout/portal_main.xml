@@ -16,8 +16,7 @@
         <ScrollView
             android:id="@+id/sv_text_card_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/top_bar">
+            android:layout_height="match_parent">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cv_text_card"

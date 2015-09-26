@@ -1,7 +1,9 @@
 package in.workarounds.define.api;
 
-
-public interface Constants {
-    String WORDNET    = "wordnet";
-    String WIKTIONARY = "wiktionary";
+/**
+ * Created by madki on 27/09/15.
+ */
+public class Constants {
+    public static final String WORDNET = "wordnet";
+    public static final String WIKTIONARY = "wiktionary";
 }

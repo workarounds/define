@@ -10,7 +10,6 @@ import android.webkit.URLUtil;
 
 import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
 
 public class ClipboardService extends Service implements
@@ -50,17 +49,15 @@ public class ClipboardService extends Service implements
 
     @Override
     public void onPrimaryClipChanged() {
-        if (!PopupManager.isPopupShown()) {
-            String text = getClipData();
-            startActionResolver(text);
-        }
+        String text = getClipData();
+        startActionResolver(text);
     }
 
     private String getClipData() {
         ClipData clipData = getClipboardManager().getPrimaryClip();
         ClipData.Item item = clipData.getItemAt(0);
         CharSequence text = item.getText();
-        if(text != null && !URLUtil.isValidUrl(text.toString())) {
+        if (text != null && !URLUtil.isValidUrl(text.toString())) {
             return text.toString();
         } else {
             return null;
@@ -68,18 +65,9 @@ public class ClipboardService extends Service implements
     }
 
     private void startActionResolver(String text) {
+        // TODO check if portal already open. If yes send data and don't re-open
         Bundle bundle = new Bundle();
         bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
         Portal.with(this).type(MainPortal.class).data(bundle).open();
-    }
-
-    private Intent getUIServiceIntent(){
-        boolean notify = PrefUtils.getSharedPreferences(this)
-                .getBoolean(PrefUtils.KEY_NOTIF_ONLY, false);
-        if(notify){
-            return new Intent(this, NotificationUIService.class);
-        } else {
-            return new Intent(this, ChatHeadService.class);
-        }
     }
 }

@@ -34,28 +34,11 @@
         </service>
 
         <service
-            android:name=".service.PopupManager"
-            android:enabled="true"
-            android:exported="false">
-        </service>
-
-        <service
             android:name=".service.UnzipService"
             android:enabled="true"
             android:exported="false">
         </service>
 
-        <service
-            android:name="in.workarounds.define.service.ChatHeadService"
-            android:enabled="true"
-            android:exported="false">
-        </service>
-
-        <service
-            android:name="in.workarounds.define.service.NotificationUIService"
-            android:enabled="true"
-            android:exported="false">
-        </service>
 
         <receiver
             android:name=".receiver.BootUpReceiver"
