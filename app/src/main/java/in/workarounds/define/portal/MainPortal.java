@@ -6,10 +6,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import in.workarounds.define.R;
+import in.workarounds.define.network.DaggerNetworkComponent;
+import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.ui.view.MeaningPage;
 import in.workarounds.define.ui.view.SelectableTextView;
+import in.workarounds.define.urban.DaggerUrbanComponent;
 import in.workarounds.define.urban.UrbanComponent;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.wordnet.DaggerWordnetComponent;
 import in.workarounds.define.wordnet.WordnetComponent;
 import in.workarounds.portal.Portal;
 
@@ -25,7 +29,8 @@ public class MainPortal extends Portal implements ComponentProvider {
     private PortalComponent component;
     private WordnetComponent wordnetComponent;
     private UrbanComponent urbanComponent;
-    private MeaningPage meaningPage;
+    private MeaningPage wordnetPage;
+    private MeaningPage urbanPage;
 
 
     public MainPortal(Context base) {
@@ -44,12 +49,12 @@ public class MainPortal extends Portal implements ComponentProvider {
 
     private void initComponents() {
         component = DaggerPortalComponent.create();
-//        wordnetComponent = DaggerWordnetComponent.create();
-//        urbanComponent = DaggerUrbanComponent.builder()
-//                .networkComponent(DaggerNetworkComponent.builder()
-//                        .networkModule(new NetworkModule(this))
-//                        .build())
-//                .build();
+        wordnetComponent = DaggerWordnetComponent.create();
+        urbanComponent = DaggerUrbanComponent.builder()
+                .networkComponent(DaggerNetworkComponent.builder()
+                        .networkModule(new NetworkModule(this))
+                        .build())
+                .build();
     }
 
     @Override
@@ -81,13 +86,15 @@ public class MainPortal extends Portal implements ComponentProvider {
                 finish();
             }
         });
-        meaningPage = (MeaningPage) findViewById(R.id.wordnet_page);
+        wordnetPage = (MeaningPage) findViewById(R.id.wordnet_page);
+        urbanPage = (MeaningPage) findViewById(R.id.urban_page);
 
         mTvClipText.setOnWordSelectedListener(new SelectableTextView.OnWordSelectedListener() {
             @Override
             public void onWordSelected(String word) {
                 Toast.makeText(MainPortal.this, "Word clicked: " + word, Toast.LENGTH_LONG).show();
-                meaningPage.setWord(word);
+                wordnetPage.setWord(word);
+                urbanPage.setWord(word);
             }
         });
     }
