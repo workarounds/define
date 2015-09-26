@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.webkit.URLUtil;
 
-import in.workarounds.define.ui.MainPortal;
+import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;

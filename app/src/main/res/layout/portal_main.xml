@@ -40,14 +40,11 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_meaning_container"
+    <in.workarounds.define.ui.view.MeaningPage
+        android:id="@+id/meaning_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:layout_weight="6" />
 
     <FrameLayout
         android:id="@+id/fl_close_container"

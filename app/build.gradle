@@ -24,7 +24,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/jaws-bin.jar')
-    compile 'in.workarounds.portal:portal:0.0.2'
+    compile 'in.workarounds.portal:portal:0.0.3'
     compile 'in.workarounds.typography:typography:0.0.4'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.google.code.gson:gson:2.3'
@@ -35,6 +35,8 @@ dependencies {
     // Dagger 2 and Compiler
     compile 'com.google.dagger:dagger:2.0.1'
     apt "com.google.dagger:dagger-compiler:2.0.1"
+
+    compile 'com.squareup.flow:flow:0.12'
 
     // Needed specifically for annotations in Java 1.6
     compile 'org.glassfish:javax.annotation:10.0-b28'
