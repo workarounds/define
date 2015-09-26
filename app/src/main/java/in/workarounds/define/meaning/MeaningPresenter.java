@@ -60,14 +60,14 @@ public class MeaningPresenter {
         adapter.update(results);
     }
 
-    private class MeaningsTask extends AsyncTask<String, Integer, ArrayList<Result>> {
+    private class MeaningsTask extends AsyncTask<String, Integer, List<Result>> {
         @Override
-        protected ArrayList<Result> doInBackground(String... params) {
+        protected List<Result> doInBackground(String... params) {
             return dictionary.results(params[0]);
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Result> results) {
+        protected void onPostExecute(List<Result> results) {
             onResultsUpdated(results);
         }
     }

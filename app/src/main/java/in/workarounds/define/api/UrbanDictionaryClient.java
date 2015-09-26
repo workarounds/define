@@ -1,6 +1,6 @@
 package in.workarounds.define.api;
 
-import in.workarounds.define.model.urbandictionary.UrbanDictResult;
+import in.workarounds.define.urban.UrbanResult;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.http.GET;
@@ -27,6 +27,6 @@ public class UrbanDictionaryClient
     public interface UrbanDictionaryService
     {
         @GET("/define")
-        void term(@Query("term") String term, Callback<UrbanDictResult> cb);
+        void term(@Query("term") String term, Callback<UrbanResult> cb);
     }
 }

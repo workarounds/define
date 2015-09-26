@@ -1,24 +1,16 @@
-package in.workarounds.define.model.urbandictionary;
-
-import android.support.annotation.NonNull;
+package in.workarounds.define.urban;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import in.workarounds.define.model.DictResult;
-
-public class UrbanDictResult
+public class UrbanResult
 {
     private List<String> tags;
     @SerializedName("result_type")
     private String resultType;
     @SerializedName("list")
-    private List<Definition> definitions;
+    private List<Meaning> meanings;
     private List<String> sounds;
 
     public List<String> getTags()
@@ -41,14 +33,14 @@ public class UrbanDictResult
         this.resultType = resultType;
     }
 
-    public List<Definition> getDefinitions()
+    public List<Meaning> getMeanings()
     {
-        return definitions;
+        return meanings;
     }
 
-    public void setDefinitions(List<Definition> definitions)
+    public void setMeanings(List<Meaning> meanings)
     {
-        this.definitions = definitions;
+        this.meanings = meanings;
     }
 
     public List<String> getSounds()

@@ -19,8 +19,8 @@ import java.util.Locale;
 
 import in.workarounds.define.R;
 import in.workarounds.define.model.DictResult;
-import in.workarounds.define.model.urbandictionary.Definition;
-import in.workarounds.define.model.urbandictionary.UrbanDictResult;
+import in.workarounds.define.urban.Meaning;
+import in.workarounds.define.urban.UrbanResult;
 import in.workarounds.define.ui.view.FlowLayout;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.StringUtils;
@@ -166,7 +166,7 @@ public class DefineCardHandler implements OnTouchListener{
         }
     }
 
-    public void addUrbanDictMeaningsToScrollView(UrbanDictResult results) {
+    public void addUrbanDictMeaningsToScrollView(UrbanResult results) {
 
         TextView urbanHeadingTextView = new TextView(mContext);
         urbanHeadingTextView.setTextSize(15);
@@ -178,9 +178,9 @@ public class DefineCardHandler implements OnTouchListener{
         urbanHeadingTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        if (results.getDefinitions().size() != 0) { mMeanings.addView(urbanHeadingTextView);}
+        if (results.getMeanings().size() != 0) { mMeanings.addView(urbanHeadingTextView);}
 
-        for (Definition dr : results.getDefinitions()) {
+        for (Meaning dr : results.getMeanings()) {
             View meaningRow = LayoutInflater.from(mContext).inflate(
                     R.layout.urban_meaning_row, mMeanings, false);
 

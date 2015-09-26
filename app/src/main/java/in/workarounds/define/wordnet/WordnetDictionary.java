@@ -33,8 +33,8 @@ public class WordnetDictionary implements Dictionary {
     }
 
     @Override
-    public ArrayList<Result> results(String word) {
-        ArrayList<Result> results = new ArrayList<>();
+    public List<Result> results(String word) {
+        List<Result> results = new ArrayList<>();
         if(database != null) {
             Synset[] synsets = database.getSynsets(word);
             for (Synset synset: synsets) {

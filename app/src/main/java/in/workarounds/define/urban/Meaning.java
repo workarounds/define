@@ -1,8 +1,8 @@
-package in.workarounds.define.model.urbandictionary;
+package in.workarounds.define.urban;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Definition
+public class Meaning
 {
     @SerializedName("defid")
     private long id;
