@@ -33,4 +33,9 @@
     <string name="label_toggles">Toggles</string>
     <string name="label_ui_service">UI Service</string>
     <string name="label_notification_only">Notification Only</string>
+
+    <!-- Notification Strings -->
+    <!-- Unzip notification -->
+    <string name="unzip_noti_title">Unzipping your dictionary</string>
+    <string name="unzip_noti_finish_title">Finished unzipping your dictionary</string>
 </resources>

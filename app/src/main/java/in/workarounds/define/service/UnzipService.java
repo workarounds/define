@@ -1,6 +1,7 @@
 package in.workarounds.define.service;
 
 import android.annotation.TargetApi;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import java.io.File;
@@ -21,10 +23,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import in.workarounds.define.helper.FileHelper;
+import javax.inject.Inject;
+
+import dagger.Lazy;
+import in.workarounds.define.R;
+import in.workarounds.define.api.Constants;
+import in.workarounds.define.file.FileHelper;
 import in.workarounds.define.ui.activity.MainActivity;
 import in.workarounds.define.util.FileUtils;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.wordnet.WordnetFileHelper;
 
 /**
  * Created by madki on 14/05/15.
@@ -66,9 +74,34 @@ public class UnzipService extends Service {
      */
     private HashMap<String, AsyncTask> mTasks = new HashMap<>();
 
+    private NotificationManager mNotifyManager;
+    private NotificationCompat.Builder mNotificationBuilder;
+    private int notificationCount = 0;
+
+    @Inject
+    Lazy<WordnetFileHelper> wordnetHelper;
+
+    private UnzipComponent component;
+
     @Override
     public IBinder onBind(Intent intent) {
         return mMessenger.getBinder();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        init();
+    }
+
+    private void init() {
+        component = DaggerUnzipComponent.create();
+        component.inject(this);
+
+        mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNotificationBuilder = new NotificationCompat.Builder(this);
+
+        mNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
     }
 
     @Override
@@ -200,6 +233,8 @@ public class UnzipService extends Service {
     }
 
     private class UnzipTask extends AsyncTask<String, Float, String> {
+        private FileHelper fileHelper;
+        private int notificationId;
 
         @Override
         protected void onPreExecute() {
@@ -208,9 +243,13 @@ public class UnzipService extends Service {
 
         @Override
         protected String doInBackground(String... params) {
+            notificationId = notificationCount + 1;
+            notificationCount = notificationCount + 1;
+
+            fileHelper = getFileHelper(params[0]);
             float progress = 0;
             float max = 0;
-            File zipFile = FileHelper.getZipFile(params[0]);
+            File zipFile = fileHelper.zipFile();
             if(zipFile != null) {
                 try {
                     ZipFile zip = new ZipFile(zipFile);
@@ -221,13 +260,13 @@ public class UnzipService extends Service {
                     while ((zipEntry = zin.getNextEntry()) != null) {
                         LogUtils.LOGV(TAG, "Unzipping " + zipEntry.getName());
                         if (zipEntry.isDirectory()) {
-                            FileUtils.assertDir(FileHelper.getRootFile() + File.separator
+                            FileUtils.assertDir(FileHelper.rootFile() + File.separator
                                     + zipEntry.getName());
                         } else {
                             progress++;
                             publishProgress(progress * 100f / max);
 
-                            FileOutputStream outputStream = new FileOutputStream(FileHelper.getRootFile() + File.separator
+                            FileOutputStream outputStream = new FileOutputStream(FileHelper.rootFile() + File.separator
                                     + zipEntry.getName());
 
                             byte[] buf = new byte[4096];
@@ -253,7 +292,7 @@ public class UnzipService extends Service {
         @Override
         protected void onPostExecute(String dictName) {
             super.onPostExecute(dictName);
-            File zipFile = FileHelper.getZipFile(dictName);
+            File zipFile = fileHelper.zipFile();
             if(zipFile != null) {
                 if(zipFile.delete()) {
                     LogUtils.LOGD(TAG, "deleted zip file for " + dictName);
@@ -262,14 +301,41 @@ public class UnzipService extends Service {
                 }
             }
             mTasks.remove(dictName);
+            finishNotification(fileHelper, notificationId);
             checkForTermination();
         }
 
         @Override
         protected void onProgressUpdate(Float... values) {
             super.onProgressUpdate(values);
+            updateNotification(fileHelper, notificationId, Math.round(values[0]));
             Message msg = Message.obtain(null, MainActivity.MSG_UNZIP_PROGRESS, Math.round(values[0]), 0);
             sendToActivity(msg);
+        }
+    }
+
+    private void updateNotification(FileHelper fileHelper, int id, int progress) {
+        // TODO add pending intent
+        mNotificationBuilder.setContentTitle(getResources().getString(R.string.unzip_noti_title));
+        mNotificationBuilder.setContentText(fileHelper.downloadFileName());
+        mNotificationBuilder.setProgress(100, progress, false);
+        mNotifyManager.notify(id, mNotificationBuilder.build());
+    }
+
+    private void finishNotification(FileHelper fileHelper, int id) {
+        // TODO add pending intent ?
+        mNotificationBuilder.setContentTitle(getResources().getString(R.string.unzip_noti_finish_title));
+        mNotificationBuilder.setContentText(fileHelper.downloadFileName());
+        mNotificationBuilder.setProgress(100, 100, false);
+        mNotifyManager.notify(id, mNotificationBuilder.build());
+    }
+
+    private FileHelper getFileHelper(String fileName) {
+        if(fileName.equals(Constants.WORDNET)) {
+            return wordnetHelper.get();
+        } else {
+            LogUtils.LOGE(TAG, "No file helper found for : " + fileName);
+            return null;
         }
     }
 }
