@@ -101,7 +101,7 @@ public class UnzipService extends Service {
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        mNotificationBuilder.setSmallIcon(R.drawable.ic_notification_icon);
     }
 
     @Override
