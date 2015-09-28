@@ -115,7 +115,7 @@ public class MainPortal extends Portal implements ComponentProvider {
 
     private void setClipTextToCard() {
         if(mClipText != null) {
-            mTvClipText.setSelectableText(mClipText);
+            mTvClipText.setText(mClipText);
         }
     }
 
