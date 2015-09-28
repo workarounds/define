@@ -12,11 +12,13 @@ import edu.smu.tspell.wordnet.SynsetType;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import in.workarounds.define.dictionary.Dictionary;
 import in.workarounds.define.dictionary.Result;
+import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 
 /**
  * Created by madki on 26/09/15.
  */
+@PerPortal
 public class WordnetDictionary implements Dictionary {
     private static final String TAG = LogUtils.makeLogTag(WordnetDictionary.class);
     private static final String WORDNET_DATABASE_DIR = "wordnet.database.dir";

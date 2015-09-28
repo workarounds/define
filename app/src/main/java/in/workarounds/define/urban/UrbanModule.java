@@ -4,7 +4,8 @@ import dagger.Module;
 import dagger.Provides;
 import in.workarounds.define.dictionary.Dictionary;
 import in.workarounds.define.portal.PerPortal;
-import retrofit.RestAdapter;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
 
 /**
  * Created by madki on 26/09/15.
@@ -19,10 +20,11 @@ public class UrbanModule {
 
     @Provides @PerPortal
     public UrbanApi provideUrbanApi() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://api.urbandictionary.com/v0")
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.urbandictionary.com/v0/")
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        return restAdapter.create(UrbanApi.class);
+        return retrofit.create(UrbanApi.class);
     }
 }

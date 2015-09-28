@@ -1,5 +1,6 @@
 package in.workarounds.define.urban;
 
+import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
@@ -9,5 +10,5 @@ import retrofit.http.Query;
 public interface UrbanApi {
 
     @GET("/define")
-    UrbanResult term(@Query("term") String term);
+    Call<UrbanResult> define(@Query("term") String word);
 }

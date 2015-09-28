@@ -35,6 +35,9 @@ public class NetworkModule {
             LogUtils.LOGE(TAG, e.getMessage(), e);
         }
         client.setCache(cache);
+
+        // TODO set request interceptors if needed. Adding headers etc
+
         return client;
     }
 
