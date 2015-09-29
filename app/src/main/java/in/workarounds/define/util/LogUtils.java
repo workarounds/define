@@ -7,7 +7,7 @@ import in.workarounds.define.BuildConfig;
 
 
 public class LogUtils {
-    private static final String LOG_PREFIX = "tc_";
+    private static final String LOG_PREFIX = "df_";
     private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
     private static final int MAX_LOG_TAG_LENGTH = 23;
 

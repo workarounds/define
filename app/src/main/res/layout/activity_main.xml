@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
 
-    <TextView
+    <in.workarounds.typography.TextView
         android:id="@+id/status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         android:padding="5dp"
         android:visibility="gone" />
 
-    <EditText
+    <in.workarounds.typography.EditText
         android:id="@+id/edit_message"
         android:layout_width="224dp"
         android:layout_height="wrap_content"

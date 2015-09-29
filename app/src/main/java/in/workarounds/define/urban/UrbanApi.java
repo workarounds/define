@@ -9,6 +9,6 @@ import retrofit.http.Query;
  */
 public interface UrbanApi {
 
-    @GET("/define")
+    @GET("define")
     Call<UrbanResult> define(@Query("term") String word);
 }

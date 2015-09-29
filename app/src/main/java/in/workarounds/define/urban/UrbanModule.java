@@ -1,5 +1,7 @@
 package in.workarounds.define.urban;
 
+import com.squareup.okhttp.OkHttpClient;
+
 import dagger.Module;
 import dagger.Provides;
 import in.workarounds.define.dictionary.Dictionary;
@@ -19,9 +21,10 @@ public class UrbanModule {
     }
 
     @Provides @PerPortal
-    public UrbanApi provideUrbanApi() {
+    public UrbanApi provideUrbanApi(OkHttpClient client) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.urbandictionary.com/v0/")
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

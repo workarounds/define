@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import in.workarounds.define.dictionary.Dictionary;
 import in.workarounds.define.dictionary.Result;
 import in.workarounds.define.portal.PerPortal;
+import in.workarounds.define.util.LogUtils;
 import retrofit.Call;
 import retrofit.Response;
 
@@ -19,6 +20,7 @@ import retrofit.Response;
  */
 @PerPortal
 public class UrbanDictionary implements Dictionary {
+    private static final String TAG = LogUtils.makeLogTag(UrbanDictionary.class);
     private final UrbanApi api;
 
     @Inject
@@ -29,19 +31,18 @@ public class UrbanDictionary implements Dictionary {
     @Override
     public List<Result> results(String word) {
         List<Result> results = new ArrayList<>();
-        if(!TextUtils.isEmpty(word)) {
+        if (!TextUtils.isEmpty(word)) {
             Call<UrbanResult> call = api.define(word);
             UrbanResult urbanResult = null;
             try {
                 Response<UrbanResult> response = call.execute();
-                if(response.isSuccess()) {
-                    urbanResult = response.body();
-                }
+                urbanResult = response.body();
             } catch (IOException e) {
+                LogUtils.LOGE(TAG, "Probably no internet. Or some other time out");
                 e.printStackTrace();
             }
-            if(urbanResult != null) {
-                for(Meaning meaning : urbanResult.getMeanings()) {
+            if (urbanResult != null) {
+                for (Meaning meaning : urbanResult.getMeanings()) {
                     results.add(toResult(meaning, urbanResult));
                 }
             }

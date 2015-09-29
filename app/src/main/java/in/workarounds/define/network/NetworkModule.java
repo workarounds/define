@@ -5,8 +5,6 @@ import android.content.Context;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.io.IOException;
-
 import dagger.Module;
 import dagger.Provides;
 import in.workarounds.define.util.LogUtils;
@@ -24,19 +22,16 @@ public class NetworkModule {
     }
 
     @Provides
-    public OkHttpClient provideOkHttpClient() {
+    public OkHttpClient provideOkHttpClient(LoggingInterceptor interceptor) {
         OkHttpClient client = new OkHttpClient();
         int cacheSize = 10 * 1024 * 1024; //10MB
 
         Cache cache = null;
-        try {
-            cache = new Cache(context.getCacheDir(), cacheSize);
-        } catch (IOException e) {
-            LogUtils.LOGE(TAG, e.getMessage(), e);
-        }
+        cache = new Cache(context.getCacheDir(), cacheSize);
         client.setCache(cache);
 
         // TODO set request interceptors if needed. Adding headers etc
+        client.networkInterceptors().add(interceptor);
 
         return client;
     }
