@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import in.workarounds.define.dictionary.Dictionary;
+import in.workarounds.define.dictionary.DictionaryException;
 import in.workarounds.define.dictionary.Result;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
@@ -63,7 +64,14 @@ public class MeaningPresenter {
     private class MeaningsTask extends AsyncTask<String, Integer, List<Result>> {
         @Override
         protected List<Result> doInBackground(String... params) {
-            return dictionary.results(params[0]);
+            List<Result> results;
+            try {
+                results = dictionary.results(params[0]);
+            } catch (DictionaryException exception) {
+                exception.printStackTrace();
+                results = new ArrayList<>();
+            }
+            return results;
         }
 
         @Override

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import in.workarounds.define.dictionary.Dictionary;
+import in.workarounds.define.dictionary.DictionaryException;
 import in.workarounds.define.dictionary.Result;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
@@ -29,7 +30,7 @@ public class UrbanDictionary implements Dictionary {
     }
 
     @Override
-    public List<Result> results(String word) {
+    public List<Result> results(String word) throws DictionaryException {
         List<Result> results = new ArrayList<>();
         if (!TextUtils.isEmpty(word)) {
             Call<UrbanResult> call = api.define(word);
@@ -38,8 +39,10 @@ public class UrbanDictionary implements Dictionary {
                 Response<UrbanResult> response = call.execute();
                 urbanResult = response.body();
             } catch (IOException e) {
-                LogUtils.LOGE(TAG, "Probably no internet. Or some other time out");
-                e.printStackTrace();
+                throw new DictionaryException(
+                        DictionaryException.NETWORK_ERROR,
+                        "Unable to fetch data from Urban Dictionary servers. Please check your network connection."
+                );
             }
             if (urbanResult != null) {
                 for (Meaning meaning : urbanResult.getMeanings()) {
