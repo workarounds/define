@@ -11,7 +11,7 @@ import in.workarounds.define.meaning.MeaningPagerAdapter;
 import in.workarounds.define.meaning.MeaningPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-import in.workarounds.define.ui.view.SelectableTextView;
+import in.workarounds.define.view.swipeselect.SelectableTextView;
 import in.workarounds.define.urban.DaggerUrbanComponent;
 import in.workarounds.define.urban.UrbanComponent;
 import in.workarounds.define.util.LogUtils;
@@ -115,7 +115,7 @@ public class MainPortal extends Portal implements ComponentProvider {
 
     private void setClipTextToCard() {
         if(mClipText != null) {
-            mTvClipText.setText(mClipText);
+            mTvClipText.setSelectableText(mClipText);
         }
     }
 
