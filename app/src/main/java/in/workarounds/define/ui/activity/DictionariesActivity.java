@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -21,6 +22,7 @@ import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.helper.DownloadProgressThread;
 import in.workarounds.define.helper.DownloadResolver;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.util.ViewUtils;
 
 /**
  * Created by madki on 30/09/15.
@@ -65,6 +67,10 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         statusTv = (TextView) findViewById(R.id.tv_progress_status);
         unzipProgress = (ProgressBar) findViewById(R.id.pb_unzip);
         downloadProgress = (ProgressBar) findViewById(R.id.pb_download);
+
+        ViewUtils.setColorOfProgressBar(unzipProgress, ContextCompat.getColor(this, R.color.theme_primary));
+        ViewUtils.setColorOfProgressBar(downloadProgress, ContextCompat.getColor(this, R.color.theme_primary));
+
         downloadButton = (Button) findViewById(R.id.btn_download_wordnet);
         cancelButton = (Button) findViewById(R.id.btn_cancel_download_wordnet);
 
