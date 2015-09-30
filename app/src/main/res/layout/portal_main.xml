@@ -27,11 +27,12 @@
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="2dp">
 
-                <in.workarounds.define.ui.view.SelectableTextView
+                <in.workarounds.define.view.swipeselect.SelectableTextView
                     android:id="@+id/tv_clip_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_medium"
+                    android:textSize="20sp"
                     android:textColor="@color/black"
                     android:textIsSelectable="true" />
             </android.support.v7.widget.CardView>
@@ -47,11 +48,18 @@
         android:layout_marginRight="@dimen/margin_regular"
         android:layout_weight="6"
         android:orientation="vertical">
+        <in.workarounds.define.view.slidingtabs.SlidingTabLayout
+            android:id="@+id/sliding_tab_layout"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/vp_pages"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
 
     </LinearLayout>
 

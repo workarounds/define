@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <in.workarounds.typography.TextView
+        android:id="@+id/tv_tab_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical"
+        android:paddingTop="@dimen/padding_regular"
+        android:paddingBottom="@dimen/padding_regular"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:textSize="@dimen/font_smaller"
+        android:textAllCaps="true"
+        android:textColor="@color/dark_gray" />
+</LinearLayout>
