@@ -25,6 +25,7 @@
 
     <string name="hint_multiple_words_selected">Multiple words selected. Click to choose a single word</string>
     <string name="hint_no_meaning">No meaning found</string>
+    <string name="hint_tap_to_select">Tap on a word to see it\'s meaning</string>
 
     <string name="silent_mode">Silent Mode</string>
 
