@@ -26,6 +26,10 @@
     <in.workarounds.typography.TextView
         android:id="@+id/tv_load_status"
         android:visibility="gone"
+        android:paddingLeft="@dimen/margin_large"
+        android:paddingRight="@dimen/margin_large"
+        android:paddingBottom="@dimen/bar_fat"
+        android:gravity="center_horizontal"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:textColor="@color/light_gray"

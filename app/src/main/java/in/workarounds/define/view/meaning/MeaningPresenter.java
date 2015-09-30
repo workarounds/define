@@ -76,9 +76,9 @@ public class MeaningPresenter {
     private void onResultsUpdated(List<Result> results) {
         adapter.update(results);
         if(results != null && results.size() != 0) {
-            showStatus("Sorry, no results found.");
-        } else {
             showList();
+        } else {
+            showStatus("Sorry, no results found.");
         }
     }
 
