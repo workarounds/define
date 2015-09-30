@@ -24,17 +24,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_regular"
                 android:layout_marginRight="@dimen/margin_regular"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/cardview_light_background"
                 app:cardCornerRadius="2dp">
 
                 <in.workarounds.define.view.swipeselect.SelectableTextView
                     android:id="@+id/tv_clip_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:textSize="20sp"
+                    android:layout_marginLeft="@dimen/margin_medium"
+                    android:layout_marginRight="@dimen/margin_medium"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_larger"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textSize="18sp"
                     android:textColor="@color/black"
                     android:textIsSelectable="true" />
+
+                <in.workarounds.typography.TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:paddingLeft="@dimen/padding_medium"
+                    android:paddingRight="@dimen/padding_medium"
+                    android:paddingTop="@dimen/padding_small"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:textSize="@dimen/font_smaller"
+                    android:textColor="@color/light_gray"
+                    android:text="@string/hint_tap_to_select"
+                    />
             </android.support.v7.widget.CardView>
         </ScrollView>
 
@@ -50,7 +67,7 @@
         android:orientation="vertical">
         <in.workarounds.define.view.slidingtabs.SlidingTabLayout
             android:id="@+id/sliding_tab_layout"
-            android:background="@color/white"
+            android:background="@color/cardview_light_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -128,6 +128,12 @@ public class SelectMovementMethod extends LinkMovementMethod{
             }
             end = getApproximateEdge(current);
         }
+        if (end < start) {
+            int temp = end;
+            end = start;
+            start = temp;
+        }
+
         selectByRange(start, end);
 
         if(notify) {
@@ -142,11 +148,6 @@ public class SelectMovementMethod extends LinkMovementMethod{
     }
 
     private void selectByRange(int start, int end){
-        if (end < start) {
-            int temp = end;
-            end = start;
-            start = temp;
-        }
         for (SelectSpan span : total) {
             boolean selected = span.index >= start
                     && span.index < end;
