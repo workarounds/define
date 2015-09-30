@@ -1,4 +1,4 @@
-package in.workarounds.define.meaning;
+package in.workarounds.define.view.meaning;
 
 import android.os.AsyncTask;
 

@@ -6,9 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import in.workarounds.define.R;
-import in.workarounds.define.meaning.MeaningPage;
-import in.workarounds.define.meaning.MeaningPagerAdapter;
-import in.workarounds.define.meaning.MeaningPresenter;
+import in.workarounds.define.view.meaning.MeaningPage;
+import in.workarounds.define.view.meaning.MeaningPagerAdapter;
+import in.workarounds.define.view.meaning.MeaningPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;

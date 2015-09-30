@@ -1,4 +1,4 @@
-package in.workarounds.define.meaning;
+package in.workarounds.define.view.meaning;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

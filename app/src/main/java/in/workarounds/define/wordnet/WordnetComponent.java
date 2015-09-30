@@ -2,8 +2,8 @@ package in.workarounds.define.wordnet;
 
 import dagger.Component;
 import in.workarounds.define.dictionary.Dictionary;
-import in.workarounds.define.meaning.MeaningPage;
-import in.workarounds.define.meaning.MeaningPresenter;
+import in.workarounds.define.view.meaning.MeaningPage;
+import in.workarounds.define.view.meaning.MeaningPresenter;
 import in.workarounds.define.portal.PerPortal;
 
 /**

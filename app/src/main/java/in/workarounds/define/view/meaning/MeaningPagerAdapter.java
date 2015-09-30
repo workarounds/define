@@ -1,4 +1,4 @@
-package in.workarounds.define.meaning;
+package in.workarounds.define.view.meaning;
 
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
