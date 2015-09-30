@@ -32,6 +32,7 @@ public class MainPortal extends Portal implements ComponentProvider {
     private ViewPager pager;
 
     private View mPortalContainer;
+    private View meaningPagesContainer;
     private PortalComponent component;
     private WordnetComponent wordnetComponent;
     private UrbanComponent urbanComponent;
@@ -86,8 +87,10 @@ public class MainPortal extends Portal implements ComponentProvider {
     }
 
     private void initViews() {
-        mPortalContainer = findViewById(R.id.ll_main_portal_container);
+        mPortalContainer = findViewById(R.id.rl_main_portal_container);
         mTvClipText = (SelectableTextView) findViewById(R.id.tv_clip_text);
+        meaningPagesContainer = findViewById(R.id.ll_meaning_pages_container);
+        meaningPagesContainer.setVisibility(View.GONE);
 
         mPortalContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +111,7 @@ public class MainPortal extends Portal implements ComponentProvider {
         mTvClipText.setOnWordSelectedListener(new SelectableTextView.OnWordSelectedListener() {
             @Override
             public void onWordSelected(String word) {
+                meaningPagesContainer.setVisibility(View.VISIBLE);
                 wordnetPresenter.word(word);
                 urbanPresenter.word(word);
             }

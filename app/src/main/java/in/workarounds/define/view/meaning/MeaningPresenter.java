@@ -26,9 +26,9 @@ import in.workarounds.typography.TextView;
 @PerPortal
 public class MeaningPresenter {
     private static final String TAG = LogUtils.makeLogTag(MeaningPresenter.class);
-    private static final int LOAD_STATUS   = 1;
+    private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
-    private static final int MEANING_LIST  = 3;
+    private static final int MEANING_LIST = 3;
 
     private Dictionary dictionary;
     private MeaningPage meaningPage;
@@ -55,11 +55,11 @@ public class MeaningPresenter {
     }
 
     public void word(String word) {
-        if(word != null && !word.equals(this.word)) {
+        if (word != null && !word.equals(this.word)) {
             showProgress();
         }
         this.word = word;
-        if(meaningPage != null) {
+        if (meaningPage != null) {
             meaningPage.title(word);
         }
         new MeaningsTask().execute(word);
@@ -75,7 +75,7 @@ public class MeaningPresenter {
 
     private void onResultsUpdated(List<Result> results) {
         adapter.update(results);
-        if(results != null && results.size() != 0) {
+        if (results != null && results.size() != 0) {
             showList();
         } else {
             showStatus("Sorry, no results found.");
@@ -108,9 +108,9 @@ public class MeaningPresenter {
     }
 
     private void setInitialViews() {
-        if(TextUtils.isEmpty(word)) {
+        if (TextUtils.isEmpty(word)) {
             showStatus("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
-        } else if(adapter != null && adapter.getItemCount() != 0) {
+        } else if (adapter != null && adapter.getItemCount() != 0) {
             showList();
         } else {
             showStatus("Sorry, no results found");
@@ -151,9 +151,15 @@ public class MeaningPresenter {
     }
 
     private void changeViewVisibilities(boolean status, boolean progress, boolean list) {
-        loadStatus.setVisibility(status?View.VISIBLE:View.GONE);
-        loadProgress.setVisibility(progress?View.VISIBLE:View.GONE);
-        meaningList.setVisibility(list?View.VISIBLE:View.GONE);
+        if (loadStatus != null) {
+            loadStatus.setVisibility(status ? View.VISIBLE : View.GONE);
+        }
+        if (loadProgress != null) {
+            loadProgress.setVisibility(progress ? View.VISIBLE : View.GONE);
+        }
+        if (meaningList != null) {
+            meaningList.setVisibility(list ? View.VISIBLE : View.GONE);
+        }
     }
 
     @IntDef({LOAD_PROGRESS, LOAD_STATUS, MEANING_LIST})
