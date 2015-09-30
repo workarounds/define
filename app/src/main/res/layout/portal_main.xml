@@ -4,7 +4,7 @@
     android:id="@+id/rl_main_portal_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/translucent_gray">
+    android:background="@color/translucent_black">
 
 
     <android.support.v7.widget.CardView
@@ -35,6 +35,7 @@
                 android:layout_marginTop="@dimen/margin_medium"
                 android:lineSpacingMultiplier="1.2"
                 android:textColor="@color/black"
+                app:font_variant="light"
                 android:textSize="18sp" />
 
         </in.workarounds.define.view.MaxHeightScrollView>
@@ -45,8 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:paddingBottom="@dimen/padding_small"
-            android:paddingLeft="@dimen/padding_medium"
-            android:paddingRight="@dimen/padding_medium"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:paddingTop="@dimen/padding_small"
             android:text="@string/hint_tap_to_select"
             android:textColor="@color/light_gray"

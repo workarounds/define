@@ -90,7 +90,7 @@ public class MainPortal extends Portal implements ComponentProvider {
         mPortalContainer = findViewById(R.id.rl_main_portal_container);
         mTvClipText = (SelectableTextView) findViewById(R.id.tv_clip_text);
         meaningPagesContainer = findViewById(R.id.ll_meaning_pages_container);
-        meaningPagesContainer.setVisibility(View.GONE);
+        meaningPagesContainer.setVisibility(View.INVISIBLE);
 
         mPortalContainer.setOnClickListener(new View.OnClickListener() {
             @Override

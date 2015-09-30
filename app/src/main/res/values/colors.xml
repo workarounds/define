@@ -14,4 +14,5 @@
     <color name="medium_gray">#777777</color>
     <color name="light_gray">#AAAAAA</color>
     <color name="translucent_gray">#33777777</color>
+    <color name="translucent_black">#77000000</color>
 </resources>

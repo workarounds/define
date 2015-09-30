@@ -35,7 +35,7 @@ public class SelectSpan extends CharacterStyle implements UpdateAppearance{
     public void updateDrawState(TextPaint ds) {
         if (mSelected) {
             ds.bgColor = Color.rgb(240, 199, 74);
-            ds.setColor(Color.WHITE);
+            // ds.setColor(Color.WHITE);
         }
     }
 }
