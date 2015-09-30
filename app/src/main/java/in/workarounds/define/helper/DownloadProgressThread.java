@@ -74,6 +74,7 @@ public class DownloadProgressThread extends Thread {
                 }
 
                 if (textView != null) {
+                    textView.setVisibility(View.VISIBLE);
                     textView.post(new Runnable() {
                         @Override
                         public void run() {

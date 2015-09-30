@@ -1,4 +1,4 @@
-package in.workarounds.define.service;
+package in.workarounds.define.file.unzip;
 
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
@@ -29,7 +29,6 @@ import dagger.Lazy;
 import in.workarounds.define.R;
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.file.FileHelper;
-import in.workarounds.define.ui.activity.MainActivity;
 import in.workarounds.define.util.FileUtils;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.wordnet.WordnetFileHelper;
@@ -216,7 +215,7 @@ public class UnzipService extends Service {
                         break;
                     case MSG_UNZIP:
                         Toast.makeText(service.getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
-                        Message message = Message.obtain(null, MainActivity.MSG_UNZIP_PROGRESS, 20, 0);
+                        Message message = Message.obtain(null, UnzipHandler.MSG_UNZIP_PROGRESS, 20, 0);
                         service.sendToActivity(message);
                         break;
                     case MSG_UNREGISTER:
@@ -293,6 +292,7 @@ public class UnzipService extends Service {
         protected void onPostExecute(String dictName) {
             super.onPostExecute(dictName);
             File zipFile = fileHelper.zipFile();
+            onProgressUpdate(100f);
             if(zipFile != null) {
                 if(zipFile.delete()) {
                     LogUtils.LOGD(TAG, "deleted zip file for " + dictName);
@@ -309,7 +309,7 @@ public class UnzipService extends Service {
         protected void onProgressUpdate(Float... values) {
             super.onProgressUpdate(values);
             updateNotification(fileHelper, notificationId, Math.round(values[0]));
-            Message msg = Message.obtain(null, MainActivity.MSG_UNZIP_PROGRESS, Math.round(values[0]), 0);
+            Message msg = Message.obtain(null, UnzipHandler.MSG_UNZIP_PROGRESS, Math.round(values[0]), 0);
             sendToActivity(msg);
         }
     }

@@ -1,4 +1,4 @@
-package in.workarounds.define.service;
+package in.workarounds.define.file.unzip;
 
 import dagger.Component;
 import dagger.Lazy;

@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import in.workarounds.define.api.Constants;
-import in.workarounds.define.service.UnzipService;
+import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.ui.activity.MainActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;

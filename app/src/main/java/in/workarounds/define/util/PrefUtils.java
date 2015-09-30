@@ -16,7 +16,7 @@ public class PrefUtils {
 
     public static SharedPreferences getSharedPreferences(Context context) {
         if(mSharedPreferences==null) {
-            mSharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+            mSharedPreferences = context.getApplicationContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         }
         return mSharedPreferences;
     }

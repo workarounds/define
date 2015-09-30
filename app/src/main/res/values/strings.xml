@@ -38,4 +38,9 @@
     <!-- Unzip notification -->
     <string name="unzip_noti_title">Unzipping dictionary</string>
     <string name="unzip_noti_finish_title">Finished unzipping dictionary</string>
+    <string name="title_wordnet_dictionary">Wordnet Dictionary</string>
+    <string name="description_wordnet_dictionary">Wordnet is a lexical database for English by Princeton University. It\'s download size is 10MB and it occupies 30MB disk space once extracted.</string>
+    <string name="title_urban_dictionary">Urban Dictionary</string>
+    <string name="description_urban_dictionary">Urban Dictionary is a crowdsourced online dictionary of slang words and phrases. It requires internet to use this dictionary.</string>
+    <string name="btn_download_wordnet_dictionary">Download Wordnet</string>
 </resources>

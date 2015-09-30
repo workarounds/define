@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar" />
+
+    <ScrollView
+        android:id="@+id/sv_dictionaries_container"
+        android:layout_below="@id/toolbar"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/rl_wordnet_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_large">
+
+                <in.workarounds.typography.TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/margin_medium"
+                    android:text="@string/title_wordnet_dictionary"
+                    android:textSize="@dimen/font_large"
+                    app:font_variant="semibold" />
+
+                <in.workarounds.typography.TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="320dp"
+                    android:paddingTop="@dimen/margin_medium"
+                    android:text="@string/description_wordnet_dictionary" />
+
+                <ProgressBar
+                    android:id="@+id/pb_download"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:padding="5dp"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/pb_unzip"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:padding="5dp"
+                    android:visibility="gone" />
+
+                <in.workarounds.typography.TextView
+                    android:id="@+id/tv_progress_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:visibility="gone" />
+
+                <in.workarounds.typography.Button
+                    android:id="@+id/btn_download_wordnet"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_download_wordnet_dictionary"
+                    app:font_variant="light" />
+
+                <in.workarounds.typography.Button
+                    android:id="@+id/btn_cancel_download_wordnet"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_cancel_download"
+                    android:visibility="gone"
+                    app:font_variant="light" />
+
+
+            </LinearLayout>
+
+            <include layout="@layout/layout_divider_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/rl_urban_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_large">
+
+                <in.workarounds.typography.TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/margin_medium"
+                    android:text="@string/title_urban_dictionary"
+                    android:textSize="@dimen/font_large"
+                    app:font_variant="semibold" />
+
+                <in.workarounds.typography.TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="320dp"
+                    android:paddingTop="@dimen/margin_medium"
+                    android:text="@string/description_urban_dictionary" />
+            </LinearLayout>
+
+            <include layout="@layout/layout_divider_horizontal" />
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>
