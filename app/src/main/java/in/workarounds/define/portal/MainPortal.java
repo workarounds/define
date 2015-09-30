@@ -11,6 +11,7 @@ import in.workarounds.define.meaning.MeaningPagerAdapter;
 import in.workarounds.define.meaning.MeaningPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
+import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
 import in.workarounds.define.urban.DaggerUrbanComponent;
 import in.workarounds.define.urban.UrbanComponent;
@@ -96,6 +97,13 @@ public class MainPortal extends Portal implements ComponentProvider {
         });
         pager = (ViewPager) findViewById(R.id.vp_pages);
         pager.setAdapter(new MeaningPagerAdapter());
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
+        if(slidingTabLayout != null) {
+            slidingTabLayout.setDistributeEvenly(true);
+            slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.theme_primary));
+            slidingTabLayout.setCustomTabView(R.layout.layout_sliding_tabs, R.id.tv_tab_header);
+            slidingTabLayout.setViewPager(pager);
+        }
 
         mTvClipText.setOnWordSelectedListener(new SelectableTextView.OnWordSelectedListener() {
             @Override
