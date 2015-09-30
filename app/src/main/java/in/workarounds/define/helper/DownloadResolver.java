@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.file.unzip.UnzipService;
-import in.workarounds.define.ui.activity.MainActivity;
+import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 
@@ -43,7 +43,7 @@ public class DownloadResolver {
     private static void onNotificationClicked(String id, Context context) {
         switch (id) {
             case Constants.WORDNET:
-                Intent activityIntent = new Intent(context, MainActivity.class);
+                Intent activityIntent = new Intent(context, DictionariesActivity.class);
                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(activityIntent);
                 break;

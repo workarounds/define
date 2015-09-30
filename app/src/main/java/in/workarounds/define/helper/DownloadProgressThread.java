@@ -74,10 +74,10 @@ public class DownloadProgressThread extends Thread {
                 }
 
                 if (textView != null) {
-                    textView.setVisibility(View.VISIBLE);
                     textView.post(new Runnable() {
                         @Override
                         public void run() {
+                            textView.setVisibility(View.VISIBLE);
                             textView.setText(status);
                         }
                     });
@@ -108,23 +108,23 @@ public class DownloadProgressThread extends Thread {
 
         switch (downloadQuery.getInt(downloadQuery.getColumnIndex(DownloadManager.COLUMN_STATUS))) {
             case DownloadManager.STATUS_FAILED:
-                msg = "Download failed!";
+                msg = "Download failed";
                 break;
 
             case DownloadManager.STATUS_PAUSED:
-                msg = "Download paused!";
+                msg = "Download paused";
                 break;
 
             case DownloadManager.STATUS_PENDING:
-                msg = "Download pending!";
+                msg = "Download pending";
                 break;
 
             case DownloadManager.STATUS_RUNNING:
-                msg = "Download in progress!";
+                msg = "Download in progress";
                 break;
 
             case DownloadManager.STATUS_SUCCESSFUL:
-                msg = "Download complete!";
+                msg = "Download complete";
                 break;
 
             default:

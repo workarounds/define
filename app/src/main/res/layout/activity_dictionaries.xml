@@ -68,6 +68,8 @@
                     android:id="@+id/tv_progress_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/margin_regular"
+                    app:font_variant="light"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:visibility="gone" />
 
