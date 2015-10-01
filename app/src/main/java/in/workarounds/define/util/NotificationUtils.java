@@ -1,7 +1,6 @@
 package in.workarounds.define.util;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -24,7 +23,7 @@ public class NotificationUtils {
         Notification.Builder notificationBuilder = new Notification.Builder(context)
                 .setContentTitle(title)
                 .setContentText(contentText)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(pendingIntent);
         if(isBig) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -32,8 +31,11 @@ public class NotificationUtils {
                         .bigText(contentText));
             }
         }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            notificationBuilder.setColor(context.getColor(R.color.theme_primary));
+        }
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if(notificationBuilder!=null) {
+        if(notificationManager != null) {
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
         }
     }
