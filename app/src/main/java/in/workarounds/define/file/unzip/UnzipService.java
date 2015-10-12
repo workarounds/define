@@ -12,6 +12,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import java.io.File;
@@ -100,7 +101,10 @@ public class UnzipService extends Service {
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon(R.drawable.ic_notification_icon);
+        mNotificationBuilder.setSmallIcon(R.drawable.ic_stat_name);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mNotificationBuilder.setColor(ContextCompat.getColor(this, R.color.theme_primary));
+        }
     }
 
     @Override
