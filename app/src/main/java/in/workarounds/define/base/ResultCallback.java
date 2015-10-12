@@ -1,4 +1,4 @@
-package in.workarounds.define.dictionary;
+package in.workarounds.define.base;
 
 import java.util.ArrayList;
 

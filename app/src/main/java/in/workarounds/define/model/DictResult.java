@@ -9,7 +9,7 @@ import in.workarounds.define.util.StringUtils;
 /**
  * result object of the dictionary, the following
  * are the properties of the object:
- * String word
+ * String onWordUpdated
  * String definition
  * String type
  * List usage

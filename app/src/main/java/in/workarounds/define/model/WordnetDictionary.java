@@ -33,7 +33,7 @@ public class WordnetDictionary implements Dictionary {
     }
 
     /**
-     * given a word, returns an array of DictResult returns an array with no
+     * given a onWordUpdated, returns an array of DictResult returns an array with no
      * elements if definition isn't found
      *
      * @param wordForm
@@ -55,12 +55,12 @@ public class WordnetDictionary implements Dictionary {
             }
             Synset[] synsets = database.getSynsets(wordForm);
 
-            // Display the word forms and definitions for synset retrieved
+            // Display the onWordUpdated forms and definitions for synset retrieved
             if (synsets.length > 0) {
                 for (Synset synset : synsets) {
                     String[] synonyms = synset.getWordForms();
                     List<String> synonymsList = new ArrayList<>(Arrays.asList(synonyms));
-                    synonymsList.remove(wordForm); // removing the word itself from the list of synonyms
+                    synonymsList.remove(wordForm); // removing the onWordUpdated itself from the list of synonyms
                     synonymsList.remove(StringUtils.makeFirstLetterLowerCase(wordForm));
                     String meaning = synset.getDefinition();
                     String type = typeToString(synset.getType());
@@ -76,7 +76,7 @@ public class WordnetDictionary implements Dictionary {
                 LogUtils.LOGD(TAG, "No definition found for: " + wordForm);
             }
         } else {
-            LogUtils.LOGD(TAG, "No word given");
+            LogUtils.LOGD(TAG, "No onWordUpdated given");
         }
 
         return results;

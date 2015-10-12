@@ -1,4 +1,4 @@
-package in.workarounds.define.view.meaning;
+package in.workarounds.define.wordnet;
 
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,9 +14,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import in.workarounds.define.R;
-import in.workarounds.define.dictionary.Dictionary;
-import in.workarounds.define.dictionary.DictionaryException;
-import in.workarounds.define.dictionary.Result;
+import in.workarounds.define.base.Dictionary;
+import in.workarounds.define.base.DictionaryException;
+import in.workarounds.define.base.MeaningPresenter;
+import in.workarounds.define.base.Result;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
@@ -25,44 +26,47 @@ import in.workarounds.typography.TextView;
  * Created by madki on 26/09/15.
  */
 @PerPortal
-public class MeaningPresenter {
-    private static final String TAG = LogUtils.makeLogTag(MeaningPresenter.class);
+public class WordnetPresenter implements MeaningPresenter {
+    private static final String TAG = LogUtils.makeLogTag(WordnetPresenter.class);
     private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
 
     private Dictionary dictionary;
-    private MeaningPage meaningPage;
+    private WordnetMeaningPage wordnetMeaningPage;
     private String word;
-    private MeaningsAdapter adapter = new MeaningsAdapter();
+    private WordnetMeaningAdapter adapter = new WordnetMeaningAdapter();
     private TextView loadStatus;
     private ProgressBar loadProgress;
     private RecyclerView meaningList;
     private MeaningsTask task;
 
     @Inject
-    public MeaningPresenter(Dictionary dictionary) {
+    public WordnetPresenter(Dictionary dictionary) {
         this.dictionary = dictionary;
     }
 
-    public void addView(MeaningPage view) {
-        this.meaningPage = view;
+    @Override
+    public void addView(View view) {
+        this.wordnetMeaningPage = (WordnetMeaningPage) view;
         initViews();
         setInitialViews();
     }
 
+    @Override
     public void dropView() {
-        this.meaningPage = null;
+        this.wordnetMeaningPage = null;
         dropViews();
     }
 
-    public void word(String word) {
+    @Override
+    public void onWordUpdated(String word) {
         if (word != null && !word.equals(this.word)) {
             showProgress();
         }
         this.word = word;
-        if (meaningPage != null) {
-            meaningPage.title(word);
+        if (wordnetMeaningPage != null) {
+            wordnetMeaningPage.title(word);
         }
         if(task != null) {
             task.cancel(true);
@@ -80,7 +84,7 @@ public class MeaningPresenter {
         return word;
     }
 
-    public MeaningsAdapter adapter() {
+    public WordnetMeaningAdapter adapter() {
         return adapter;
     }
 
@@ -113,9 +117,9 @@ public class MeaningPresenter {
     }
 
     private void initViews() {
-        loadStatus = (TextView) meaningPage.findViewById(R.id.tv_load_status);
-        loadProgress = (ProgressBar) meaningPage.findViewById(R.id.pb_load_progress);
-        meaningList = (RecyclerView) meaningPage.findViewById(R.id.rv_meaning_list);
+        loadStatus = (TextView) wordnetMeaningPage.findViewById(R.id.tv_load_status);
+        loadProgress = (ProgressBar) wordnetMeaningPage.findViewById(R.id.pb_load_progress);
+        meaningList = (RecyclerView) wordnetMeaningPage.findViewById(R.id.rv_meaning_list);
     }
 
     private void setInitialViews() {

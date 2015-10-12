@@ -8,9 +8,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import in.workarounds.define.dictionary.Dictionary;
-import in.workarounds.define.dictionary.DictionaryException;
-import in.workarounds.define.dictionary.Result;
+import in.workarounds.define.base.Dictionary;
+import in.workarounds.define.base.DictionaryException;
+import in.workarounds.define.base.Result;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 import retrofit.Call;

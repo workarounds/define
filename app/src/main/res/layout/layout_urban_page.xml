@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<in.workarounds.define.view.meaning.MeaningPage
+<in.workarounds.define.wordnet.WordnetMeaningPage
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/urban_page"
     android:layout_width="match_parent"

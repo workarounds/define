@@ -11,9 +11,9 @@ import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.SynsetType;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import edu.smu.tspell.wordnet.impl.file.RetrievalException;
-import in.workarounds.define.dictionary.Dictionary;
-import in.workarounds.define.dictionary.DictionaryException;
-import in.workarounds.define.dictionary.Result;
+import in.workarounds.define.base.Dictionary;
+import in.workarounds.define.base.DictionaryException;
+import in.workarounds.define.base.Result;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 

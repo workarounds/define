@@ -6,9 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import in.workarounds.define.R;
-import in.workarounds.define.view.meaning.MeaningPage;
-import in.workarounds.define.view.meaning.MeaningPagerAdapter;
-import in.workarounds.define.view.meaning.MeaningPresenter;
+import in.workarounds.define.wordnet.WordnetMeaningPage;
+import in.workarounds.define.base.MeaningPagerAdapter;
+import in.workarounds.define.wordnet.WordnetPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
@@ -37,8 +37,8 @@ public class MainPortal extends Portal implements ComponentProvider {
     private WordnetComponent wordnetComponent;
     private UrbanComponent urbanComponent;
 
-    private MeaningPresenter wordnetPresenter;
-    private MeaningPresenter urbanPresenter;
+    private WordnetPresenter wordnetPresenter;
+    private WordnetPresenter urbanPresenter;
 
     public MainPortal(Context base) {
         super(base);
@@ -73,13 +73,13 @@ public class MainPortal extends Portal implements ComponentProvider {
     }
 
     @Override
-    public void inject(MeaningPage meaningPage) {
-        switch (meaningPage.getId()) {
+    public void inject(WordnetMeaningPage wordnetMeaningPage) {
+        switch (wordnetMeaningPage.getId()) {
             case R.id.wordnet_page:
-                wordnetComponent.inject(meaningPage);
+                wordnetComponent.inject(wordnetMeaningPage);
                 break;
             case R.id.urban_page:
-                urbanComponent.inject(meaningPage);
+                urbanComponent.inject(wordnetMeaningPage);
                 break;
             default:
                 throw new IllegalArgumentException("Meaning page must have a id. Either wordnet_page or urban_page");
@@ -112,8 +112,8 @@ public class MainPortal extends Portal implements ComponentProvider {
             @Override
             public void onWordSelected(String word) {
                 meaningPagesContainer.setVisibility(View.VISIBLE);
-                wordnetPresenter.word(word);
-                urbanPresenter.word(word);
+                wordnetPresenter.onWordUpdated(word);
+                urbanPresenter.onWordUpdated(word);
             }
         });
     }

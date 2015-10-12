@@ -3,7 +3,7 @@ package in.workarounds.define.util;
 public class StringUtils {
 
     /**
-     * filters the word from anything other than alphabets
+     * filters the onWordUpdated from anything other than alphabets
      *
      * @param word
      * @return

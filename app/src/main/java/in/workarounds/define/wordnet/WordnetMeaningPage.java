@@ -1,4 +1,4 @@
-package in.workarounds.define.view.meaning;
+package in.workarounds.define.wordnet;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,24 +16,24 @@ import in.workarounds.define.portal.ComponentProvider;
 /**
  * Created by madki on 26/09/15.
  */
-public class MeaningPage extends RelativeLayout {
+public class WordnetMeaningPage extends RelativeLayout {
     @Inject
-    MeaningPresenter presenter;
+    WordnetPresenter presenter;
 
     private TextView title;
     private RecyclerView meanings;
 
-    public MeaningPage(Context context) {
+    public WordnetMeaningPage(Context context) {
         super(context);
         init();
     }
 
-    public MeaningPage(Context context, AttributeSet attrs) {
+    public WordnetMeaningPage(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public MeaningPage(Context context, AttributeSet attrs, int defStyleAttr) {
+    public WordnetMeaningPage(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -65,7 +65,7 @@ public class MeaningPage extends RelativeLayout {
     }
 
     public void setWord(String word) {
-        presenter.word(word);
+        presenter.onWordUpdated(word);
         title(word);
     }
 

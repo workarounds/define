@@ -1,11 +1,11 @@
 package in.workarounds.define.urban;
 
 import dagger.Component;
-import in.workarounds.define.dictionary.Dictionary;
-import in.workarounds.define.view.meaning.MeaningPresenter;
+import in.workarounds.define.base.Dictionary;
+import in.workarounds.define.wordnet.WordnetPresenter;
 import in.workarounds.define.network.NetworkComponent;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.view.meaning.MeaningPage;
+import in.workarounds.define.wordnet.WordnetMeaningPage;
 
 /**
  * Created by madki on 26/09/15.
@@ -14,6 +14,6 @@ import in.workarounds.define.view.meaning.MeaningPage;
 @Component(modules = {UrbanModule.class}, dependencies = {NetworkComponent.class})
 public interface UrbanComponent {
     Dictionary dictionary();
-    MeaningPresenter presenter();
-    void inject(MeaningPage meaningPage);
+    WordnetPresenter presenter();
+    void inject(WordnetMeaningPage wordnetMeaningPage);
 }

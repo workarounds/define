@@ -1,9 +1,7 @@
 package in.workarounds.define.wordnet;
 
 import dagger.Component;
-import in.workarounds.define.dictionary.Dictionary;
-import in.workarounds.define.view.meaning.MeaningPage;
-import in.workarounds.define.view.meaning.MeaningPresenter;
+import in.workarounds.define.base.Dictionary;
 import in.workarounds.define.portal.PerPortal;
 
 /**
@@ -13,6 +11,6 @@ import in.workarounds.define.portal.PerPortal;
 @Component(modules = {WordnetModule.class})
 public interface WordnetComponent {
     Dictionary dictionary();
-    MeaningPresenter presenter();
-    void inject(MeaningPage meaningPage);
+    WordnetPresenter presenter();
+    void inject(WordnetMeaningPage wordnetMeaningPage);
 }

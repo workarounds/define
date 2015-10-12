@@ -36,11 +36,11 @@ public class MainActivity extends BaseActivity {
     }
 
     public void speakAmerican(View v) {
-        mSpeechHelper.speakAmerican("selected word");
+        mSpeechHelper.speakAmerican("selected onWordUpdated");
     }
 
     public void speakBritish(View v) {
-        mSpeechHelper.speakBritish("selected word");
+        mSpeechHelper.speakBritish("selected onWordUpdated");
     }
 
 

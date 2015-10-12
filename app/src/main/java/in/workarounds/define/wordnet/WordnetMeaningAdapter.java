@@ -1,4 +1,4 @@
-package in.workarounds.define.view.meaning;
+package in.workarounds.define.wordnet;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.workarounds.define.R;
-import in.workarounds.define.dictionary.Result;
+import in.workarounds.define.base.Result;
 
 /**
  * Created by madki on 27/09/15.
  */
-public class MeaningsAdapter extends RecyclerView.Adapter<MeaningsAdapter.ViewHolder> {
+public class WordnetMeaningAdapter extends RecyclerView.Adapter<WordnetMeaningAdapter.ViewHolder> {
     private List<Result> results = new ArrayList<>();
 
     @Override

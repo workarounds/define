@@ -50,7 +50,7 @@ public class SpeechHelper {
     }
 
     /**
-     * helper method to speak a word in American pronunciation
+     * helper method to speak a onWordUpdated in American pronunciation
      * @param word to be pronounced
      */
     public void speakAmerican(String word) {
@@ -58,7 +58,7 @@ public class SpeechHelper {
     }
 
     /**
-     * helper method to speak a word in British pronunciation
+     * helper method to speak a onWordUpdated in British pronunciation
      * @param word to be pronounced
      */
     public void speakBritish(String word) {
@@ -67,7 +67,7 @@ public class SpeechHelper {
 
     /**
      * sets the given Locale of the TextToSpeech object
-     * and speaks the word
+     * and speaks the onWordUpdated
      * @param word to be pronounced
      * @param locale locale to be used
      */

@@ -2,7 +2,7 @@ package in.workarounds.define.wordnet;
 
 import dagger.Module;
 import dagger.Provides;
-import in.workarounds.define.dictionary.Dictionary;
+import in.workarounds.define.base.Dictionary;
 import in.workarounds.define.portal.PerPortal;
 
 /**

@@ -4,7 +4,7 @@ import com.squareup.okhttp.OkHttpClient;
 
 import dagger.Module;
 import dagger.Provides;
-import in.workarounds.define.dictionary.Dictionary;
+import in.workarounds.define.base.Dictionary;
 import in.workarounds.define.portal.PerPortal;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
