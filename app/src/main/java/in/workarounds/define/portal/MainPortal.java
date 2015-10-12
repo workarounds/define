@@ -5,19 +5,17 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 import in.workarounds.define.R;
 import in.workarounds.define.base.MeaningPagerAdapter;
+import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-import in.workarounds.define.urban.UrbanMeaningPage;
-import in.workarounds.define.urban.UrbanPresenter;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
-import in.workarounds.define.wordnet.WordnetMeaningPage;
-import in.workarounds.define.wordnet.WordnetPresenter;
 import in.workarounds.portal.Portal;
 
 /**
@@ -35,10 +33,7 @@ public class MainPortal extends Portal implements ComponentProvider {
     private View meaningPagesContainer;
     private PortalComponent component;
 
-    @Inject
-    WordnetPresenter wordnetPresenter;
-    @Inject
-    UrbanPresenter urbanPresenter;
+    private List<MeaningPresenter> presenters = new ArrayList<>();
 
     public MainPortal(Context base) {
         super(base);
@@ -48,7 +43,6 @@ public class MainPortal extends Portal implements ComponentProvider {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         initComponents();
-        component.inject(this);
         setContentView(R.layout.portal_main);
         initViews();
         extractClipText(bundle);
@@ -57,6 +51,7 @@ public class MainPortal extends Portal implements ComponentProvider {
 
     private void initComponents() {
         component = DaggerPortalComponent.builder()
+                .portalModule(new PortalModule(this))
                 .networkComponent(
                         DaggerNetworkComponent.builder()
                                 .networkModule(new NetworkModule(this)).build())
@@ -66,16 +61,6 @@ public class MainPortal extends Portal implements ComponentProvider {
     @Override
     public PortalComponent component() {
         return component;
-    }
-
-    @Override
-    public void inject(WordnetMeaningPage wordnetMeaningPage) {
-        component.inject(wordnetMeaningPage);
-    }
-
-    @Override
-    public void inject(UrbanMeaningPage urbanMeaningPage) {
-        component.inject(urbanMeaningPage);
     }
 
     private void initViews() {
@@ -104,8 +89,9 @@ public class MainPortal extends Portal implements ComponentProvider {
             @Override
             public void onWordSelected(String word) {
                 meaningPagesContainer.setVisibility(View.VISIBLE);
-                wordnetPresenter.onWordUpdated(word);
-                urbanPresenter.onWordUpdated(word);
+                for(MeaningPresenter presenter: presenters) {
+                    presenter.onWordUpdated(word);
+                }
             }
         });
     }
@@ -123,5 +109,20 @@ public class MainPortal extends Portal implements ComponentProvider {
         }
     }
 
+    public void addPresenter(MeaningPresenter presenter) {
+        if(!presenters.contains(presenter)) {
+            presenters.add(presenter);
+        } else {
+            LogUtils.LOGE(TAG, "Presented already present. Not adding");
+        }
+    }
+
+    public void removePresenter(MeaningPresenter presenter) {
+        if(presenters.contains(presenter)) {
+            presenters.remove(presenter);
+        } else {
+            LogUtils.LOGE(TAG, "Presenter isn't present. Not removing");
+        }
+    }
 
 }

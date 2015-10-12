@@ -13,7 +13,6 @@ import in.workarounds.define.wordnet.WordnetModule;
 @PerPortal
 @Component(modules = {PortalModule.class, UrbanModule.class, WordnetModule.class}, dependencies = {NetworkComponent.class})
 public interface PortalComponent {
-    void inject(MainPortal portal);
     void inject(UrbanMeaningPage urbanMeaningPage);
     void inject(WordnetMeaningPage wordnetMeaningPage);
 }

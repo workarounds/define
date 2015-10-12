@@ -60,7 +60,7 @@ public class WordnetMeaningPage extends RelativeLayout {
 
     private void inject() {
         if(!isInEditMode()) {
-            ((ComponentProvider) getContext()).inject(this);
+            ((ComponentProvider) getContext()).component().inject(this);
         }
     }
 
