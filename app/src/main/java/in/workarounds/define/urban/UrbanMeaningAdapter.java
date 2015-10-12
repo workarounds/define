@@ -1,4 +1,4 @@
-package in.workarounds.define.wordnet;
+package in.workarounds.define.urban;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,17 +14,15 @@ import javax.inject.Inject;
 
 import in.workarounds.define.R;
 import in.workarounds.define.base.Result;
-import in.workarounds.define.portal.PerPortal;
 
 /**
- * Created by madki on 27/09/15.
+ * Created by madki on 13/10/15.
  */
-@PerPortal
-public class WordnetMeaningAdapter extends RecyclerView.Adapter<WordnetMeaningAdapter.ViewHolder> {
+public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapter.ViewHolder> {
     private List<Result> results = new ArrayList<>();
 
     @Inject
-    public WordnetMeaningAdapter() {
+    public UrbanMeaningAdapter() {
 
     }
 

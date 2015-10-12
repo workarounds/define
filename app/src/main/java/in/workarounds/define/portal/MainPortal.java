@@ -5,19 +5,19 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import javax.inject.Inject;
+
 import in.workarounds.define.R;
-import in.workarounds.define.wordnet.WordnetMeaningPage;
 import in.workarounds.define.base.MeaningPagerAdapter;
-import in.workarounds.define.wordnet.WordnetPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
+import in.workarounds.define.urban.UrbanMeaningPage;
+import in.workarounds.define.urban.UrbanPresenter;
+import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
-import in.workarounds.define.urban.DaggerUrbanComponent;
-import in.workarounds.define.urban.UrbanComponent;
-import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.wordnet.DaggerWordnetComponent;
-import in.workarounds.define.wordnet.WordnetComponent;
+import in.workarounds.define.wordnet.WordnetMeaningPage;
+import in.workarounds.define.wordnet.WordnetPresenter;
 import in.workarounds.portal.Portal;
 
 /**
@@ -34,11 +34,11 @@ public class MainPortal extends Portal implements ComponentProvider {
     private View mPortalContainer;
     private View meaningPagesContainer;
     private PortalComponent component;
-    private WordnetComponent wordnetComponent;
-    private UrbanComponent urbanComponent;
 
-    private WordnetPresenter wordnetPresenter;
-    private WordnetPresenter urbanPresenter;
+    @Inject
+    WordnetPresenter wordnetPresenter;
+    @Inject
+    UrbanPresenter urbanPresenter;
 
     public MainPortal(Context base) {
         super(base);
@@ -48,6 +48,7 @@ public class MainPortal extends Portal implements ComponentProvider {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         initComponents();
+        component.inject(this);
         setContentView(R.layout.portal_main);
         initViews();
         extractClipText(bundle);
@@ -55,16 +56,11 @@ public class MainPortal extends Portal implements ComponentProvider {
     }
 
     private void initComponents() {
-        component = DaggerPortalComponent.create();
-        wordnetComponent = DaggerWordnetComponent.create();
-        urbanComponent = DaggerUrbanComponent.builder()
-                .networkComponent(DaggerNetworkComponent.builder()
-                        .networkModule(new NetworkModule(this))
-                        .build())
+        component = DaggerPortalComponent.builder()
+                .networkComponent(
+                        DaggerNetworkComponent.builder()
+                                .networkModule(new NetworkModule(this)).build())
                 .build();
-
-        wordnetPresenter = wordnetComponent.presenter();
-        urbanPresenter   = urbanComponent.presenter();
     }
 
     @Override
@@ -74,16 +70,12 @@ public class MainPortal extends Portal implements ComponentProvider {
 
     @Override
     public void inject(WordnetMeaningPage wordnetMeaningPage) {
-        switch (wordnetMeaningPage.getId()) {
-            case R.id.wordnet_page:
-                wordnetComponent.inject(wordnetMeaningPage);
-                break;
-            case R.id.urban_page:
-                urbanComponent.inject(wordnetMeaningPage);
-                break;
-            default:
-                throw new IllegalArgumentException("Meaning page must have a id. Either wordnet_page or urban_page");
-        }
+        component.inject(wordnetMeaningPage);
+    }
+
+    @Override
+    public void inject(UrbanMeaningPage urbanMeaningPage) {
+        component.inject(urbanMeaningPage);
     }
 
     private void initViews() {

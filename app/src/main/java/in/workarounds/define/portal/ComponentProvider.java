@@ -1,5 +1,6 @@
 package in.workarounds.define.portal;
 
+import in.workarounds.define.urban.UrbanMeaningPage;
 import in.workarounds.define.wordnet.WordnetMeaningPage;
 
 /**
@@ -8,4 +9,5 @@ import in.workarounds.define.wordnet.WordnetMeaningPage;
 public interface ComponentProvider {
     PortalComponent component();
     void inject(WordnetMeaningPage wordnetMeaningPage);
+    void inject(UrbanMeaningPage urbanMeaningPage);
 }

@@ -1,4 +1,4 @@
-package in.workarounds.define.wordnet;
+package in.workarounds.define.urban;
 
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,51 +22,55 @@ import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
 
 /**
- * Created by madki on 26/09/15.
+ * Created by madki on 13/10/15.
  */
 @PerPortal
-public class WordnetPresenter implements MeaningPresenter {
-    private static final String TAG = LogUtils.makeLogTag(WordnetPresenter.class);
+public class UrbanPresenter implements MeaningPresenter {
+    private static final String TAG = LogUtils.makeLogTag(UrbanPresenter.class);
     private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
 
-    private WordnetDictionary dictionary;
-    private WordnetMeaningPage wordnetMeaningPage;
+    private UrbanDictionary dictionary;
+    private UrbanMeaningPage urbanMeaningPage;
     private String word;
-    private WordnetMeaningAdapter adapter;
+    private UrbanMeaningAdapter adapter;
     private TextView loadStatus;
     private ProgressBar loadProgress;
     private RecyclerView meaningList;
     private MeaningsTask task;
 
     @Inject
-    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter) {
+    public UrbanPresenter(UrbanDictionary dictionary, UrbanMeaningAdapter adapter) {
         this.dictionary = dictionary;
         this.adapter = adapter;
     }
 
     @Override
     public void addView(View view) {
-        this.wordnetMeaningPage = (WordnetMeaningPage) view;
+        LogUtils.LOGD(TAG, "View added");
+        this.urbanMeaningPage = (UrbanMeaningPage) view;
         initViews();
         setInitialViews();
     }
 
     @Override
     public void dropView() {
-        this.wordnetMeaningPage = null;
+        LogUtils.LOGD(TAG, "View dropped");
+        this.urbanMeaningPage = null;
         dropViews();
     }
 
     @Override
     public void onWordUpdated(String word) {
+        LogUtils.LOGD(TAG, "Word updated: " + word);
         if (word != null && !word.equals(this.word)) {
             showProgress();
         }
         this.word = word;
-        if (wordnetMeaningPage != null) {
-            wordnetMeaningPage.title(word);
+        if (urbanMeaningPage != null) {
+            LogUtils.LOGD(TAG, "urbanMeaningPage not null");
+            urbanMeaningPage.title(word);
         }
         if(task != null) {
             task.cancel(true);
@@ -84,7 +88,7 @@ public class WordnetPresenter implements MeaningPresenter {
         return word;
     }
 
-    public WordnetMeaningAdapter adapter() {
+    public UrbanMeaningAdapter adapter() {
         return adapter;
     }
 
@@ -117,9 +121,9 @@ public class WordnetPresenter implements MeaningPresenter {
     }
 
     private void initViews() {
-        loadStatus = (TextView) wordnetMeaningPage.findViewById(R.id.tv_load_status);
-        loadProgress = (ProgressBar) wordnetMeaningPage.findViewById(R.id.pb_load_progress);
-        meaningList = (RecyclerView) wordnetMeaningPage.findViewById(R.id.rv_meaning_list);
+        loadStatus = (TextView) urbanMeaningPage.findViewById(R.id.tv_load_status);
+        loadProgress = (ProgressBar) urbanMeaningPage.findViewById(R.id.pb_load_progress);
+        meaningList = (RecyclerView) urbanMeaningPage.findViewById(R.id.rv_meaning_list);
     }
 
     private void setInitialViews() {
