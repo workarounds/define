@@ -1,6 +1,7 @@
 package in.workarounds.define.view.meaning;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -37,6 +38,7 @@ public class MeaningPresenter {
     private TextView loadStatus;
     private ProgressBar loadProgress;
     private RecyclerView meaningList;
+    private MeaningsTask task;
 
     @Inject
     public MeaningPresenter(Dictionary dictionary) {
@@ -62,7 +64,16 @@ public class MeaningPresenter {
         if (meaningPage != null) {
             meaningPage.title(word);
         }
-        new MeaningsTask().execute(word);
+        if(task != null) {
+            task.cancel(true);
+        }
+
+        task = new MeaningsTask();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
+        } else {
+            task.execute(word);
+        }
     }
 
     public String word() {
