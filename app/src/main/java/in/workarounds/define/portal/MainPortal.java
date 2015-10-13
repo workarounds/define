@@ -1,9 +1,12 @@
 package in.workarounds.define.portal;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,8 @@ public class MainPortal extends Portal implements ComponentProvider {
 
     private SelectableTextView mTvClipText;
     private ViewPager pager;
+
+    private String selectedText;
 
     private View mPortalContainer;
     private View meaningPagesContainer;
@@ -67,7 +72,9 @@ public class MainPortal extends Portal implements ComponentProvider {
         mPortalContainer = findViewById(R.id.rl_main_portal_container);
         mTvClipText = (SelectableTextView) findViewById(R.id.tv_clip_text);
         meaningPagesContainer = findViewById(R.id.ll_meaning_pages_container);
-        meaningPagesContainer.setVisibility(View.INVISIBLE);
+        if (meaningPagesContainer != null) {
+            meaningPagesContainer.setVisibility(View.INVISIBLE);
+        }
 
         mPortalContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,12 +96,14 @@ public class MainPortal extends Portal implements ComponentProvider {
         mTvClipText.setOnWordSelectedListener(new SelectableTextView.OnWordSelectedListener() {
             @Override
             public void onWordSelected(String word) {
+                selectedText = word;
                 meaningPagesContainer.setVisibility(View.VISIBLE);
                 for(MeaningPresenter presenter: presenters) {
                     presenter.onWordUpdated(word);
                 }
             }
         });
+        initButtons();
     }
 
     private void extractClipText(Bundle bundle) {
@@ -126,4 +135,24 @@ public class MainPortal extends Portal implements ComponentProvider {
         }
     }
 
+    private void initButtons(){
+        View copyButton = findViewById(R.id.button_copy);
+        if (copyButton != null) {
+            copyButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(selectedText != null) {
+                        copySelectedText();
+                    }
+                }
+            });
+        }
+    }
+
+    private void copySelectedText(){
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Define", selectedText);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this, "Copied", Toast.LENGTH_SHORT).show();
+    }
 }
