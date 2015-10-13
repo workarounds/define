@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import edu.smu.tspell.wordnet.Synset;
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
@@ -90,7 +91,7 @@ public class WordnetPresenter implements MeaningPresenter {
         return adapter;
     }
 
-    private void onResultsUpdated(List<Result> results) {
+    private void onResultsUpdated(List<Synset> results) {
         adapter.update(results);
         if (results != null && results.size() != 0) {
             showList();
@@ -99,21 +100,20 @@ public class WordnetPresenter implements MeaningPresenter {
         }
     }
 
-    private class MeaningsTask extends AsyncTask<String, Integer, List<Result>> {
+    private class MeaningsTask extends AsyncTask<String, Integer, List<Synset>> {
         @Override
-        protected List<Result> doInBackground(String... params) {
-            List<Result> results;
+        protected List<Synset> doInBackground(String... params) {
+            List<Synset> results = new ArrayList<>();
             try {
                 results = dictionary.results(params[0]);
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
-                results = new ArrayList<>();
             }
             return results;
         }
 
         @Override
-        protected void onPostExecute(List<Result> results) {
+        protected void onPostExecute(List<Synset> results) {
             onResultsUpdated(results);
         }
     }

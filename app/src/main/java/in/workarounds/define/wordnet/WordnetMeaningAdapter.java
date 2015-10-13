@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import edu.smu.tspell.wordnet.Synset;
+import edu.smu.tspell.wordnet.SynsetType;
 import in.workarounds.define.R;
-import in.workarounds.define.base.Result;
+import in.workarounds.define.base.DictConstants;
 import in.workarounds.define.portal.PerPortal;
 
 /**
@@ -21,7 +24,7 @@ import in.workarounds.define.portal.PerPortal;
  */
 @PerPortal
 public class WordnetMeaningAdapter extends RecyclerView.Adapter<WordnetMeaningAdapter.ViewHolder> {
-    private List<Result> results = new ArrayList<>();
+    private List<Synset> results = new ArrayList<>();
 
     @Inject
     public WordnetMeaningAdapter() {
@@ -37,11 +40,11 @@ public class WordnetMeaningAdapter extends RecyclerView.Adapter<WordnetMeaningAd
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         if(position >= 0 && position < results.size()) {
-            Result result = results.get(position);
-            viewHolder.type.setText(result.type());
-            viewHolder.synonyms.setText(join(result.synonyms()));
-            viewHolder.usages.setText(join(result.usages()));
-            viewHolder.definition.setText(result.definition());
+            Synset synset = results.get(position);
+            viewHolder.type.setText(convertType(synset.getType()));
+            viewHolder.synonyms.setText(join(Arrays.asList(synset.getWordForms())));
+            viewHolder.usages.setText(join(Arrays.asList(synset.getUsageExamples())));
+            viewHolder.definition.setText(synset.getDefinition());
         }
     }
 
@@ -50,7 +53,25 @@ public class WordnetMeaningAdapter extends RecyclerView.Adapter<WordnetMeaningAd
         return results.size();
     }
 
-    public void update(List<Result> results) {
+    private String convertType(SynsetType type) {
+        String typeStr = "";
+        if (type == SynsetType.NOUN) {
+            typeStr = DictConstants.TYPE_NOUN;
+        } else if (type == SynsetType.VERB) {
+            typeStr = DictConstants.TYPE_VERB;
+        } else if (type == SynsetType.ADJECTIVE) {
+            typeStr = DictConstants.TYPE_ADJ;
+        } else if (type == SynsetType.ADVERB) {
+            typeStr = DictConstants.TYPE_ADV;
+        } else if (type == SynsetType.ADJECTIVE_SATELLITE) {
+            typeStr = DictConstants.TYPE_ADJS;
+        } else {
+            typeStr = DictConstants.TYPE_NONE;
+        }
+        return typeStr;
+    }
+
+    public void update(List<Synset> results) {
         this.results = new ArrayList<>();
         this.results.addAll(results);
         notifyDataSetChanged();
