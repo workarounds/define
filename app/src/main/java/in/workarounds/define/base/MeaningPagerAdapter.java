@@ -11,8 +11,9 @@ import in.workarounds.define.R;
  * Created by madki on 27/09/15.
  */
 public class MeaningPagerAdapter extends PagerAdapter {
-    private static final String[] titles = new String[] {"Wordnet", "Urban"};
-    private static final int[] layouts = new int[] {R.layout.layout_wordnet_page, R.layout.layout_urban_page};
+    private static final String[] titles = new String[] {"Wordnet", "Livio", "Urban"};
+    private static final int[] layouts = new int[] {R.layout.layout_wordnet_page,R.layout.layout_livio_page,
+            R.layout.layout_urban_page};
 
     @Override
     public int getCount() {
