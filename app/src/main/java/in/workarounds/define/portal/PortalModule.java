@@ -1,5 +1,7 @@
 package in.workarounds.define.portal;
 
+import android.content.Context;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,4 +20,10 @@ public class PortalModule {
     public MainPortal provideMainPortal() {
         return portal;
     }
+
+    @Provides
+    public Context provideContext() {
+        return portal.getApplicationContext();
+    }
 }
+
