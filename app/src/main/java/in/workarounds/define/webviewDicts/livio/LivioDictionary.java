@@ -27,8 +27,8 @@ import in.workarounds.define.util.LogUtils;
 @PerPortal
 public class LivioDictionary implements HtmlDictionary {
     private static final String TAG = LogUtils.makeLogTag(LivioDictionary.class);
-    public static String d = "livio.pack.lang.en_US.DictionaryProvider";
-    public static Uri e = Uri.parse("content://" + d + "/dictionary");
+    public static String contentProvider = "livio.pack.lang.en_US.DictionaryProvider";
+    public static Uri contentUri = Uri.parse("content://" + contentProvider + "/dictionary");
 
     private Context context;
 
@@ -47,13 +47,16 @@ public class LivioDictionary implements HtmlDictionary {
     }
 
     public String getHtml(String word){
-        String html = "<HTML><HEAD><LINK href=\"css/livio.css\" type=\"text/css\" rel=\"stylesheet\"/>" +
+        StringBuilder htmlBuilder = new StringBuilder();
+        String html = "";
+        //add css and js
+        htmlBuilder = htmlBuilder
+                .append("<HTML><HEAD><LINK href=\"css/livio.css\" type=\"text/css\" rel=\"stylesheet\"/>" +
                 "<script src=\"js/livio.js\" type=\"text/javascript\" > </script>"+
-                "</HEAD>";
-        Cursor c = context.getContentResolver().query(e, null, null, new String[]{word}, null);
+                "</HEAD>");
+        Cursor c = context.getContentResolver().query(contentUri, null, null, new String[]{word}, null);
 
         Document localObject1;
-        String[] localObject4;
         if ((c != null) && c.moveToFirst())
         {
             for(String name : c.getColumnNames()) System.out.println(name);
@@ -62,56 +65,19 @@ public class LivioDictionary implements HtmlDictionary {
             (localObject1).select("dl").remove();
             (localObject1).select("ul").remove();
             (localObject1).select("head").remove();
-            //Elements elements = localObject1.select("html");
 
-            //elements.tagName("");
-           // localObject1.select("html").remove();
             for( Element element : localObject1.select("silence") ) {
                 element.remove();
             }
             for(Element element : localObject1.select("hr")) {
                 element.remove();
             }
-            html += localObject1.html();
-            html += "</html>";
+            htmlBuilder.append(localObject1.html());
+            html = htmlBuilder.toString();
             System.out.print(html);
-           /* localObject4 = Jsoup.parse((localObject1).select("ol").remove().outerHtml().replace("<li>", "~<li>")).text().split("~");
-            for(String row : localObject4) {
-                System.out.println("1. " + row);
-            }*/
+
             c.close();
         }
         return html;
     }
-
-    public String getAssetFile(String filePath){
-        String css = "";
-        StringBuilder builder = new StringBuilder();
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(
-                    new InputStreamReader(context.getAssets().open(filePath), "UTF-8"));
-
-            // do reading, usually loop until end of file reading
-            String mLine = reader.readLine();
-            while (mLine != null) {
-                //process line
-                builder.append(mLine);
-                mLine = reader.readLine();
-            }
-            css = builder.toString();
-        } catch (IOException e) {
-            //log the exception
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    //log the exception
-                }
-            }
-        }
-        return css;
-    }
-
 }
