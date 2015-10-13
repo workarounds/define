@@ -8,16 +8,11 @@ import android.text.TextUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.inject.Inject;
 
 import in.workarounds.define.base.DictionaryException;
-import in.workarounds.define.base.HtmlDictionary;
+import in.workarounds.define.base.IHtmlDictionary;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 
@@ -25,7 +20,7 @@ import in.workarounds.define.util.LogUtils;
  * Created by madki on 26/09/15.
  */
 @PerPortal
-public class LivioDictionary implements HtmlDictionary {
+public class LivioDictionary implements IHtmlDictionary {
     private static final String TAG = LogUtils.makeLogTag(LivioDictionary.class);
     public static String contentProvider = "livio.pack.lang.en_US.DictionaryProvider";
     public static Uri contentUri = Uri.parse("content://" + contentProvider + "/dictionary");
@@ -52,8 +47,8 @@ public class LivioDictionary implements HtmlDictionary {
         //add css and js
         htmlBuilder = htmlBuilder
                 .append("<HTML><HEAD><LINK href=\"css/livio.css\" type=\"text/css\" rel=\"stylesheet\"/>" +
-                "<script src=\"js/livio.js\" type=\"text/javascript\" > </script>"+
-                "</HEAD>");
+                        "<script src=\"js/livio.js\" type=\"text/javascript\" > </script>" +
+                        "</HEAD>");
         Cursor c = context.getContentResolver().query(contentUri, null, null, new String[]{word}, null);
 
         Document localObject1;
