@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
+import in.workarounds.define.base.IUrbanDictionary;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.base.Result;
 import in.workarounds.define.portal.MainPortal;
@@ -94,30 +95,29 @@ public class UrbanPresenter implements MeaningPresenter {
         return adapter;
     }
 
-    private void onResultsUpdated(List<Result> results) {
+    private void onResultsUpdated(UrbanResult results) {
         adapter.update(results);
-        if (results != null && results.size() != 0) {
+        if (results != null && results.getMeanings().size() != 0) {
             showList();
         } else {
             showStatus("Sorry, no results found.");
         }
     }
 
-    private class MeaningsTask extends AsyncTask<String, Integer, List<Result>> {
+    private class MeaningsTask extends AsyncTask<String, Integer, UrbanResult> {
         @Override
-        protected List<Result> doInBackground(String... params) {
-            List<Result> results;
+        protected UrbanResult doInBackground(String... params) {
+            UrbanResult results = null;
             try {
                 results = dictionary.results(params[0]);
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
-                results = new ArrayList<>();
             }
             return results;
         }
 
         @Override
-        protected void onPostExecute(List<Result> results) {
+        protected void onPostExecute(UrbanResult results) {
             onResultsUpdated(results);
         }
     }

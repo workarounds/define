@@ -19,7 +19,7 @@ import in.workarounds.define.base.Result;
  * Created by madki on 13/10/15.
  */
 public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapter.ViewHolder> {
-    private List<Result> results = new ArrayList<>();
+    private UrbanResult results;
 
     @Inject
     public UrbanMeaningAdapter() {
@@ -34,23 +34,23 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        if(position >= 0 && position < results.size()) {
-            Result result = results.get(position);
-            viewHolder.type.setText(result.type());
-            viewHolder.synonyms.setText(join(result.synonyms()));
-            viewHolder.usages.setText(join(result.usages()));
-            viewHolder.definition.setText(result.definition());
+        if(position >= 0 && position < results.getMeanings().size()) {
+            UrbanResult result = results;
+            Meaning meaning = result.getMeanings().get(position);
+            viewHolder.type.setText(result.getResultType());
+            viewHolder.synonyms.setText(join(result.getTags()));
+            viewHolder.usages.setText(meaning.getExample());
+            viewHolder.definition.setText(meaning.getDefinition());
         }
     }
 
     @Override
     public int getItemCount() {
-        return results.size();
+        return results.getMeanings().size();
     }
 
-    public void update(List<Result> results) {
-        this.results = new ArrayList<>();
-        this.results.addAll(results);
+    public void update(UrbanResult results) {
+        this.results = results;
         notifyDataSetChanged();
     }
 
