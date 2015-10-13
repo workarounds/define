@@ -10,6 +10,7 @@
     <string name="selection">We wanted to put together a small corner in the Medium universe that’s maybe a bit like a library, and maybe a bit like a museum, but much more lively, and much more forward-looking</string>
     <!-- Content Descriptions-->
     <string name="content_description_copy">Copy</string>
+    <string name="content_description_google">Google</string>
 
     <string name="ok">Yes</string>
     <string name="cancel">No</string>

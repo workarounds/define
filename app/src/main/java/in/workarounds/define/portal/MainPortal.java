@@ -1,8 +1,10 @@
 package in.workarounds.define.portal;
 
+import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -141,8 +143,21 @@ public class MainPortal extends Portal implements ComponentProvider {
             copyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(selectedText != null) {
+                    if (selectedText != null) {
                         copySelectedText();
+                    }
+                }
+            });
+        }
+
+        View googleButton = findViewById(R.id.button_google);
+        if (googleButton != null) {
+            googleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(selectedText != null){
+                        googleSelectedText();
+                        finish();
                     }
                 }
             });
@@ -154,5 +169,12 @@ public class MainPortal extends Portal implements ComponentProvider {
         ClipData clip = ClipData.newPlainText("Define", selectedText);
         clipboard.setPrimaryClip(clip);
         Toast.makeText(this, "Copied", Toast.LENGTH_SHORT).show();
+    }
+
+    private void googleSelectedText(){
+        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+        intent.putExtra(SearchManager.QUERY, selectedText);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
