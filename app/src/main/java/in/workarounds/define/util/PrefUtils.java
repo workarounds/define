@@ -3,12 +3,14 @@ package in.workarounds.define.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import in.workarounds.define.ui.activity.UserPrefActivity;
+
 /**
  * Created by mouli on 15/3/15.
  */
 public class PrefUtils {
     private static final String FILE_NAME = "default.prefs";
-    public static final String KEY_NOTIF_ONLY = "key_notif_only";
+    public static final String KEY_NOTIFY_MODE = "key_notify_mode";
 
     private static final String DM = "dm_";
 
@@ -21,16 +23,12 @@ public class PrefUtils {
         return mSharedPreferences;
     }
 
-    public static void setIsSilentMode(Context context, boolean isNotifOnly) {
-        SharedPreferences sharedPreferences = PrefUtils.getSharedPreferences(context);
-        sharedPreferences.edit()
-                .putBoolean(KEY_NOTIF_ONLY, isNotifOnly)
-                .apply();
+    public static void setNotifyMode(@UserPrefActivity.NotifyMode int mode, Context context) {
+        getSharedPreferences(context).edit().putInt(KEY_NOTIFY_MODE, mode).apply();
     }
 
-    public static boolean getIsSilentMode(Context context) {
-        SharedPreferences sharedPreferences = PrefUtils.getSharedPreferences(context);
-        return sharedPreferences.getBoolean(KEY_NOTIF_ONLY, false);
+    public static int getNotifyMode( @UserPrefActivity.NotifyMode int defaultValue, Context context) {
+        return getSharedPreferences(context).getInt(KEY_NOTIFY_MODE, defaultValue);
     }
 
     public static long getDownloadId(String key, Context context) {
