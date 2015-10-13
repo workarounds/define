@@ -29,7 +29,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/jaws-bin.jar')
     compile 'in.workarounds.portal:portal:0.0.3'
-    compile 'in.workarounds.typography:typography:0.0.4'
+    compile 'in.workarounds.typography:typography:0.0.5'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'

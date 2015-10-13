@@ -28,6 +28,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.UserPrefActivity"
+            android:label="@string/activity_settings" />
+
         <service
             android:name="in.workarounds.define.service.ClipboardService"
             android:enabled="true"
