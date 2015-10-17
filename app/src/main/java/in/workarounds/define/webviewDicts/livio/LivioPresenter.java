@@ -8,6 +8,7 @@ import android.support.annotation.IntDef;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import javax.inject.Inject;
@@ -104,13 +105,12 @@ public class LivioPresenter implements MeaningPresenter {
     }
 
     private void onResultsUpdated(final String html) {
-        meaningList.post(new Runnable() {
-            public void run() {
-                meaningList.loadDataWithBaseURL("file:///android_asset/",html, mime, encoding,null);
-            }
-        });
         if (html != null && !html.isEmpty()) {
-            showList();
+            meaningList.post(new Runnable() {
+                public void run() {
+                    meaningList.loadDataWithBaseURL("file:///android_asset/", html, mime, encoding, null);
+                }
+            });
         } else {
             showStatus("Sorry, no results found.");
         }
@@ -142,6 +142,11 @@ public class LivioPresenter implements MeaningPresenter {
         meaningList = (WebView) livioMeaningPage.findViewById(R.id.rv_meaning_list);
         meaningList.getSettings().setJavaScriptEnabled(true);
         meaningList.addJavascriptInterface(javaScriptInterface, "JSInterface");
+        meaningList.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                showList();
+            }
+        });
     }
 
     private void setInitialViews() {
