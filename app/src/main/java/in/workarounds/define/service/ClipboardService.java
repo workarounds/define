@@ -46,7 +46,7 @@ public class ClipboardService extends Service implements
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent.hasExtra(INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY)){
+        if(intent != null && intent.hasExtra(INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY)){
             startPortal(intent.getStringExtra(INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY));
             //remove notification
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
