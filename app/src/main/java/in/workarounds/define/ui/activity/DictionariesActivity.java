@@ -22,6 +22,7 @@ import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.helper.DownloadProgressThread;
 import in.workarounds.define.helper.DownloadResolver;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.util.ViewUtils;
 
 /**
@@ -91,6 +92,12 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         super.onResume();
         unzipProgress.setVisibility(View.GONE);
         statusTv.setVisibility(View.GONE);
+
+        //Set dictionaries done if at least one of local dictionaries
+        // is downloaded
+        if(PrefUtils.getUnzipped(Constants.WORDNET, this)){
+            PrefUtils.setDictionariesDone(true, this);
+        }
     }
 
     @Override
