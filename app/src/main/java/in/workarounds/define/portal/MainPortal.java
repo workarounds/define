@@ -145,6 +145,7 @@ public class MainPortal extends Portal implements ComponentProvider {
                 public void onClick(View v) {
                     if (selectedText != null) {
                         copySelectedText();
+                        finish();
                     }
                 }
             });
