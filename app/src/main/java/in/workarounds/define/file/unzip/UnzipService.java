@@ -32,6 +32,7 @@ import in.workarounds.define.api.Constants;
 import in.workarounds.define.file.FileHelper;
 import in.workarounds.define.util.FileUtils;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.wordnet.WordnetFileHelper;
 
 /**
@@ -250,6 +251,7 @@ public class UnzipService extends Service {
             notificationCount = notificationCount + 1;
 
             fileHelper = getFileHelper(params[0]);
+            PrefUtils.setUnzipped(params[0], false, getApplicationContext());
             float progress = 0;
             float max = 0;
             File zipFile = fileHelper.zipFile();
@@ -295,6 +297,7 @@ public class UnzipService extends Service {
         @Override
         protected void onPostExecute(String dictName) {
             super.onPostExecute(dictName);
+            PrefUtils.setUnzipped(dictName, true, getApplicationContext());
             File zipFile = fileHelper.zipFile();
             onProgressUpdate(100f);
             if(zipFile != null) {
