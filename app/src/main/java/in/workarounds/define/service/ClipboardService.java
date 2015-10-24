@@ -116,9 +116,8 @@ public class ClipboardService extends Service implements
     }
 
     private void startPortal(String text){
-        // TODO check if portal already open. If yes send data and don't re-open
         Bundle bundle = new Bundle();
         bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
-        Portal.with(this).type(MainPortal.class).data(bundle).open();
+        Portal.with(this).data(bundle).send(MainPortal.class);
     }
 }
