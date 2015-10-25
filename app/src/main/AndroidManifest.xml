@@ -19,14 +19,23 @@
             android:label="@string/app_name" >
         </activity>
 
-        <activity android:name=".ui.activity.DictionariesActivity"
-                  android:label="@string/app_name">
+        <activity
+            android:name=".ui.activity.SplashActivity"
+            android:theme="@style/Theme.CustomTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.activity.DictionariesActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".ui.activity.TutorialActivity"
+            android:label="@string/app_name"
+            />
 
         <activity android:name=".ui.activity.UserPrefActivity"
             android:label="@string/activity_settings" />

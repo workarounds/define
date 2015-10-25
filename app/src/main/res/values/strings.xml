@@ -7,13 +7,15 @@
     <string name="wordnet_database_dir">wordnet.database.dir</string>
 
     <string name="word">Lorem Ipsum</string>
-    <string name="selection">We wanted to put together a small corner in the Medium universe that’s maybe a bit like a library, and maybe a bit like a museum, but much more lively, and much more forward-looking</string>
+    <string name="selection">Voilà! In view, a humble vaudevillian veteran, cast vicariously as both victim and villain by the vicissitudes of fate.</string>
+    <string name="copy_something">Copy something you don\'t understand</string>
     <!-- Content Descriptions-->
     <string name="content_description_copy">Copy</string>
     <string name="content_description_google">Google</string>
 
     <string name="ok">Yes</string>
     <string name="cancel">No</string>
+    <string name="copy">copy</string>
     <string name="close">CLOSE</string>
 
     <string name="btn_download_data">Download Data</string>
