@@ -23,8 +23,6 @@ public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
     private static final String TAG = LogUtils.makeLogTag(ClipboardService.class);
     private static boolean isRunning = false;
-    private static final String INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY
-            = "INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY";
     private static final int SILENT_NOTIFICATION_ID = 201;
 
     @Override
@@ -45,12 +43,6 @@ public class ClipboardService extends Service implements
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(intent != null && intent.hasExtra(INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY)){
-            startPortal(intent.getStringExtra(INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY));
-            //remove notification
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(SILENT_NOTIFICATION_ID);
-        }
         return START_STICKY;
     }
 
@@ -89,14 +81,20 @@ public class ClipboardService extends Service implements
 
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
+                            .setAutoCancel(true)
                             .setSmallIcon(R.drawable.ic_notification_icon)
                             .setPriority(priority)
                             .setVibrate(new long[0]) //mandatory for high priority,setting no vibration
                             .setContentTitle(getString(R.string.app_name))
                             .setContentText(getString(R.string.notification_content));
 // Creates an explicit intent for clipboard Service
-            Intent resultIntent = new Intent(this, ClipboardService.class);
-            resultIntent.putExtra(INTENT_SILENT_NOTIFICATION_CLICK_SELECTED_TEXT_KEY, text);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
+            Intent resultIntent =
+                    Portal.with(this)
+                    .data(bundle)
+                    .sendIntent(MainPortal.class);
             PendingIntent resultPendingIntent =
                     PendingIntent.getService(
                             this,
