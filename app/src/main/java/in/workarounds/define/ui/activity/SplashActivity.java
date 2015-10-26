@@ -35,9 +35,8 @@ public class SplashActivity extends AppCompatActivity{
             return;
         }
 
-        // TODO: 24/10/15 Start Dashboard Activity
-        Intent settings = new Intent(this, UserPrefActivity.class);
-        startActivity(settings);
+        Intent dashboard = new Intent(this, DashboardActivity.class);
+        startActivity(dashboard);
         finish();
     }
 }

@@ -3,33 +3,50 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar" />
+
     <in.workarounds.typography.TextView
         android:id="@+id/tv_pref_name_notification"
         android:text="@string/pref_name_notification"
+        android:textSize="@dimen/font_medium"
+        android:layout_margin="@dimen/margin_large"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <RadioGroup
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_regular"
+        android:paddingRight="@dimen/padding_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <in.workarounds.typography.RadioButton
             android:id="@+id/rb_option_silent"
             android:text="@string/option_silent"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:textSize="@dimen/font_regular"
+            android:layout_marginLeft="@dimen/margin_regular"
+            android:layout_marginRight="@dimen/margin_regular"
+            android:padding="@dimen/padding_regular"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <in.workarounds.typography.RadioButton
             android:id="@+id/rb_option_priority"
             android:text="@string/option_priority"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:textSize="@dimen/font_regular"
+            android:layout_marginLeft="@dimen/margin_regular"
+            android:layout_marginRight="@dimen/margin_regular"
+            android:padding="@dimen/padding_regular"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <in.workarounds.typography.RadioButton
             android:id="@+id/rb_option_direct"
             android:text="@string/option_direct"
-            android:layout_weight="1"
-            android:layout_width="0dp"
+            android:textSize="@dimen/font_regular"
+            android:layout_marginLeft="@dimen/margin_regular"
+            android:layout_marginRight="@dimen/margin_regular"
+            android:padding="@dimen/padding_regular"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RadioGroup>
 
