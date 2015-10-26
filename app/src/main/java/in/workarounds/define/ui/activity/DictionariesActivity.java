@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -77,6 +78,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
 
         downloadButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+        findViewById(R.id.btn_install_livio).setOnClickListener(this);
 
         mThread = DownloadResolver.setUpProgress(Constants.WORDNET, downloadProgress, statusTv, this);
     }
@@ -196,6 +198,9 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
             case R.id.btn_cancel_download_wordnet:
                 cancelClick();
                 break;
+            case R.id.btn_install_livio:
+                installLivio();
+                break;
             default:
                 LogUtils.LOGE(TAG, "No actionable define for this click");
         }
@@ -224,4 +229,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         DownloadResolver.cancelDownload(Constants.WORDNET, this);
     }
 
+    public void installLivio(){
+        String livio = "livio.pack.lang.en_US";
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + livio)));
+    }
 }

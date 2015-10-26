@@ -21,6 +21,42 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/livio_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_large">
+
+                <in.workarounds.typography.TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/margin_medium"
+                    android:text="@string/title_livio_dictionary"
+                    android:textSize="@dimen/font_large"
+                    app:font_variant="semibold" />
+
+                <in.workarounds.typography.TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:maxWidth="320dp"
+                    android:paddingTop="@dimen/margin_medium"
+                    android:text="@string/description_livio_dictionary" />
+
+                <in.workarounds.typography.Button
+                    android:id="@+id/btn_install_livio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:text="@string/btn_install_livio"
+                    app:font_variant="light"
+                    />
+            </LinearLayout>
+
+            <include layout="@layout/layout_divider_horizontal" />
+
+            <LinearLayout
                 android:id="@+id/rl_wordnet_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

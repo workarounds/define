@@ -44,6 +44,9 @@
     <!-- Unzip notification -->
     <string name="unzip_noti_title">Unzipping dictionary</string>
     <string name="unzip_noti_finish_title">Finished unzipping dictionary</string>
+    <string name="title_livio_dictionary">Livio Dictionary</string>
+    <string name="description_livio_dictionary">The free offline English dictionary app based on English Wiktionary</string>
+    <string name="btn_install_livio">Install Livio</string>
     <string name="title_wordnet_dictionary">Wordnet Dictionary</string>
     <string name="description_wordnet_dictionary">Wordnet is a lexical database for English by Princeton University. It\'s download size is 10MB and it occupies 30MB disk space once extracted.</string>
     <string name="title_urban_dictionary">Urban Dictionary</string>
