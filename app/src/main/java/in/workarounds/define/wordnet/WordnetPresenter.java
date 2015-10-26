@@ -59,6 +59,7 @@ public class WordnetPresenter implements MeaningPresenter {
     @Override
     public void dropView() {
         this.wordnetMeaningPage = null;
+        if(task != null) task.cancel(true);
         dropViews();
     }
 

@@ -66,6 +66,7 @@ public class LivioPresenter implements MeaningPresenter {
     public void dropView() {
         LogUtils.LOGD(TAG, "View dropped");
         this.livioMeaningPage = null;
+        if(task != null) task.cancel(true);
         dropViews();
     }
 
