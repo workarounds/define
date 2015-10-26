@@ -17,6 +17,8 @@
 
     <RadioGroup
         android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_regular"
+        android:paddingRight="@dimen/padding_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <in.workarounds.typography.RadioButton
@@ -25,6 +27,7 @@
             android:textSize="@dimen/font_regular"
             android:layout_marginLeft="@dimen/margin_regular"
             android:layout_marginRight="@dimen/margin_regular"
+            android:padding="@dimen/padding_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <in.workarounds.typography.RadioButton
@@ -33,6 +36,7 @@
             android:textSize="@dimen/font_regular"
             android:layout_marginLeft="@dimen/margin_regular"
             android:layout_marginRight="@dimen/margin_regular"
+            android:padding="@dimen/padding_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <in.workarounds.typography.RadioButton
@@ -41,6 +45,7 @@
             android:textSize="@dimen/font_regular"
             android:layout_marginLeft="@dimen/margin_regular"
             android:layout_marginRight="@dimen/margin_regular"
+            android:padding="@dimen/padding_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RadioGroup>
