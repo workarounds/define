@@ -111,6 +111,7 @@
         android:id="@+id/ll_meaning_pages_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:layout_above="@id/fl_close_container"
         android:layout_below="@id/button_container"
         android:layout_marginLeft="@dimen/margin_regular"

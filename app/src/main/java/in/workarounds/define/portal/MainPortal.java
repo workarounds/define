@@ -74,9 +74,9 @@ public class MainPortal extends Portal implements ComponentProvider {
         mPortalContainer = findViewById(R.id.rl_main_portal_container);
         mTvClipText = (SelectableTextView) findViewById(R.id.tv_clip_text);
         meaningPagesContainer = findViewById(R.id.ll_meaning_pages_container);
-        if (meaningPagesContainer != null) {
-            meaningPagesContainer.setVisibility(View.INVISIBLE);
-        }
+//        if (meaningPagesContainer != null) {
+//            meaningPagesContainer.setVisibility(View.INVISIBLE);
+//        }
 
         mPortalContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +124,7 @@ public class MainPortal extends Portal implements ComponentProvider {
     public void addPresenter(MeaningPresenter presenter) {
         if(!presenters.contains(presenter)) {
             presenters.add(presenter);
+            presenter.onWordUpdated(selectedText);
         } else {
             LogUtils.LOGE(TAG, "Presented already present. Not adding");
         }

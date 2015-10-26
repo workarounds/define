@@ -23,7 +23,6 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
 
     @Inject
     public UrbanMeaningAdapter() {
-
     }
 
     @Override
@@ -34,7 +33,7 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        if(position >= 0 && position < results.getMeanings().size()) {
+        if(position >= 0 && position < getItemCount()) {
             UrbanResult result = results;
             Meaning meaning = result.getMeanings().get(position);
             viewHolder.type.setText(result.getResultType());
@@ -46,6 +45,7 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
 
     @Override
     public int getItemCount() {
+        if(results == null) return 0;
         return results.getMeanings().size();
     }
 
