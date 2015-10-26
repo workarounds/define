@@ -61,6 +61,7 @@ public class UrbanPresenter implements MeaningPresenter {
     public void dropView() {
         LogUtils.LOGD(TAG, "View dropped");
         this.urbanMeaningPage = null;
+        if(task != null) task.cancel(true);
         dropViews();
     }
 

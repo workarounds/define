@@ -100,7 +100,7 @@ public class MainPortal extends Portal implements ComponentProvider {
             public void onWordSelected(String word) {
                 selectedText = word;
                 meaningPagesContainer.setVisibility(View.VISIBLE);
-                for(MeaningPresenter presenter: presenters) {
+                for (MeaningPresenter presenter : presenters) {
                     presenter.onWordUpdated(word);
                 }
             }
@@ -157,7 +157,7 @@ public class MainPortal extends Portal implements ComponentProvider {
             googleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(selectedText != null){
+                    if (selectedText != null) {
                         googleSelectedText();
                         finish();
                     }
@@ -178,5 +178,11 @@ public class MainPortal extends Portal implements ComponentProvider {
         intent.putExtra(SearchManager.QUERY, selectedText);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }
