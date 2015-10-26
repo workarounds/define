@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/margin_regular"
         android:textColor="@android:color/black"
         android:textSize="@dimen/font_large"
-        android:textStyle="bold" />
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_meaning_list"

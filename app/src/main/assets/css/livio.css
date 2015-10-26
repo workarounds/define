@@ -4,6 +4,35 @@
  }
  * {
      font-family: 'Open Sans';
-     font-size: medium;
+     font-size: 14px;
      text-align: justify;
+     color: #666666;
+ }
+ body {
+     padding: 0px 8px;
+ }
+ .head {
+     font-size: 14px;
+     color: #666666;
+ }
+ p {
+     margin: 0px 0px 16px 0px;
+ }
+ p , p *{
+     font-size: 16px;
+     color: #000000;
+ }
+ ol {
+     padding-left: 24px;
+     margin: 0px;
+ }
+ ol li {
+     color: #000000;
+     margin: 0px 0px 8px 0px;
+     font-size: 16px;
+ }
+ ol li a {
+     color: #3355EE;
+     text-decoration: none;
+     font-size: 16px;
  }
