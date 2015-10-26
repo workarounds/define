@@ -58,4 +58,8 @@
 
     <!-- Meaning Notification -->
     <string name="notification_content">Click to view meaning</string>
+
+    <string name="dashboard_dictionaries">Dictionaries</string>
+    <string name="dashboard_tutorial">Tutorial</string>
+    <string name="dashboard_settings">Settings</string>
 </resources>

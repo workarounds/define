@@ -28,6 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.DashboardActivity"
+            android:label="@string/app_name"
+            />
 
         <activity android:name=".ui.activity.DictionariesActivity"
                   android:label="@string/app_name">
