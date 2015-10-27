@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <include
         android:id="@+id/toolbar"
@@ -20,71 +21,97 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/livio_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_large">
+                >
 
                 <in.workarounds.typography.TextView
+                    android:id="@+id/tv_livio_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/margin_medium"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/btn_install_livio"
+                    android:layout_toStartOf="@id/btn_install_livio"
+                    android:layout_margin="@dimen/margin_medium"
                     android:text="@string/title_livio_dictionary"
                     android:textSize="@dimen/font_large"
+                    android:textColor="@color/dark_gray"
                     app:font_variant="semibold" />
 
                 <in.workarounds.typography.TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:maxWidth="320dp"
-                    android:paddingTop="@dimen/margin_medium"
+                    android:layout_below="@id/tv_livio_title"
+                    android:layout_marginLeft="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:layout_toLeftOf="@+id/btn_install_livio"
+                    android:layout_toStartOf="@id/btn_install_livio"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:text="@string/description_livio_dictionary" />
 
-                <in.workarounds.typography.Button
+                <ImageView
                     android:id="@+id/btn_install_livio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:text="@string/btn_install_livio"
-                    app:font_variant="light"
+                    android:layout_width="@dimen/icon_regular"
+                    android:layout_height="@dimen/icon_regular"
+                    android:padding="@dimen/padding_medium"
+                    android:background="?android:selectableItemBackground"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/ic_play_store"
+                    android:tint="@color/theme_accent"
                     />
-            </LinearLayout>
+            </RelativeLayout>
 
             <include layout="@layout/layout_divider_horizontal" />
 
-            <LinearLayout
-                android:id="@+id/rl_wordnet_container"
+            <RelativeLayout
+                android:id="@+id/wordnet_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_large">
+                >
 
                 <in.workarounds.typography.TextView
+                    android:id="@+id/tv_wordnet_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/margin_medium"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/btn_download_wordnet"
+                    android:layout_toStartOf="@+id/btn_download_wordnet"
+                    android:layout_margin="@dimen/margin_medium"
                     android:text="@string/title_wordnet_dictionary"
                     android:textSize="@dimen/font_large"
+                    android:textColor="@color/dark_gray"
                     app:font_variant="semibold" />
 
                 <in.workarounds.typography.TextView
+                    android:id="@+id/tv_description_wordnet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_below="@id/tv_wordnet_title"
+                    android:layout_marginLeft="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:layout_toLeftOf="@+id/btn_download_wordnet"
+                    android:layout_toStartOf="@+id/btn_download_wordnet"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:maxWidth="320dp"
-                    android:paddingTop="@dimen/margin_medium"
                     android:text="@string/description_wordnet_dictionary" />
-
                 <ProgressBar
                     android:id="@+id/pb_download"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_description_wordnet"
                     android:indeterminate="false"
                     android:max="100"
                     android:padding="5dp"
@@ -95,6 +122,7 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_description_wordnet"
                     android:indeterminate="false"
                     android:max="100"
                     android:padding="5dp"
@@ -104,57 +132,78 @@
                     android:id="@+id/tv_progress_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/margin_regular"
+                    android:padding="@dimen/padding_regular"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/tv_description_wordnet"
+                    android:layout_marginTop="@dimen/margin_large"
                     app:font_variant="light"
+                    tools:text="Download in progress"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:visibility="gone" />
 
-                <in.workarounds.typography.Button
+                <ImageView
                     android:id="@+id/btn_download_wordnet"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/btn_download_wordnet_dictionary"
-                    app:font_variant="light" />
+                    android:layout_width="@dimen/icon_regular"
+                    android:layout_height="@dimen/icon_regular"
+                    android:padding="@dimen/padding_medium"
+                    android:background="?android:selectableItemBackground"
+                    android:src="@drawable/ic_download"
+                    android:tint="@color/theme_accent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    />
 
-                <in.workarounds.typography.Button
+                <ImageView
                     android:id="@+id/btn_cancel_download_wordnet"
-                    android:layout_marginTop="@dimen/margin_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/btn_cancel_download"
+                    android:padding="@dimen/padding_medium"
+                    android:src="@drawable/ic_cancel"
                     android:visibility="gone"
-                    app:font_variant="light" />
+                    android:tint="@color/red"
+                    android:background="?android:selectableItemBackground"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    />
 
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <include layout="@layout/layout_divider_horizontal" />
 
-            <LinearLayout
-                android:id="@+id/rl_urban_container"
+            <RelativeLayout
+                android:id="@+id/urban_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_large">
+                >
 
                 <in.workarounds.typography.TextView
+                    android:id="@+id/tv_urban_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/margin_medium"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="@dimen/margin_medium"
                     android:text="@string/title_urban_dictionary"
                     android:textSize="@dimen/font_large"
+                    android:textColor="@color/dark_gray"
                     app:font_variant="semibold" />
 
                 <in.workarounds.typography.TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_below="@id/tv_urban_title"
+                    android:layout_marginLeft="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:layout_marginBottom="@dimen/margin_medium"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:maxWidth="320dp"
-                    android:paddingTop="@dimen/margin_medium"
-                    android:text="@string/description_urban_dictionary" />
-            </LinearLayout>
+                    android:text="@string/description_livio_dictionary" />
+            </RelativeLayout>
 
             <include layout="@layout/layout_divider_horizontal" />
 
