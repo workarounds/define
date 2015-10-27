@@ -1,30 +1,55 @@
 package in.workarounds.define.base;
 
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
+
 import in.workarounds.define.R;
+import in.workarounds.define.constants.DictionaryId;
+import in.workarounds.define.util.PrefUtils;
 
 /**
  * Created by madki on 27/09/15.
  */
 public class MeaningPagerAdapter extends PagerAdapter {
-    private static final String[] titles = new String[] {"Wordnet", "Livio", "Urban"};
-    private static final int[] layouts = new int[] {R.layout.layout_wordnet_page,R.layout.layout_livio_page,
-            R.layout.layout_urban_page};
+    private HashMap<Integer, String> titleMap;
+    private HashMap<Integer, Integer> layoutMap;
+
+    private Context context;
+    private int[] order;
+
+    public MeaningPagerAdapter(Context context) {
+        initMaps();
+        this.context = context;
+        order = PrefUtils.getDictionaryOrder(context);
+    }
+
+    private void initMaps() {
+        titleMap = new HashMap<>();
+        titleMap.put(DictionaryId.WORDNET, "Wordnet");
+        titleMap.put(DictionaryId.LIVIO, "Livio");
+        titleMap.put(DictionaryId.URBAN, "Urban");
+
+        layoutMap = new HashMap<>();
+        layoutMap.put(DictionaryId.WORDNET, R.layout.layout_wordnet_page);
+        layoutMap.put(DictionaryId.LIVIO, R.layout.layout_livio_page);
+        layoutMap.put(DictionaryId.URBAN, R.layout.layout_urban_page);
+    }
 
     @Override
     public int getCount() {
-        return titles.length;
+        return order.length;
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(
                 container.getContext()).cloneInContext(container.getContext())
-                .inflate(layouts[position], container, false);
+                .inflate(layoutMap.get(order[position]), container, false);
         container.addView(view);
         return view;
     }
@@ -41,7 +66,7 @@ public class MeaningPagerAdapter extends PagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+        return titleMap.get(order[position]);
     }
 
 }

@@ -3,8 +3,12 @@ package in.workarounds.define.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.util.ArraySet;
+
+import java.util.Set;
 
 import in.workarounds.define.api.Constants;
+import in.workarounds.define.constants.DictionaryId;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 
 /**
@@ -15,6 +19,9 @@ public class PrefUtils {
     public static final String KEY_NOTIFY_MODE = "key_notify_mode";
     public static final String KEY_TUTORIAL_DONE = "key_tutorial_done";
     public static final String KEY_DICTIONARIES_DONE = "key_dictionaries_done";
+    public static final String KEY_DICTIONARY_ORDER = "key_dictionary_order";
+    private static final String KEY_DICTIONARY_VISIBILITY = "key_dictionary_visibility";
+    private static final String DELIMITER = ",";
 
     private static final String KEY_WORDNET_UNZIPPED = "key_wordnet_unzipped";
 
@@ -100,5 +107,79 @@ public class PrefUtils {
         } else {
             return null;
         }
+    }
+
+    public static int[] getDictionaryOrder(Context context) {
+        String order = getSharedPreferences(context).getString(KEY_DICTIONARY_ORDER, null);
+        if(order != null) {
+            return stringToIntArray(order.split(DELIMITER));
+
+        }
+        return DictionaryId.defaultOrder;
+    }
+
+    public static void setDictionaryOrder(Context context, int[] order) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(KEY_DICTIONARY_ORDER, arrayToString(intToStringArray(order)));
+        editor.apply();
+    }
+
+    public static boolean[] getDictionaryVisibility(Context context) {
+        String visibility = getSharedPreferences(context).getString(KEY_DICTIONARY_VISIBILITY, null);
+        if(visibility != null) {
+            return stringToBooleanArray(visibility.split(DELIMITER));
+
+        }
+        return DictionaryId.defaultVisibility;
+    }
+
+    public static void setDictionaryVisibility(Context context, boolean[] visibility) {
+        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+        editor.putString(KEY_DICTIONARY_VISIBILITY, arrayToString(booleanToStringArray(visibility)));
+        editor.apply();
+    }
+
+    private static int[] stringToIntArray(String[] stringArray) {
+        int[] intArray = new int[stringArray.length];
+        for(int i=0; i<stringArray.length; i++) {
+            intArray[i] = Integer.valueOf(stringArray[i]);
+        }
+        return intArray;
+    }
+
+    private static String[] intToStringArray(int[] intArray) {
+        String[] stringArray = new String[intArray.length];
+        for(int i=0; i<intArray.length; i++) {
+            stringArray[i] = Integer.toString(intArray[i]);
+        }
+        return stringArray;
+    }
+
+    private static boolean[] stringToBooleanArray(String[] stringArray) {
+        boolean[] booleanArray = new boolean[stringArray.length];
+        for(int i=0; i<stringArray.length; i++) {
+            booleanArray[i] = Boolean.valueOf(stringArray[i]);
+        }
+        return booleanArray;
+    }
+
+    private static String[] booleanToStringArray(boolean[] booleanArray) {
+         String[] stringArray = new String[booleanArray.length];
+        for(int i=0; i<booleanArray.length; i++) {
+            stringArray[i] = Boolean.toString(booleanArray[i]);
+        }
+        return stringArray;
+    }
+
+    private static String arrayToString(String[] stringArray) {
+        String string = null;
+        for (String s : stringArray) {
+            if(string == null) {
+                string = s;
+            } else {
+                string = string + DELIMITER + s;
+            }
+        }
+        return string;
     }
 }

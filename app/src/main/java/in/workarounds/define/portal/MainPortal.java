@@ -86,7 +86,7 @@ public class MainPortal extends Portal implements ComponentProvider {
         });
         pager = (ViewPager) findViewById(R.id.vp_pages);
         pager.setOffscreenPageLimit(3);
-        pager.setAdapter(new MeaningPagerAdapter());
+        pager.setAdapter(new MeaningPagerAdapter(this));
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
         if(slidingTabLayout != null) {
             slidingTabLayout.setDistributeEvenly(true);
