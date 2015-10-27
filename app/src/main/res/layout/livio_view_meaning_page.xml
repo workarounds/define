@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/cardview_light_background">
 
     <in.workarounds.typography.TextView
@@ -23,17 +24,36 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@id/tv_title" />
 
-    <in.workarounds.typography.TextView
-        android:id="@+id/tv_load_status"
-        android:visibility="gone"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingLeft="@dimen/margin_large"
         android:paddingRight="@dimen/margin_large"
         android:paddingBottom="@dimen/bar_fat"
-        android:gravity="center_horizontal"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:textColor="@color/light_gray"
-        android:layout_height="wrap_content" />
+        android:layout_centerInParent="true" >
+
+        <in.workarounds.typography.TextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tv_load_status"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:textColor="@color/light_gray"
+            android:layout_height="wrap_content" />
+
+        <in.workarounds.typography.Button
+            android:id="@+id/btn_install_livio"
+            android:layout_below="@+id/tv_load_status"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_install_livio"
+            app:font_variant="light"
+            />
+
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/pb_load_progress"

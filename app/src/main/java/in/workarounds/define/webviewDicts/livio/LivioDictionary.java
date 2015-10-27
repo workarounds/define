@@ -12,10 +12,13 @@ import org.jsoup.select.Elements;
 
 import javax.inject.Inject;
 
+import in.workarounds.define.DefineApp;
+import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.IHtmlDictionary;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.util.PackageManagerUtils;
 
 /**
  * Created by madki on 26/09/15.
@@ -36,6 +39,12 @@ public class LivioDictionary implements IHtmlDictionary {
 
     @Override
     public String results(String word) throws DictionaryException {
+        if(!PackageManagerUtils.isAppInstalled(context,packageName)){
+            throw new DictionaryException(
+                    DictionaryException.DICTIONARY_NOT_FOUND,
+                    DefineApp.getContext().getString(R.string.exception_livio)
+            );
+        }
         String results = "";
         if (!TextUtils.isEmpty(word)) {
             results = getHtml(word);

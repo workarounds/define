@@ -13,7 +13,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -52,8 +51,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     private ProgressBar unzipProgress;
     private ProgressBar downloadProgress;
     private TextView statusTv;
-    private Button downloadButton;
-    private Button cancelButton;
+    private View downloadButton;
+    private View cancelButton;
 
     @Override
     protected void onStart() {
@@ -74,8 +73,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         ViewUtils.setColorOfProgressBar(unzipProgress, ContextCompat.getColor(this, R.color.theme_primary));
         ViewUtils.setColorOfProgressBar(downloadProgress, ContextCompat.getColor(this, R.color.theme_primary));
 
-        downloadButton = (Button) findViewById(R.id.btn_download_wordnet);
-        cancelButton = (Button) findViewById(R.id.btn_cancel_download_wordnet);
+        downloadButton = findViewById(R.id.btn_download_wordnet);
+        cancelButton = findViewById(R.id.btn_cancel_download_wordnet);
 
         downloadButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
@@ -211,6 +210,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     private void downloadClick() {
         downloadButton.setVisibility(View.GONE);
         cancelButton.setVisibility(View.VISIBLE);
+        statusTv.setVisibility(View.VISIBLE);
         DownloadResolver.startDownload(Constants.WORDNET, this);
         mThread = DownloadResolver.setUpProgress(Constants.WORDNET, downloadProgress, statusTv, this);
     }
@@ -225,6 +225,12 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         downloadProgress.setVisibility(View.GONE);
         unzipProgress.setVisibility(View.GONE);
         DownloadResolver.cancelDownload(Constants.WORDNET, this);
+        statusTv.post(new Runnable() {
+            @Override
+            public void run() {
+                statusTv.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void installLivio(){

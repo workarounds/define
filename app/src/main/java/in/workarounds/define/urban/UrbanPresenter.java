@@ -106,6 +106,7 @@ public class UrbanPresenter implements MeaningPresenter {
     }
 
     private class MeaningsTask extends AsyncTask<String, Integer, UrbanResult> {
+        private DictionaryException dictionaryException;
         @Override
         protected UrbanResult doInBackground(String... params) {
             UrbanResult results = null;
@@ -113,13 +114,18 @@ public class UrbanPresenter implements MeaningPresenter {
                 results = dictionary.results(params[0]);
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
+                dictionaryException = exception;
             }
             return results;
         }
 
         @Override
         protected void onPostExecute(UrbanResult results) {
-            onResultsUpdated(results);
+            if (dictionaryException != null) {
+                showStatus(dictionaryException.getMessage());
+            }else {
+                onResultsUpdated(results);
+            }
         }
     }
 

@@ -38,3 +38,8 @@
 
 -keep class edu.smu.tspell.wordnet.** { *; }
 -keep class in.workarounds.portal.WrapperLayout { *; }
+
+-keepattributes JavascriptInterface
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}

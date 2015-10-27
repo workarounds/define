@@ -10,7 +10,7 @@ import in.workarounds.define.util.LogUtils;
 /**
  * Created by Nithin on 13/10/15.
  */
-public class JavaScriptInterface{
+public class JavaScriptInterface {
     private static final String TAG = LogUtils.makeLogTag(JavaScriptInterface.class);
     private MeaningPresenter presenter;
     private Handler handler;
