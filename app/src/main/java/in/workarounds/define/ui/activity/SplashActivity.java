@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import in.workarounds.define.R;
+import in.workarounds.define.constants.DictionaryId;
 import in.workarounds.define.util.PrefUtils;
 
 /**
@@ -20,6 +21,7 @@ public class SplashActivity extends AppCompatActivity{
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
 
         if(!PrefUtils.getDictionariesDone(this)){
             Intent dictionaries = new Intent(this, DictionariesActivity.class);
