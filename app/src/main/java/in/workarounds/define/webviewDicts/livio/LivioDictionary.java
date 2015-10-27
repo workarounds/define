@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import javax.inject.Inject;
 
@@ -22,8 +23,9 @@ import in.workarounds.define.util.LogUtils;
 @PerPortal
 public class LivioDictionary implements IHtmlDictionary {
     private static final String TAG = LogUtils.makeLogTag(LivioDictionary.class);
-    public static String contentProvider = "livio.pack.lang.en_US.DictionaryProvider";
-    public static Uri contentUri = Uri.parse("content://" + contentProvider + "/dictionary");
+    public static final String packageName = "livio.pack.lang.en_US";
+    public static final String contentProvider = "livio.pack.lang.en_US.DictionaryProvider";
+    public static final Uri contentUri = Uri.parse("content://" + contentProvider + "/dictionary");
 
     private Context context;
 
@@ -58,7 +60,7 @@ public class LivioDictionary implements IHtmlDictionary {
             String htmlString  = c.getString(c.getColumnIndexOrThrow("suggest_text_2"));
             localObject1 = Jsoup.parse(htmlString);
             (localObject1).select("dl").remove();
-            (localObject1).select("ul").remove();
+           // (localObject1).select("ul").remove();
             (localObject1).select("head").remove();
 
             for( Element element : localObject1.select("silence") ) {
@@ -67,10 +69,23 @@ public class LivioDictionary implements IHtmlDictionary {
             for(Element element : localObject1.select("hr")) {
                 element.remove();
             }
+
+            Elements elementsByClass = (localObject1).getElementsByClass("head");
+            if(elementsByClass.size() > 0) {
+                Element etymologyElement = elementsByClass.get(0);
+                if (etymologyElement.text().equals("etymology")) {
+                    etymologyElement.remove(); //remove etymology
+                    Element etymologyContentElement = (localObject1).select("p").get(0);
+                    etymologyContentElement.remove();
+                    Element bodyElement = localObject1.select("body").get(0);
+                    bodyElement.appendChild(etymologyElement); //add at the end
+                    bodyElement.appendChild(etymologyContentElement);
+                }
+            }
+
             htmlBuilder.append(localObject1.html());
             html = htmlBuilder.toString();
             System.out.print(html);
-
             c.close();
         }
         return html;

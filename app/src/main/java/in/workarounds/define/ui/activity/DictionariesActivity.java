@@ -1,5 +1,6 @@
 package in.workarounds.define.ui.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -95,11 +96,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         unzipProgress.setVisibility(View.GONE);
         statusTv.setVisibility(View.GONE);
 
-        //Set dictionaries done if at least one of local dictionaries
-        // is downloaded
-        if(PrefUtils.getUnzipped(Constants.WORDNET, this)){
-            PrefUtils.setDictionariesDone(true, this);
-        }
+        //Set the user has visited dictionaries screen
+        PrefUtils.setDictionariesDone(true, this);
     }
 
     @Override
@@ -231,6 +229,10 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
 
     public void installLivio(){
         String livio = "livio.pack.lang.en_US";
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + livio)));
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + livio)));
+        } catch (ActivityNotFoundException e){
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + livio)));
+        }
     }
 }
