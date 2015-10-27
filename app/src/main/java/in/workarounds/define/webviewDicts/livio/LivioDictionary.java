@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 
 import javax.inject.Inject;
 
+import in.workarounds.define.DefineApp;
+import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.IHtmlDictionary;
 import in.workarounds.define.portal.PerPortal;
@@ -40,7 +42,7 @@ public class LivioDictionary implements IHtmlDictionary {
         if(!PackageManagerUtils.isAppInstalled(context,packageName)){
             throw new DictionaryException(
                     DictionaryException.DICTIONARY_NOT_FOUND,
-                    "Livio dictionary is not installed"
+                    DefineApp.getContext().getString(R.string.exception_livio)
             );
         }
         String results = "";

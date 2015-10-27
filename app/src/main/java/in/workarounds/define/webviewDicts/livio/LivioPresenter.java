@@ -1,18 +1,25 @@
 package in.workarounds.define.webviewDicts.livio;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.IntDef;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import javax.inject.Inject;
 
+import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
@@ -23,6 +30,7 @@ import in.workarounds.define.webviewDicts.DaggerWebViewComponent;
 import in.workarounds.define.webviewDicts.JavaScriptInterface;
 import in.workarounds.define.webviewDicts.WebViewComponent;
 import in.workarounds.define.webviewDicts.WebViewModule;
+import in.workarounds.portal.Portal;
 import in.workarounds.typography.TextView;
 
 /**
@@ -38,11 +46,13 @@ public class LivioPresenter implements MeaningPresenter {
     private static final String mime = "text/html";
     private static final String encoding = "utf-8";
 
+    private MainPortal portal;
     private JavaScriptInterface javaScriptInterface;
     private LivioDictionary dictionary;
     private LivioMeaningPage livioMeaningPage;
     private String word;
     private TextView loadStatus;
+    private Button installLivioBtn;
     private ProgressBar loadProgress;
     private WebView meaningList;
     private MeaningsTask task;
@@ -50,6 +60,7 @@ public class LivioPresenter implements MeaningPresenter {
     @Inject
     public LivioPresenter(LivioDictionary dictionary, MainPortal portal) {
         this.dictionary = dictionary;
+        this.portal = portal;
         portal.addPresenter(this);
         initComponents();
     }
@@ -118,6 +129,7 @@ public class LivioPresenter implements MeaningPresenter {
     }
 
     private class MeaningsTask extends AsyncTask<String, Integer, String> {
+        private DictionaryException dictionaryException;
         @Override
         protected String doInBackground(String... params) {
             String html = "";
@@ -125,13 +137,20 @@ public class LivioPresenter implements MeaningPresenter {
                 html = dictionary.results(params[0]);
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
+                dictionaryException = exception;
             }
             return html;
         }
 
         @Override
         protected void onPostExecute(String html) {
-            onResultsUpdated(html);
+            if (dictionaryException != null) {
+                showStatus(dictionaryException.getMessage());
+                installLivioBtn.setVisibility(View.VISIBLE);
+            }else {
+                installLivioBtn.setVisibility(View.GONE);
+                onResultsUpdated(html);
+            }
         }
     }
 
@@ -139,6 +158,7 @@ public class LivioPresenter implements MeaningPresenter {
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void initViews() {
         loadStatus = (TextView) livioMeaningPage.findViewById(R.id.tv_load_status);
+        installLivioBtn = (Button) livioMeaningPage.findViewById(R.id.btn_install_livio);
         loadProgress = (ProgressBar) livioMeaningPage.findViewById(R.id.pb_load_progress);
         meaningList = (WebView) livioMeaningPage.findViewById(R.id.rv_meaning_list);
         meaningList.getSettings().setJavaScriptEnabled(true);
@@ -148,6 +168,25 @@ public class LivioPresenter implements MeaningPresenter {
                 showList();
             }
         });
+        installLivioBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                installLivio();
+            }
+        });
+    }
+
+    public void installLivio(){
+        String livio = "livio.pack.lang.en_US";
+        try {
+            DefineApp.getContext().startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" + livio)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (ActivityNotFoundException e){
+            DefineApp.getContext().startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=" + livio))
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+        portal.finish();
     }
 
     private void setInitialViews() {
@@ -160,6 +199,7 @@ public class LivioPresenter implements MeaningPresenter {
 
     private void dropViews() {
         loadStatus = null;
+        installLivioBtn = null;
         loadProgress = null;
         meaningList = null;
     }

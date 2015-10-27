@@ -3,14 +3,13 @@ package in.workarounds.define.urban;
 import android.text.TextUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
+import in.workarounds.define.DefineApp;
+import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.IUrbanDictionary;
-import in.workarounds.define.base.Result;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 import retrofit.Call;
@@ -40,7 +39,7 @@ public class UrbanDictionary implements IUrbanDictionary {
             } catch (IOException e) {
                 throw new DictionaryException(
                         DictionaryException.NETWORK_ERROR,
-                        "Unable to fetch data from Urban Dictionary servers. Please check your network connection."
+                        DefineApp.getContext().getString(R.string.exception_urban)
                 );
             }
         }

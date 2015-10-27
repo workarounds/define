@@ -47,6 +47,9 @@
     <string name="title_livio_dictionary">Livio Dictionary</string>
     <string name="description_livio_dictionary">The free offline English dictionary app based on English Wiktionary</string>
     <string name="btn_install_livio">Install Livio</string>
+    <string name="exception_livio">Livio is not installed on your device</string>
+    <string name="exception_urban">Unable to fetch data from Urban Dictionary servers. Please check your network connection.</string>
+    <string name="exception_wordnet">Unable to load wordnet dictionary. Make sure you have downloaded wordnet dictionary</string>
     <string name="title_wordnet_dictionary">Wordnet Dictionary</string>
     <string name="description_wordnet_dictionary">Wordnet is a lexical database for English by Princeton University. It\'s download size is 10MB and it occupies 30MB disk space once extracted.</string>
     <string name="title_urban_dictionary">Urban Dictionary</string>
