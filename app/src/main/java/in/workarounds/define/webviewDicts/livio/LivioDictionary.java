@@ -16,6 +16,7 @@ import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.IHtmlDictionary;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.util.PackageManagerUtils;
 
 /**
  * Created by madki on 26/09/15.
@@ -36,6 +37,12 @@ public class LivioDictionary implements IHtmlDictionary {
 
     @Override
     public String results(String word) throws DictionaryException {
+        if(!PackageManagerUtils.isAppInstalled(context,packageName)){
+            throw new DictionaryException(
+                    DictionaryException.DICTIONARY_NOT_FOUND,
+                    "Livio dictionary is not installed"
+            );
+        }
         String results = "";
         if (!TextUtils.isEmpty(word)) {
             results = getHtml(word);
