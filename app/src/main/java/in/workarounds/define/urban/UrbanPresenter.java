@@ -8,16 +8,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
-import in.workarounds.define.base.IUrbanDictionary;
 import in.workarounds.define.base.MeaningPresenter;
-import in.workarounds.define.base.Result;
 import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
@@ -71,21 +66,21 @@ public class UrbanPresenter implements MeaningPresenter {
         LogUtils.LOGD(TAG, "Word updated: " + word);
         if (word != null && !word.equals(this.word)) {
             showProgress();
-        }
-        this.word = word;
-        if (urbanMeaningPage != null) {
-            LogUtils.LOGD(TAG, "urbanMeaningPage not null");
-            urbanMeaningPage.title(word);
-        }
-        if(task != null) {
-            task.cancel(true);
-        }
+            this.word = word;
+            if (urbanMeaningPage != null) {
+                LogUtils.LOGD(TAG, "urbanMeaningPage not null");
+                urbanMeaningPage.title(word);
+            }
+            if(task != null) {
+                task.cancel(true);
+            }
 
-        task = new MeaningsTask();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
-        } else {
-            task.execute(word);
+            task = new MeaningsTask();
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
+            } else {
+                task.execute(word);
+            }
         }
     }
 

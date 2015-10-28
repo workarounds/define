@@ -96,21 +96,21 @@ public class LivioPresenter implements MeaningPresenter {
         LogUtils.LOGD(TAG, "Word updated: " + word);
         if (word != null && !word.equals(this.word)) {
             showProgress();
-        }
-        this.word = word;
-        if (livioMeaningPage != null) {
-            LogUtils.LOGD(TAG, "livioMeaningPage not null");
-            livioMeaningPage.title(word);
-        }
-        if(task != null) {
-            task.cancel(true);
-        }
+            this.word = word;
+            if (livioMeaningPage != null) {
+                LogUtils.LOGD(TAG, "livioMeaningPage not null");
+                livioMeaningPage.title(word);
+            }
+            if(task != null) {
+                task.cancel(true);
+            }
 
-        task = new MeaningsTask();
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
-        } else {
-            task.execute(word);
+            task = new MeaningsTask();
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
+            } else {
+                task.execute(word);
+            }
         }
     }
 

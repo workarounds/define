@@ -116,12 +116,13 @@ public class MainPortal extends Portal implements ComponentProvider {
             }
         });
         initButtons();
+        //pre-drawing the meaning container to reduce lag
         meaningPagesContainer.postDelayed(new Runnable() {
             @Override
             public void run() {
                 meaningPagesContainer.setVisibility(View.INVISIBLE);
             }
-        }, 350);
+        }, 150);
     }
 
     private void extractClipText(Bundle bundle) {
