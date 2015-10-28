@@ -96,7 +96,6 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         installLivioButton = (ImageView)findViewById(R.id.btn_install_livio);
 
         inject();
-        setDictionaryFlags();
 
         View nextButton = findViewById(R.id.btn_next);
         if(!PrefUtils.getTutorialDone(this)){
@@ -172,8 +171,6 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     protected void onStop() {
         super.onStop();
         unbindFromUnzipService();
-        livioTask.cancel(true);
-        wordnetTask.cancel(true);
     }
 
     @Override
@@ -182,6 +179,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         unzipProgress.setVisibility(View.GONE);
         statusTv.setVisibility(View.GONE);
 
+        setDictionaryFlags();
         //Set the user has visited dictionaries screen
         PrefUtils.setDictionariesDone(true, this);
     }
@@ -197,6 +195,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         if(mThread != null) {
             mThread.close();
         }
+        livioTask.cancel(true);
+        wordnetTask.cancel(true);
     }
 
     /**
