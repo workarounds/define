@@ -3,9 +3,6 @@ package in.workarounds.define.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
-import android.util.ArraySet;
-
-import java.util.Set;
 
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.constants.DictionaryId;
