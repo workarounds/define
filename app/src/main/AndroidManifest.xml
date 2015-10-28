@@ -43,6 +43,7 @@
             />
 
         <activity android:name=".ui.activity.UserPrefActivity"
+            android:exported="true"
             android:label="@string/activity_settings" />
 
         <service

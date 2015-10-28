@@ -2,7 +2,6 @@ package in.workarounds.define.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,7 +17,6 @@ import in.workarounds.define.service.ClipboardService;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     TextView titleTextView;
-    @StringRes int toolbarTitleResId = R.string.app_name;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -29,14 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             toolbar.setTitle("");
         }
         titleTextView = (TextView) findViewById(R.id.tv_app_title);
-        setToolbarTitle(toolbarTitleResId);
-    }
-
-    protected void setToolbarTitle(@StringRes int resId){
-        toolbarTitleResId = resId;
-        if(titleTextView != null) {
-            titleTextView.setText(resId);
-        }
+        titleTextView.setText(getToolbarTitle());
     }
 
     @Override
@@ -75,6 +66,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected abstract String getToolbarTitle();
+    protected String getToolbarTitle() {
+        return getString(R.string.app_name);
+    }
 
 }

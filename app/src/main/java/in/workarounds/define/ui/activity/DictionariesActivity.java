@@ -64,7 +64,6 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionaries);
-        setToolbarTitle(R.string.app_name);
 
         statusTv = (TextView) findViewById(R.id.tv_progress_status);
         unzipProgress = (ProgressBar) findViewById(R.id.pb_unzip);
