@@ -9,15 +9,16 @@ import in.workarounds.define.R;
 /**
  * Created by manidesto on 26/10/15.
  */
-public class DashboardActivity extends BaseActivity{
+public class DashboardActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        findViewById(R.id.dictionaries_container).setOnClickListener(dictionariesClickListener);
-        findViewById(R.id.tutorial_container).setOnClickListener(tutorialClickListener);
-        findViewById(R.id.settings_container).setOnClickListener(settingsClickListener);
+        findViewById(R.id.dictionaries_container).setOnClickListener(this);
+        findViewById(R.id.tutorial_container).setOnClickListener(this);
+        findViewById(R.id.settings_container).setOnClickListener(this);
+        findViewById(R.id.sort_dictionaries_container).setOnClickListener(this);
     }
 
     @Override
@@ -25,26 +26,23 @@ public class DashboardActivity extends BaseActivity{
         return getString(R.string.app_name);
     }
 
-    private View.OnClickListener dictionariesClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(getDictionariesIntent());
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.dictionaries_container:
+                startActivity(getDictionariesIntent());
+                break;
+            case R.id.tutorial_container:
+                startActivity(getTutorialIntent());
+                break;
+            case R.id.sort_dictionaries_container:
+                startActivity(getSortDictionariesIntent());
+                break;
+            case R.id.settings_container:
+                startActivity(getSettingsIntent());
+                break;
         }
-    };
-
-    private View.OnClickListener tutorialClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(getTutorialIntent());
-        }
-    };
-
-    private View.OnClickListener settingsClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(getSettingsIntent());
-        }
-    };
+    }
 
     private Intent getDictionariesIntent(){
         return new Intent(this, DictionariesActivity.class);
@@ -52,6 +50,10 @@ public class DashboardActivity extends BaseActivity{
 
     private Intent getTutorialIntent(){
         return new Intent(this, TutorialActivity.class);
+    }
+
+    private Intent getSortDictionariesIntent(){
+        return new Intent(this, DictOrderActivity.class);
     }
 
     private Intent getSettingsIntent(){

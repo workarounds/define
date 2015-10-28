@@ -2,28 +2,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/padding_small"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true">
     <ImageView
         android:id="@+id/iv_drag_handle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/icon_regular"
+        android:layout_height="@dimen/icon_regular"
+        android:padding="@dimen/padding_medium"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:tint="@color/dark_gray"
         android:src="@drawable/ic_reorder" />
 
     <ImageView
         android:id="@+id/iv_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/icon_regular"
+        android:layout_height="@dimen/icon_regular"
+        android:padding="@dimen/padding_medium"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_close" />
+        android:layout_alignParentEnd="true"
+        android:tint="@color/dark_gray"
+        android:src="@drawable/ic_cancel" />
 
-    <TextView
+    <in.workarounds.typography.TextView
         android:id="@+id/tv_dictionary_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/font_medium"
+        android:textColor="@color/dark_gray"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/iv_action_button"
         android:layout_toRightOf="@id/iv_drag_handle"
         tools:text="Wordnet" />
