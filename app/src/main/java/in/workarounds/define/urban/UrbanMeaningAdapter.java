@@ -7,13 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import in.workarounds.define.R;
-import in.workarounds.define.base.Result;
 
 /**
  * Created by madki on 13/10/15.
@@ -27,7 +25,7 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_meaning, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_urban_meaning, parent, false);
         return new ViewHolder(view);
     }
 
@@ -36,10 +34,10 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
         if(position >= 0 && position < getItemCount()) {
             UrbanResult result = results;
             Meaning meaning = result.getMeanings().get(position);
-            viewHolder.type.setText(result.getResultType());
-            viewHolder.synonyms.setText(join(result.getTags()));
             viewHolder.usages.setText(meaning.getExample());
             viewHolder.definition.setText(meaning.getDefinition());
+            viewHolder.upVotes.setText(String.valueOf(meaning.getThumbsUp()));
+            viewHolder.downVotes.setText(String.valueOf(meaning.getThumbsDown()));
         }
     }
 
@@ -51,22 +49,21 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
 
     public void update(UrbanResult results) {
         this.results = results;
-        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView type;
         TextView definition;
-        TextView synonyms;
         TextView usages;
+        TextView upVotes;
+        TextView downVotes;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            type = (TextView) itemView.findViewById(R.id.tv_meaning_type);
             definition = (TextView) itemView.findViewById(R.id.tv_definition);
-            synonyms = (TextView) itemView.findViewById(R.id.tv_synonyms);
             usages = (TextView) itemView.findViewById(R.id.tv_usages);
+            upVotes = (TextView) itemView.findViewById(R.id.tv_up_votes);
+            downVotes = (TextView) itemView.findViewById(R.id.tv_down_votes);
         }
     }
 

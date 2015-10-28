@@ -36,6 +36,7 @@ public class WordnetPresenter implements MeaningPresenter{
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
 
+    private DictionaryException dictionaryException;
     private WordnetDictionary dictionary;
     private WordnetMeaningPage wordnetMeaningPage;
     private String word;
@@ -88,6 +89,14 @@ public class WordnetPresenter implements MeaningPresenter{
         }
     }
 
+    public DictionaryException getDictionaryException() {
+        return dictionaryException;
+    }
+
+    public void setDictionaryException(DictionaryException dictionaryException) {
+        this.dictionaryException = dictionaryException;
+    }
+
     public String word() {
         return word;
     }
@@ -98,34 +107,37 @@ public class WordnetPresenter implements MeaningPresenter{
 
     private void onResultsUpdated(List<Synset> results) {
         adapter.update(results);
-        if (results != null && results.size() != 0) {
-            showList();
-        } else {
-            showStatus("Sorry, no results found.");
+        if(wordnetMeaningPage != null) {
+            downloadButton.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
+            if (results != null && results.size() != 0) {
+                showList();
+            } else {
+                showStatus("Sorry, no results found.");
+            }
         }
     }
 
     private class MeaningsTask extends AsyncTask<String, Integer, List<Synset>> {
-        private DictionaryException dictionaryException;
         @Override
         protected List<Synset> doInBackground(String... params) {
             List<Synset> results = new ArrayList<>();
+            setDictionaryException(null);
             try {
                 results = dictionary.results(params[0]);
+                setDictionaryException(null);
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
-                dictionaryException = exception;
+                setDictionaryException(exception);
             }
             return results;
         }
 
         @Override
         protected void onPostExecute(List<Synset> results) {
-            if(dictionaryException != null){
-                showStatus(dictionaryException.getMessage());
-                downloadButton.setVisibility(View.VISIBLE);
+            if(getDictionaryException() != null){
+                showException();
             }else {
-                downloadButton.setVisibility(View.GONE);
                 onResultsUpdated(results);
             }
         }
@@ -149,7 +161,10 @@ public class WordnetPresenter implements MeaningPresenter{
         if (TextUtils.isEmpty(word)) {
             showStatus("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
         } else if (adapter != null && adapter.getItemCount() != 0) {
+            adapter.notifyDataSetChanged();
             showList();
+        } else if (getDictionaryException() != null) {
+            showException();
         } else {
             showStatus("Sorry, no results found");
         }
@@ -165,6 +180,13 @@ public class WordnetPresenter implements MeaningPresenter{
     private void showStatus(String status) {
         loadStatus.setText(status);
         showView(LOAD_STATUS);
+    }
+
+    private void showException() {
+        if(wordnetMeaningPage != null) {
+            showStatus(getDictionaryException().getMessage());
+            downloadButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showProgress() {
