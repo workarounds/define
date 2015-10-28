@@ -51,7 +51,6 @@ public class UrbanMeaningAdapter extends RecyclerView.Adapter<UrbanMeaningAdapte
 
     public void update(UrbanResult results) {
         this.results = results;
-        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

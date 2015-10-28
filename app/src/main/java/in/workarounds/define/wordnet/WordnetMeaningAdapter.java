@@ -74,7 +74,6 @@ public class WordnetMeaningAdapter extends RecyclerView.Adapter<WordnetMeaningAd
     public void update(List<Synset> results) {
         this.results = new ArrayList<>();
         this.results.addAll(results);
-        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

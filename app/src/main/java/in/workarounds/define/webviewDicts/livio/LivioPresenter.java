@@ -47,6 +47,7 @@ public class LivioPresenter implements MeaningPresenter {
     private static final String encoding = "utf-8";
 
     private MainPortal portal;
+    private DictionaryException dictionaryException;
     private JavaScriptInterface javaScriptInterface;
     private LivioDictionary dictionary;
     private LivioMeaningPage livioMeaningPage;
@@ -55,6 +56,7 @@ public class LivioPresenter implements MeaningPresenter {
     private Button installLivioBtn;
     private ProgressBar loadProgress;
     private WebView meaningList;
+    private String webviewHtml;
     private MeaningsTask task;
 
     @Inject
@@ -112,43 +114,54 @@ public class LivioPresenter implements MeaningPresenter {
         }
     }
 
+    public DictionaryException getDictionaryException() {
+        return dictionaryException;
+    }
+
+    public void setDictionaryException(DictionaryException dictionaryException) {
+        this.dictionaryException = dictionaryException;
+    }
+
     public String word() {
         return word;
     }
 
     private void onResultsUpdated(final String html) {
-        if (html != null && !html.isEmpty()) {
-            meaningList.post(new Runnable() {
-                public void run() {
-                    meaningList.loadDataWithBaseURL("file:///android_asset/", html, mime, encoding, null);
-                }
-            });
-        } else {
-            showStatus("Sorry, no results found.");
+        webviewHtml = html;
+        if(livioMeaningPage != null) {
+            installLivioBtn.setVisibility(View.GONE);
+            if (html != null && !html.isEmpty()) {
+                meaningList.post(new Runnable() {
+                    public void run() {
+                        meaningList.loadDataWithBaseURL("file:///android_asset/", html, mime, encoding, null);
+                    }
+                });
+            } else {
+                showStatus("Sorry, no results found.");
+            }
         }
     }
 
     private class MeaningsTask extends AsyncTask<String, Integer, String> {
-        private DictionaryException dictionaryException;
+
         @Override
         protected String doInBackground(String... params) {
             String html = "";
             try {
                 html = dictionary.results(params[0]);
+                setDictionaryException(null);
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
-                dictionaryException = exception;
+                setDictionaryException(exception);
             }
             return html;
         }
 
         @Override
         protected void onPostExecute(String html) {
-            if (dictionaryException != null) {
-                showStatus(dictionaryException.getMessage());
-                installLivioBtn.setVisibility(View.VISIBLE);
+            if (getDictionaryException() != null) {
+                showException();
             }else {
-                installLivioBtn.setVisibility(View.GONE);
                 onResultsUpdated(html);
             }
         }
@@ -192,6 +205,10 @@ public class LivioPresenter implements MeaningPresenter {
     private void setInitialViews() {
         if (TextUtils.isEmpty(word)) {
             showStatus("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
+        } else if (getDictionaryException() != null) {
+            showException();
+        } else if (webviewHtml != null) {
+            onResultsUpdated(webviewHtml);
         } else {
             showStatus("Sorry, no results found");
         }
@@ -207,6 +224,13 @@ public class LivioPresenter implements MeaningPresenter {
     private void showStatus(String status) {
         loadStatus.setText(status);
         showView(LOAD_STATUS);
+    }
+
+    private void showException() {
+        if(livioMeaningPage != null) {
+            showStatus(getDictionaryException().getMessage());
+            installLivioBtn.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showProgress() {

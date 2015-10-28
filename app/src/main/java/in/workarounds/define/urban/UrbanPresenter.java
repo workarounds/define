@@ -33,6 +33,7 @@ public class UrbanPresenter implements MeaningPresenter {
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
 
+    private DictionaryException dictionaryException;
     private UrbanDictionary dictionary;
     private UrbanMeaningPage urbanMeaningPage;
     private String word;
@@ -88,6 +89,14 @@ public class UrbanPresenter implements MeaningPresenter {
         }
     }
 
+    public DictionaryException getDictionaryException() {
+        return dictionaryException;
+    }
+
+    public void setDictionaryException(DictionaryException dictionaryException) {
+        this.dictionaryException = dictionaryException;
+    }
+
     public String word() {
         return word;
     }
@@ -98,31 +107,35 @@ public class UrbanPresenter implements MeaningPresenter {
 
     private void onResultsUpdated(UrbanResult results) {
         adapter.update(results);
-        if (results != null && results.getMeanings().size() != 0) {
-            showList();
-        } else {
-            showStatus("Sorry, no results found.");
+        if(urbanMeaningPage != null) {
+            adapter.notifyDataSetChanged();
+            if (results != null && results.getMeanings().size() != 0) {
+                showList();
+            } else {
+                showStatus("Sorry, no results found.");
+            }
         }
     }
 
     private class MeaningsTask extends AsyncTask<String, Integer, UrbanResult> {
-        private DictionaryException dictionaryException;
+
         @Override
         protected UrbanResult doInBackground(String... params) {
             UrbanResult results = null;
             try {
                 results = dictionary.results(params[0]);
+                setDictionaryException(null);
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
-                dictionaryException = exception;
+                setDictionaryException(exception);
             }
             return results;
         }
 
         @Override
         protected void onPostExecute(UrbanResult results) {
-            if (dictionaryException != null) {
-                showStatus(dictionaryException.getMessage());
+            if (getDictionaryException() != null) {
+                showException();
             }else {
                 onResultsUpdated(results);
             }
@@ -139,7 +152,10 @@ public class UrbanPresenter implements MeaningPresenter {
         if (TextUtils.isEmpty(word)) {
             showStatus("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
         } else if (adapter != null && adapter.getItemCount() != 0) {
+            adapter.notifyDataSetChanged();
             showList();
+        } else if (getDictionaryException() != null) {
+            showException();
         } else {
             showStatus("Sorry, no results found");
         }
@@ -154,6 +170,12 @@ public class UrbanPresenter implements MeaningPresenter {
     private void showStatus(String status) {
         loadStatus.setText(status);
         showView(LOAD_STATUS);
+    }
+
+    private void showException() {
+        if(urbanMeaningPage != null) {
+            showStatus(getDictionaryException().getMessage());
+        }
     }
 
     private void showProgress() {
