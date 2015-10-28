@@ -6,9 +6,12 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -29,7 +32,7 @@ import in.workarounds.portal.Portal;
 /**
  * Created by madki on 20/09/15.
  */
-public class MainPortal extends Portal implements ComponentProvider {
+public class MainPortal extends Portal implements ComponentProvider, View.OnClickListener {
     private static final String TAG = LogUtils.makeLogTag(MainPortal.class);
     public static final String BUNDLE_KEY_CLIP_TEXT = "bundle_key_clip_text";
     private String mClipText;
@@ -100,7 +103,7 @@ public class MainPortal extends Portal implements ComponentProvider {
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
         if(slidingTabLayout != null) {
             slidingTabLayout.setDistributeEvenly(true);
-            slidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.theme_primary));
+            slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.theme_primary));
             slidingTabLayout.setCustomTabView(R.layout.layout_sliding_tabs, R.id.tv_tab_header);
             slidingTabLayout.setViewPager(pager);
         }
@@ -154,45 +157,35 @@ public class MainPortal extends Portal implements ComponentProvider {
         }
     }
 
-    private void initButtons(){
-        View copyButton = findViewById(R.id.button_copy);
-        if (copyButton != null) {
-            copyButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (selectedText != null) {
-                        copySelectedText();
-                        finish();
-                    }
-                }
-            });
-        }
-
-        View googleButton = findViewById(R.id.button_google);
-        if (googleButton != null) {
-            googleButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (selectedText != null) {
-                        googleSelectedText();
-                        finish();
-                    }
-                }
-            });
-        }
+    private void initButtons() {
+        findViewById(R.id.button_search).setOnClickListener(this);
+        findViewById(R.id.button_copy).setOnClickListener(this);
+        findViewById(R.id.button_wiki).setOnClickListener(this);
     }
 
-    private void copySelectedText(){
+    private void copySelectedText() {
+        if(TextUtils.isEmpty(selectedText)) return;
+
         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Define", selectedText);
         clipboard.setPrimaryClip(clip);
         Toast.makeText(this, "Copied", Toast.LENGTH_SHORT).show();
     }
 
-    private void googleSelectedText(){
+    private void searchSelectedText() {
+        if(TextUtils.isEmpty(selectedText)) return;
+
         Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
         intent.putExtra(SearchManager.QUERY, selectedText);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void wikiSelectedText() {
+        if(TextUtils.isEmpty(selectedText)) return;
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://en.m.wikipedia.org/wiki/" + selectedText));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -201,5 +194,26 @@ public class MainPortal extends Portal implements ComponentProvider {
     protected void onPause() {
         super.onPause();
         finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+       int id = v.getId();
+        switch (id) {
+            case R.id.button_search:
+                searchSelectedText();
+                finish();
+                break;
+            case R.id.button_copy:
+                copySelectedText();
+                finish();
+                break;
+            case R.id.button_wiki:
+                wikiSelectedText();
+                finish();
+                break;
+            default:
+                break;
+        }
     }
 }
