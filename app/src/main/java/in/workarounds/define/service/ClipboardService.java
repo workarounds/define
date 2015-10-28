@@ -18,6 +18,8 @@ import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
+import in.workarounds.portal.PortalManager;
+import in.workarounds.portal.State;
 
 public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
@@ -73,7 +75,11 @@ public class ClipboardService extends Service implements
     }
 
     private void startActionResolver(String text) {
-        @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(UserPrefActivity.OPTION_DIRECT,this);
+        int state = PortalManager.getPortalState(this, MainPortal.class);
+        if(state == State.ACTIVE){
+            return;
+        }
+        @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(UserPrefActivity.OPTION_DIRECT, this);
         if(notifyMode == UserPrefActivity.OPTION_SILENT || notifyMode == UserPrefActivity.OPTION_PRIORITY) {
 //Set notification priority as high for priority mode, default for silent mode
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
