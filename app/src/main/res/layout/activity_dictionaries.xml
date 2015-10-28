@@ -89,7 +89,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:src="@drawable/ic_play_store"
                     android:tint="@color/theme_accent"
                     />
             </RelativeLayout>
@@ -172,7 +171,6 @@
                     android:layout_height="@dimen/icon_regular"
                     android:padding="@dimen/padding_medium"
                     android:background="?android:selectableItemBackground"
-                    android:src="@drawable/ic_download"
                     android:tint="@color/theme_accent"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"

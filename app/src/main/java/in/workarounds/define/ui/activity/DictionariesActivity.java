@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -13,18 +14,28 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import in.workarounds.define.R;
 import in.workarounds.define.api.Constants;
+import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.file.unzip.UnzipHandler;
 import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.helper.DownloadProgressThread;
 import in.workarounds.define.helper.DownloadResolver;
+import in.workarounds.define.portal.ComponentProvider;
+import in.workarounds.define.portal.PortalModule;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.util.ViewUtils;
+import in.workarounds.define.webviewDicts.livio.LivioDictionary;
+import in.workarounds.define.webviewDicts.livio.LivioModule;
+import in.workarounds.define.wordnet.WordnetDictionary;
+import in.workarounds.define.wordnet.WordnetModule;
 
 /**
  * Created by madki on 30/09/15.
@@ -51,8 +62,16 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     private ProgressBar unzipProgress;
     private ProgressBar downloadProgress;
     private TextView statusTv;
-    private View downloadButton;
-    private View cancelButton;
+    private ImageView downloadButton;
+    private ImageView cancelButton;
+    private ImageView installLivioButton;
+    private AsyncTask livioTask;
+    private AsyncTask wordnetTask;
+    private static final String testWord = "define";
+    @Inject
+    WordnetDictionary wordnetDictionary;
+    @Inject
+    LivioDictionary livioDictionary;
 
     @Override
     protected void onStart() {
@@ -72,12 +91,13 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         ViewUtils.setColorOfProgressBar(unzipProgress, ContextCompat.getColor(this, R.color.theme_primary));
         ViewUtils.setColorOfProgressBar(downloadProgress, ContextCompat.getColor(this, R.color.theme_primary));
 
-        downloadButton = findViewById(R.id.btn_download_wordnet);
-        cancelButton = findViewById(R.id.btn_cancel_download_wordnet);
+        downloadButton = (ImageView) findViewById(R.id.btn_download_wordnet);
+        cancelButton = (ImageView) findViewById(R.id.btn_cancel_download_wordnet);
+        installLivioButton = (ImageView)findViewById(R.id.btn_install_livio);
 
-        downloadButton.setOnClickListener(this);
-        cancelButton.setOnClickListener(this);
-        findViewById(R.id.btn_install_livio).setOnClickListener(this);
+        inject();
+        setDictionaryFlags();
+
         View nextButton = findViewById(R.id.btn_next);
         if(!PrefUtils.getTutorialDone(this)){
             nextButton.setVisibility(View.VISIBLE);
@@ -89,10 +109,71 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         mThread = DownloadResolver.setUpProgress(Constants.WORDNET, downloadProgress, statusTv, this);
     }
 
+    private void inject(){
+        DaggerDictionaryComponent.builder().livioModule(new LivioModule())
+                .wordnetModule(new WordnetModule()).build().inject(this);
+    }
+
+    private void setDictionaryFlags(){
+        livioTask = new LivioMeaningsTask().execute();
+        wordnetTask = new WordnetMeaningsTask().execute();
+    }
+
+    private class LivioMeaningsTask extends AsyncTask<String, Integer, Void> {
+        private DictionaryException livioException;
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                livioDictionary.results(testWord);
+            } catch (DictionaryException exception) {
+                livioException = exception;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if (livioException != null) {
+                installLivioButton.setImageResource(R.drawable.ic_play_store);
+                installLivioButton.setOnClickListener(DictionariesActivity.this);
+            } else {
+                installLivioButton.setImageResource(R.drawable.ic_tick);
+                installLivioButton.setColorFilter(R.color.green);
+            }
+        }
+    }
+
+    private class WordnetMeaningsTask extends AsyncTask<String, Integer, Void> {
+        private DictionaryException wordnetException;
+        @Override
+        protected Void doInBackground(String... params) {
+            try {
+                wordnetDictionary.results(testWord);
+            } catch (DictionaryException exception) {
+                wordnetException = exception;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if (wordnetException != null) {
+                downloadButton.setImageResource(R.drawable.ic_download);
+                downloadButton.setOnClickListener(DictionariesActivity.this);
+                cancelButton.setOnClickListener(DictionariesActivity.this);
+            }else {
+                downloadButton.setImageResource(R.drawable.ic_tick);
+                downloadButton.setColorFilter(R.color.green);
+            }
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
         unbindFromUnzipService();
+        livioTask.cancel(true);
+        wordnetTask.cancel(true);
     }
 
     @Override
