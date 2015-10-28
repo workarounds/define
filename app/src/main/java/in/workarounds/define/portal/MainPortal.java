@@ -116,6 +116,12 @@ public class MainPortal extends Portal implements ComponentProvider {
             }
         });
         initButtons();
+        meaningPagesContainer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                meaningPagesContainer.setVisibility(View.INVISIBLE);
+            }
+        }, 350);
     }
 
     private void extractClipText(Bundle bundle) {
@@ -186,6 +192,7 @@ public class MainPortal extends Portal implements ComponentProvider {
     private void googleSelectedText(){
         Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
         intent.putExtra(SearchManager.QUERY, selectedText);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

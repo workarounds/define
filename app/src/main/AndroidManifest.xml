@@ -39,8 +39,8 @@
             android:name=".ui.activity.TutorialActivity"
             android:label="@string/app_name" />
 
-        <activity
-            android:name=".ui.activity.UserPrefActivity"
+        <activity android:name=".ui.activity.UserPrefActivity"
+            android:exported="true"
             android:label="@string/activity_settings" />
 
         <activity
