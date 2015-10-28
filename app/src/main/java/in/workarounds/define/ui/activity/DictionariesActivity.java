@@ -27,8 +27,6 @@ import in.workarounds.define.file.unzip.UnzipHandler;
 import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.helper.DownloadProgressThread;
 import in.workarounds.define.helper.DownloadResolver;
-import in.workarounds.define.portal.ComponentProvider;
-import in.workarounds.define.portal.PortalModule;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.util.ViewUtils;
@@ -135,9 +133,10 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
             if (livioException != null) {
                 installLivioButton.setImageResource(R.drawable.ic_play_store);
                 installLivioButton.setOnClickListener(DictionariesActivity.this);
+                installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.theme_accent));
             } else {
                 installLivioButton.setImageResource(R.drawable.ic_tick);
-                installLivioButton.setColorFilter(R.color.green);
+                installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
             }
         }
     }
@@ -158,11 +157,12 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         protected void onPostExecute(Void result) {
             if (wordnetException != null) {
                 downloadButton.setImageResource(R.drawable.ic_download);
+                downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.theme_accent));
                 downloadButton.setOnClickListener(DictionariesActivity.this);
                 cancelButton.setOnClickListener(DictionariesActivity.this);
             }else {
                 downloadButton.setImageResource(R.drawable.ic_tick);
-                downloadButton.setColorFilter(R.color.green);
+                downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
             }
         }
     }

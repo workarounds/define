@@ -1,7 +1,10 @@
 package in.workarounds.define.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
+import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -43,16 +46,27 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
                 switch (id) {
                     case R.id.rb_option_direct:
                         PrefUtils.setNotifyMode(OPTION_DIRECT, this);
+                        copyTutorialText(R.string.notify_tutorial_direct);
                         break;
                     case R.id.rb_option_priority:
                         PrefUtils.setNotifyMode(OPTION_PRIORITY, this);
+                        copyTutorialText(R.string.notify_tutorial_priority);
                         break;
                     case R.id.rb_option_silent:
                         PrefUtils.setNotifyMode(OPTION_SILENT, this);
+                        copyTutorialText(R.string.notify_tutorial_silent);
                         break;
                 }
             }
         }
+    }
+
+    private void copyTutorialText(@StringRes int stringRes){
+        String notifyTutorial = getString(stringRes);
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Define", notifyTutorial);
+        clipboard.setPrimaryClip(clip);
     }
 
     @IntDef({OPTION_DIRECT, OPTION_PRIORITY, OPTION_SILENT})

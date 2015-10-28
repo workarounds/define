@@ -75,4 +75,8 @@
     <string name="button_search">Search</string>
     <string name="button_copy">Copy</string>
     <string name="button_wiki">Wiki</string>
+
+    <string name="notify_tutorial_silent">Most unobtrusive setting. Whenever a text is copied a silent notification is shown. Tap on notification to define</string>
+    <string name="notify_tutorial_priority">Recommended setting for Lollipop and above. Whenever a text is copied a priority notification is shown. Tap on notification to define</string>
+    <string name="notify_tutorial_direct">A cancellable popup is directly shown whenever text is copied</string>
 </resources>

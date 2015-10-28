@@ -124,7 +124,9 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         meaningPagesContainer.postDelayed(new Runnable() {
             @Override
             public void run() {
-                meaningPagesContainer.setVisibility(View.INVISIBLE);
+                if(meaningPagesContainer.getVisibility() == View.GONE) {
+                    meaningPagesContainer.setVisibility(View.INVISIBLE);
+                }
             }
         }, 150);
     }

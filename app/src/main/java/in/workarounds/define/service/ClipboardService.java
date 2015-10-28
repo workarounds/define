@@ -79,7 +79,7 @@ public class ClipboardService extends Service implements
         if(state == State.ACTIVE){
             return;
         }
-        @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(UserPrefActivity.OPTION_DIRECT, this);
+        @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(this);
         if(notifyMode == UserPrefActivity.OPTION_SILENT || notifyMode == UserPrefActivity.OPTION_PRIORITY) {
 //Set notification priority as high for priority mode, default for silent mode
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
