@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/padding_small"
+    android:paddingRight="@dimen/padding_small">
+
+    <in.workarounds.typography.Button
+        android:id="@+id/button_search"
+        style="@style/ActionButton"
+        android:text="@string/button_search"
+        app:font_variant="Semibold" />
+
+    <in.workarounds.typography.Button
+        android:id="@+id/button_wiki"
+        style="@style/ActionButton"
+        android:text="@string/button_wiki"
+        app:font_variant="Semibold" />
+
+    <in.workarounds.typography.Button
+        android:id="@+id/button_copy"
+        style="@style/ActionButton"
+        android:text="@string/button_copy"
+        app:font_variant="Semibold" />
+</LinearLayout>

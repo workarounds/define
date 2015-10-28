@@ -45,4 +45,21 @@
         <item name="android:windowEnterAnimation">@anim/card_entry</item>
         <item name="android:windowExitAnimation">@anim/card_exit</item>
     </style>
+
+    <style name="ActionButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/theme_accent</item>
+        <item name="android:minHeight">@dimen/bar_medium</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingLeft">@dimen/padding_large</item>
+        <item name="android:paddingRight">@dimen/padding_large</item>
+        <item name="android:theme">@style/ActionButtonTheme</item>
+    </style>
+
+    <style name="ActionButtonTheme" parent="Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/cardview_light_background</item>
+        <item name="android:colorButtonNormal">@color/cardview_light_background</item>
+    </style>
 </resources>
