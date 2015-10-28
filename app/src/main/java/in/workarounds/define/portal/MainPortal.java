@@ -117,6 +117,12 @@ public class MainPortal extends Portal implements ComponentProvider {
             }
         });
         initButtons();
+        meaningPagesContainer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                meaningPagesContainer.setVisibility(View.INVISIBLE);
+            }
+        }, 350);
     }
 
     private void extractClipText(Bundle bundle) {
