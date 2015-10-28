@@ -42,18 +42,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        startClipboardService();
-        super.onStart();
-    }
-
-
-    @Override
     protected void onResume() {
         startClipboardService();
         super.onResume();
     }
-
 
     /**
      * starts the clipboard service if its not up already
