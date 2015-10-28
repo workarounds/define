@@ -1,11 +1,11 @@
 package in.workarounds.define.portal;
 
 import dagger.Component;
-import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
-import in.workarounds.define.webviewDicts.livio.LivioModule;
 import in.workarounds.define.network.NetworkComponent;
 import in.workarounds.define.urban.UrbanMeaningPage;
 import in.workarounds.define.urban.UrbanModule;
+import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
+import in.workarounds.define.webviewDicts.livio.LivioModule;
 import in.workarounds.define.wordnet.WordnetMeaningPage;
 import in.workarounds.define.wordnet.WordnetModule;
 
