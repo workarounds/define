@@ -1,6 +1,7 @@
 package in.workarounds.define.ui.fragment;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,14 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Set;
-import java.util.zip.Inflater;
 
 import in.workarounds.define.R;
 import in.workarounds.define.constants.DictionaryId;
@@ -154,6 +150,7 @@ public class DictOrderFragment extends Fragment {
                         updatePrefs();
                     }
                 });
+                holder.dictionaryName.setPaintFlags(holder.dictionaryName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
         }
 
