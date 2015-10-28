@@ -68,4 +68,6 @@
     <string name="dashboard_dictionaries">Dictionaries</string>
     <string name="dashboard_tutorial">Tutorial</string>
     <string name="dashboard_settings">Settings</string>
+
+    <string name="menu_next">Next</string>
 </resources>

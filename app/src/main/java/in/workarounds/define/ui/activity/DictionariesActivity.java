@@ -78,6 +78,13 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         downloadButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         findViewById(R.id.btn_install_livio).setOnClickListener(this);
+        View nextButton = findViewById(R.id.btn_next);
+        if(!PrefUtils.getTutorialDone(this)){
+            nextButton.setVisibility(View.VISIBLE);
+        } else {
+            nextButton.setVisibility(View.GONE);
+        }
+        nextButton.setOnClickListener(this);
 
         mThread = DownloadResolver.setUpProgress(Constants.WORDNET, downloadProgress, statusTv, this);
     }
@@ -197,6 +204,9 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
             case R.id.btn_install_livio:
                 installLivio();
                 break;
+            case R.id.btn_next:
+                next();
+                break;
             default:
                 LogUtils.LOGE(TAG, "No actionable define for this click");
         }
@@ -239,5 +249,11 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         } catch (ActivityNotFoundException e){
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + livio)));
         }
+    }
+
+    public void next(){
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

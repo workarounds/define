@@ -5,9 +5,34 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <include
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_primary"
+        app:theme="@style/MyToolBar">
+
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:textColor="@android:color/white"
+            tools:text="Define"
+            android:textSize="18sp" />
+
+        <in.workarounds.typography.Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:gravity="right|center_vertical"
+            android:textColor="@color/white"
+            style="?android:borderlessButtonStyle"
+            android:text="@string/menu_next"
+            />
+
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:id="@+id/sv_dictionaries_container"

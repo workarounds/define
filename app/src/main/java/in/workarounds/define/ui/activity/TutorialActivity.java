@@ -2,6 +2,8 @@ package in.workarounds.define.ui.activity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -31,7 +33,14 @@ public class TutorialActivity extends BaseActivity{
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText("Define", getString(R.string.selection));
             clipboard.setPrimaryClip(clip);
-            PrefUtils.setTutorialDone(true, TutorialActivity.this);
+            Context context = TutorialActivity.this;
+            if(!PrefUtils.getTutorialDone(context)) {
+                Intent intent = new Intent(context, SplashActivity.class);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                finish();
+            }
+            PrefUtils.setTutorialDone(true, context);
         }
     };
 }
