@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +139,16 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     private void setClipTextToCard() {
         if(mClipText != null) {
             mTvClipText.setSelectableText(mClipText);
+            BreakIterator iterator = BreakIterator.getWordInstance();
+            iterator.setText(mClipText);
+            iterator.first();
+            int n = 0;
+            for(int end = iterator.next(); end != BreakIterator.DONE; end = iterator.next()){
+                n++;
+            }
+            if(n <= 2){
+                mTvClipText.selectAll();
+            }
         }
     }
 

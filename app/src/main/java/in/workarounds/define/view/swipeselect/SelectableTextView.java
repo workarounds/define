@@ -77,6 +77,10 @@ public class SelectableTextView extends TextView implements SelectMovementMethod
         }
     }
 
+    public void selectAll(){
+        movementMethod.selectAll();
+    }
+
     public void setOnWordSelectedListener(OnWordSelectedListener wordClickListener) {
         this.mWordSelectedListener = wordClickListener;
     }

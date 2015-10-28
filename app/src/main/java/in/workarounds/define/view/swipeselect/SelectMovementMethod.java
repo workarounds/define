@@ -36,6 +36,12 @@ public class SelectMovementMethod extends LinkMovementMethod{
         total = spanList;
     }
 
+    public void selectAll(){
+        selectByRange(0, total.size());
+        selectableView.invalidate();
+        selectableView.onSelectionFinished(0, total.size());
+    }
+
     @Override
     public boolean onTouchEvent(@NonNull TextView widget, @NonNull Spannable buffer,
                                 @NonNull MotionEvent event) {
