@@ -35,6 +35,7 @@
 -keep class in.workarounds.define.urban.Meaning { *; }
 -keep class in.workarounds.define.urban.UrbanResult { *; }
 -keep class in.workarounds.define.portal.MainPortal { *; }
+-dontwarn in.workarounds.portal.**
 
 -keep class edu.smu.tspell.wordnet.** { *; }
 -keep class in.workarounds.portal.WrapperLayout { *; }
@@ -42,4 +43,7 @@
 -keepattributes JavascriptInterface
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
+}
+-keep public class org.jsoup.** {
+public *;
 }

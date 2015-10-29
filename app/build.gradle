@@ -9,8 +9,8 @@ android {
         applicationId "in.workarounds.define"
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 4
-        versionName "0.1 - beta"
+        versionCode 5
+        versionName "1.0"
     }
     buildTypes {
         release {
@@ -18,7 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
