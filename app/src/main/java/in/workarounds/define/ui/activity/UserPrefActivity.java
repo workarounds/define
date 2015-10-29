@@ -7,6 +7,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import in.workarounds.define.R;
 import in.workarounds.define.util.PrefUtils;
@@ -19,15 +20,14 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
     public static final int OPTION_PRIORITY = 2;
     public static final int OPTION_DIRECT   = 3;
 
+    private TextView description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_prefs);
 
-        findViewById(R.id.rb_option_direct).setOnClickListener(this);
-        findViewById(R.id.rb_option_priority).setOnClickListener(this);
-        findViewById(R.id.rb_option_silent).setOnClickListener(this);
+        init();
     }
 
     @Override
@@ -46,18 +46,68 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
                 switch (id) {
                     case R.id.rb_option_direct:
                         PrefUtils.setNotifyMode(OPTION_DIRECT, this);
-                        copyTutorialText(R.string.notify_tutorial_direct);
+                        description.setText(R.string.notify_tutorial_direct);
                         break;
                     case R.id.rb_option_priority:
                         PrefUtils.setNotifyMode(OPTION_PRIORITY, this);
-                        copyTutorialText(R.string.notify_tutorial_priority);
+                        description.setText(R.string.notify_tutorial_priority);
                         break;
                     case R.id.rb_option_silent:
                         PrefUtils.setNotifyMode(OPTION_SILENT, this);
-                        copyTutorialText(R.string.notify_tutorial_silent);
+                        description.setText(R.string.notify_tutorial_silent);
                         break;
                 }
             }
+        } else if(id == R.id.button_test){
+            demoNotificationMode();
+        }
+    }
+
+    private void init(){
+        RadioButton direct = (RadioButton) findViewById(R.id.rb_option_direct);
+        RadioButton silent = (RadioButton) findViewById(R.id.rb_option_silent);
+        RadioButton priority = (RadioButton) findViewById(R.id.rb_option_priority);
+        description = (TextView) findViewById(R.id.tv_mode_description);
+
+        int notifyMode = PrefUtils.getNotifyMode(this);
+        switch(notifyMode){
+            case OPTION_DIRECT:
+                direct.setChecked(true);
+                description.setText(R.string.notify_tutorial_direct);
+                break;
+            case OPTION_PRIORITY:
+                priority.setChecked(true);
+                description.setText(R.string.notify_tutorial_priority);
+                break;
+            case OPTION_SILENT:
+                priority.setChecked(true);
+                description.setText(R.string.notify_tutorial_silent);
+                break;
+            default:
+                break;
+        }
+
+        direct.setOnClickListener(this);
+        priority.setOnClickListener(this);
+        silent.setOnClickListener(this);
+
+        findViewById(R.id.button_test).setOnClickListener(this);
+    }
+
+    private void demoNotificationMode(){
+        int notifyMode = PrefUtils.getNotifyMode(this);
+        switch (notifyMode){
+            case OPTION_PRIORITY:
+                copyTutorialText(R.string.notify_tutorial_priority);
+                break;
+            case OPTION_SILENT:
+                copyTutorialText(R.string.notify_tutorial_silent);
+                break;
+            case OPTION_DIRECT:
+                copyTutorialText(R.string.notify_tutorial_direct);
+                break;
+            default:
+                break;
         }
     }
 
