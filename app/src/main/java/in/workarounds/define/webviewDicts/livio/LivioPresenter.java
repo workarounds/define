@@ -153,6 +153,10 @@ public class LivioPresenter implements MeaningPresenter {
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
                 setDictionaryException(exception);
+            }catch (Exception exception){
+                exception.printStackTrace();
+                setDictionaryException(new
+                        DictionaryException(DictionaryException.UNKNOWN,"Sorry, something went wrong."));
             }
             return html;
         }
@@ -229,7 +233,9 @@ public class LivioPresenter implements MeaningPresenter {
     private void showException() {
         if(livioMeaningPage != null) {
             showStatus(getDictionaryException().getMessage());
-            installLivioBtn.setVisibility(View.VISIBLE);
+            if(getDictionaryException().getType() == DictionaryException.DICTIONARY_NOT_FOUND) {
+                installLivioBtn.setVisibility(View.VISIBLE);
+            }
         }
     }
 

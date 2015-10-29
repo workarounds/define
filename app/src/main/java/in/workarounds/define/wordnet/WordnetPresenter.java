@@ -129,6 +129,10 @@ public class WordnetPresenter implements MeaningPresenter{
             } catch (DictionaryException exception) {
                 exception.printStackTrace();
                 setDictionaryException(exception);
+            } catch (Exception exception){
+                exception.printStackTrace();
+                setDictionaryException(new DictionaryException(
+                        DictionaryException.UNKNOWN,"Sorry, something went wrong."));
             }
             return results;
         }
@@ -185,7 +189,9 @@ public class WordnetPresenter implements MeaningPresenter{
     private void showException() {
         if(wordnetMeaningPage != null) {
             showStatus(getDictionaryException().getMessage());
-            downloadButton.setVisibility(View.VISIBLE);
+            if(getDictionaryException().getType() == DictionaryException.DICTIONARY_NOT_FOUND) {
+                downloadButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 
