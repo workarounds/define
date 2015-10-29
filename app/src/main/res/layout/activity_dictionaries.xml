@@ -26,7 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
-            android:gravity="right|center_vertical"
             android:textColor="@color/white"
             style="?android:borderlessButtonStyle"
             android:text="@string/menu_next"
@@ -44,12 +43,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical">
+            <in.workarounds.typography.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/get_offline_dictionaries"
+                app:font_variant="Semibold"
+                android:textColor="@color/black"
+                android:textAllCaps="true"
+                android:background="#F3F3F3"
+                android:textSize="@dimen/font_regular"
+                />
 
             <RelativeLayout
                 android:id="@+id/livio_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_regular"
+                android:paddingStart="@dimen/padding_regular"
                 >
 
                 <in.workarounds.typography.TextView
@@ -63,7 +76,7 @@
                     android:layout_toStartOf="@id/btn_install_livio"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@string/title_livio_dictionary"
-                    android:textSize="@dimen/font_large"
+                    android:textSize="@dimen/font_medium"
                     android:textColor="@color/dark_gray"
                     app:font_variant="semibold" />
 
@@ -82,23 +95,30 @@
 
                 <ImageView
                     android:id="@+id/btn_install_livio"
-                    android:layout_width="@dimen/icon_regular"
-                    android:layout_height="@dimen/icon_regular"
+                    android:layout_width="@dimen/icon_large"
+                    android:layout_height="@dimen/icon_large"
                     android:padding="@dimen/padding_medium"
                     android:background="?android:selectableItemBackground"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
                     android:tint="@color/theme_accent"
                     />
             </RelativeLayout>
 
-            <include layout="@layout/layout_divider_horizontal" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lighter_gray"
+                android:layout_marginLeft="@dimen/margin_large"
+                />
 
             <RelativeLayout
                 android:id="@+id/wordnet_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_regular"
+                android:paddingStart="@dimen/padding_regular"
                 >
 
                 <in.workarounds.typography.TextView
@@ -112,7 +132,7 @@
                     android:layout_toStartOf="@+id/btn_download_wordnet"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@string/title_wordnet_dictionary"
-                    android:textSize="@dimen/font_large"
+                    android:textSize="@dimen/font_medium"
                     android:textColor="@color/dark_gray"
                     app:font_variant="semibold" />
 
@@ -167,20 +187,20 @@
 
                 <ImageView
                     android:id="@+id/btn_download_wordnet"
-                    android:layout_width="@dimen/icon_regular"
-                    android:layout_height="@dimen/icon_regular"
+                    android:layout_width="@dimen/icon_large"
+                    android:layout_height="@dimen/icon_large"
                     android:padding="@dimen/padding_medium"
                     android:background="?android:selectableItemBackground"
                     android:tint="@color/theme_accent"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
                     />
 
                 <ImageView
                     android:id="@+id/btn_cancel_download_wordnet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_large"
+                    android:layout_height="@dimen/icon_large"
                     android:padding="@dimen/padding_medium"
                     android:src="@drawable/ic_cancel"
                     android:visibility="gone"
@@ -188,18 +208,30 @@
                     android:background="?android:selectableItemBackground"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
                     />
 
 
             </RelativeLayout>
 
-            <include layout="@layout/layout_divider_horizontal" />
+            <in.workarounds.typography.TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/online_dictionaries"
+                app:font_variant="Semibold"
+                android:textColor="@color/black"
+                android:background="#F3F3F3"
+                android:textAllCaps="true"
+                android:textSize="@dimen/font_regular"
+                />
 
             <RelativeLayout
                 android:id="@+id/urban_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_regular"
+                android:paddingStart="@dimen/padding_regular"
                 >
 
                 <in.workarounds.typography.TextView
@@ -211,7 +243,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_margin="@dimen/margin_medium"
                     android:text="@string/title_urban_dictionary"
-                    android:textSize="@dimen/font_large"
+                    android:textSize="@dimen/font_medium"
                     android:textColor="@color/dark_gray"
                     app:font_variant="semibold" />
 
@@ -228,7 +260,6 @@
                     android:text="@string/description_livio_dictionary" />
             </RelativeLayout>
 
-            <include layout="@layout/layout_divider_horizontal" />
 
         </LinearLayout>
 

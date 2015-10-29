@@ -51,9 +51,11 @@
     <string name="exception_urban">Unable to fetch data from Urban Dictionary servers. Please check your network connection.</string>
     <string name="exception_wordnet">Unable to load wordnet dictionary. Make sure you have downloaded wordnet dictionary</string>
     <string name="title_wordnet_dictionary">Wordnet Dictionary</string>
-    <string name="description_wordnet_dictionary">Wordnet is a lexical database for English by Princeton University. It\'s download size is 10MB and it occupies 30MB disk space once extracted.</string>
+    <string name="description_wordnet_dictionary">Dictionary by Princeton University. Download size 10MB.</string>
     <string name="title_urban_dictionary">Urban Dictionary</string>
     <string name="description_urban_dictionary">Urban Dictionary is a crowdsourced online dictionary of slang words and phrases. It requires internet to use this dictionary.</string>
+    <string name="get_offline_dictionaries">Get offline dictionaries</string>
+    <string name="online_dictionaries">Online dictionaries</string>
     <string name="btn_download_wordnet_dictionary">Download Wordnet</string>
     <string name="pref_name_notification">How would you like define to notify you?</string>
     <string name="option_silent">Silent</string>
