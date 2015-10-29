@@ -1,7 +1,7 @@
 package in.workarounds.define.service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -13,10 +13,10 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.webkit.URLUtil;
 
-import in.workarounds.define.R;
 import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
 import in.workarounds.portal.PortalManager;
@@ -25,13 +25,17 @@ public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
     private static final String TAG = LogUtils.makeLogTag(ClipboardService.class);
     private static boolean isRunning = false;
-    private static final int SILENT_NOTIFICATION_ID = 201;
+    private Handler notificationHandler;
+    private Runnable notificationHandlerRunnable;
+    public static final int SILENT_NOTIFICATION_ID = 201;
 
     @Override
     public void onCreate() {
         isRunning = true;
+        notificationHandler = new Handler();
         ClipboardManager clipboardManager = getClipboardManager();
         clipboardManager.addPrimaryClipChangedListener(this);
+        setNotificationClearer();
     }
 
     private ClipboardManager getClipboardManager() {
@@ -83,36 +87,12 @@ public class ClipboardService extends Service implements
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
                     ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
 
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setAutoCancel(true)
-                            .setSmallIcon(R.drawable.ic_notification_icon)
-                            .setPriority(priority)
-                            .setVibrate(new long[0]) //mandatory for high priority,setting no vibration
-                            .setContentTitle(getString(R.string.app_name))
-                            .setContentText(getString(R.string.notification_content));
-// Creates an explicit intent for clipboard Service
+            NotificationUtils.INSTANCE.sendMeaningNotification(text, SILENT_NOTIFICATION_ID, priority);
 
-            Bundle bundle = new Bundle();
-            bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
-            Intent resultIntent =
-                    Portal.with(this)
-                    .data(bundle)
-                    .sendIntent(MainPortal.class);
-            PendingIntent resultPendingIntent =
-                    PendingIntent.getService(
-                            this,
-                            0,
-                            resultIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-            mBuilder.setContentIntent(resultPendingIntent);
-            NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-// SILENT_NOTIFICATION_ID allows you to update/remove the notification later on.
-            mNotificationManager.notify(SILENT_NOTIFICATION_ID, mBuilder.build());
-            Handler handler = new Handler();
-            handler.postDelayed(getNotificationClearer(), 10000);
+            if(PrefUtils.getNotificationAutoHideFlag(this)) {
+                notificationHandler.removeCallbacks(notificationHandlerRunnable);
+                notificationHandler.postDelayed(notificationHandlerRunnable, 10000);
+            }
         }
         else{
             startPortal(text);
@@ -125,13 +105,11 @@ public class ClipboardService extends Service implements
         Portal.with(this).data(bundle).send(MainPortal.class);
     }
 
-    private Runnable getNotificationClearer(){
-        return new Runnable() {
+    private void setNotificationClearer(){
+        notificationHandlerRunnable =  new Runnable() {
             @Override
             public void run() {
-                NotificationManager manager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.cancel(SILENT_NOTIFICATION_ID);
+                NotificationUtils.INSTANCE.getNotificationManager().cancel(SILENT_NOTIFICATION_ID);
             }
         };
     }

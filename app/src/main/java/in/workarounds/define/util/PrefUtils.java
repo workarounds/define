@@ -18,6 +18,7 @@ public class PrefUtils {
     public static final String KEY_DICTIONARIES_DONE = "key_dictionaries_done";
     public static final String KEY_DICTIONARY_ORDER = "key_dictionary_order";
     private static final String KEY_DICTIONARY_VISIBILITY = "key_dictionary_visibility";
+    private static final String KEY_NOTIFICATION_AUTO_HIDE = "key_notification_auto_hide";
     private static final String DELIMITER = ",";
     public static final int DEFAULT_NOTIFY_MODE = UserPrefActivity.OPTION_PRIORITY;
 
@@ -94,6 +95,17 @@ public class PrefUtils {
 
     public static boolean getDictionariesDone(Context context){
         return getSharedPreferences(context).getBoolean(KEY_DICTIONARIES_DONE, false);
+    }
+
+    public static void setNotificationAutoHideFlag(boolean done, Context context){
+        getSharedPreferences(context)
+                .edit()
+                .putBoolean(KEY_NOTIFICATION_AUTO_HIDE, done)
+                .apply();
+    }
+
+    public static boolean getNotificationAutoHideFlag(Context context){
+        return getSharedPreferences(context).getBoolean(KEY_NOTIFICATION_AUTO_HIDE, true);
     }
 
     @Nullable

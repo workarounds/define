@@ -68,4 +68,30 @@
         android:text="@string/button_test"
         style="@style/ColoredButton"
         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lighter_gray"
+        android:layout_marginLeft="@dimen/margin_large"
+        />
+
+    <in.workarounds.typography.TextView
+        android:id="@+id/tv_pref_other_settings"
+        android:text="@string/pref_other_settings"
+        android:textSize="@dimen/font_medium"
+        android:layout_margin="@dimen/margin_large"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <in.workarounds.typography.CheckBox
+        android:id="@+id/notification_autocancel_checkbox"
+        android:textSize="@dimen/font_regular"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:text="@string/notification_auto_hide"
+        />
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringRes;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -60,6 +61,8 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
             }
         } else if(id == R.id.button_test){
             demoNotificationMode();
+        }else if(id == R.id.notification_autocancel_checkbox){
+            PrefUtils.setNotificationAutoHideFlag(((CheckBox) v).isChecked(), this);
         }
     }
 
@@ -67,6 +70,7 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         RadioButton direct = (RadioButton) findViewById(R.id.rb_option_direct);
         RadioButton silent = (RadioButton) findViewById(R.id.rb_option_silent);
         RadioButton priority = (RadioButton) findViewById(R.id.rb_option_priority);
+        CheckBox notificationAutoHide = (CheckBox) findViewById(R.id.notification_autocancel_checkbox);
         description = (TextView) findViewById(R.id.tv_mode_description);
 
         int notifyMode = PrefUtils.getNotifyMode(this);
@@ -90,7 +94,9 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         direct.setOnClickListener(this);
         priority.setOnClickListener(this);
         silent.setOnClickListener(this);
+        notificationAutoHide.setOnClickListener(this);
 
+        notificationAutoHide.setChecked(PrefUtils.getNotificationAutoHideFlag(this));
         findViewById(R.id.button_test).setOnClickListener(this);
     }
 

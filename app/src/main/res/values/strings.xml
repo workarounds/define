@@ -58,6 +58,7 @@
     <string name="online_dictionaries">Online dictionaries</string>
     <string name="btn_download_wordnet_dictionary">Download Wordnet</string>
     <string name="pref_name_notification">How would you like define to notify you?</string>
+    <string name="pref_other_settings">Other settings</string>
     <string name="option_silent">Silent</string>
     <string name="option_priority">Priority</string>
     <string name="option_direct">Direct display</string>
@@ -82,4 +83,6 @@
     <string name="notify_tutorial_silent">Most unobtrusive setting. Whenever a text is copied a silent notification is shown. Tap on notification to define</string>
     <string name="notify_tutorial_priority">Recommended setting for Lollipop and above. Whenever a text is copied a priority notification is shown. Tap on notification to define</string>
     <string name="notify_tutorial_direct">A cancellable popup is directly shown whenever text is copied</string>
+
+    <string name="notification_auto_hide">Auto hide unused notifications</string>
 </resources>
