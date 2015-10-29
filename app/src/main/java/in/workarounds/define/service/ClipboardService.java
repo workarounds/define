@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import in.workarounds.define.portal.MainPortal;
@@ -64,7 +65,9 @@ public class ClipboardService extends Service implements
     @Override
     public void onPrimaryClipChanged() {
         String text = getClipData();
-        startActionResolver(text);
+        if(!TextUtils.isEmpty(text)) {
+            startActionResolver(text);
+        }
     }
 
     private String getClipData() {

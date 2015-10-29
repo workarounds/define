@@ -72,6 +72,13 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         callStateListener = new CallStateListener();
     }
 
+    @Override
+    protected void onData(Bundle data) {
+        super.onData(data);
+        extractClipText(data);
+        setClipTextToCard();
+    }
+
     private void initComponents() {
         component = DaggerPortalComponent.builder()
                 .portalModule(new PortalModule(this))
