@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.webkit.URLUtil;
@@ -19,7 +20,6 @@ import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
 import in.workarounds.portal.PortalManager;
-import in.workarounds.portal.State;
 
 public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
@@ -111,6 +111,8 @@ public class ClipboardService extends Service implements
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 // SILENT_NOTIFICATION_ID allows you to update/remove the notification later on.
             mNotificationManager.notify(SILENT_NOTIFICATION_ID, mBuilder.build());
+            Handler handler = new Handler();
+            handler.postDelayed(getNotificationClearer(), 10000);
         }
         else{
             startPortal(text);
@@ -121,5 +123,16 @@ public class ClipboardService extends Service implements
         Bundle bundle = new Bundle();
         bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
         Portal.with(this).data(bundle).send(MainPortal.class);
+    }
+
+    private Runnable getNotificationClearer(){
+        return new Runnable() {
+            @Override
+            public void run() {
+                NotificationManager manager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.cancel(SILENT_NOTIFICATION_ID);
+            }
+        };
     }
 }
