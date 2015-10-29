@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,7 +27,9 @@ import in.workarounds.define.base.MeaningPagerAdapter;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
+import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
 import in.workarounds.portal.Portal;
@@ -49,6 +53,9 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
 
     private List<MeaningPresenter> presenters = new ArrayList<>();
 
+    private CallStateListener callStateListener;
+    private TelephonyManager telephonyManager;
+
     public MainPortal(Context base) {
         super(base);
     }
@@ -61,6 +68,8 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         initViews();
         extractClipText(bundle);
         setClipTextToCard();
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        callStateListener = new CallStateListener();
     }
 
     private void initComponents() {
@@ -207,7 +216,14 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     @Override
     protected void onPause() {
         super.onPause();
+        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        super.onResume();
     }
 
     @Override
@@ -228,6 +244,20 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
                 break;
             default:
                 break;
+        }
+    }
+
+    private class CallStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:
+                    // called when someone is ringing to this phone
+                    NotificationUtils.INSTANCE.sendSilentMeaningNotification(mTvClipText.getText().toString(),
+                            ClipboardService.SILENT_NOTIFICATION_ID);
+                    finish();
+                    break;
+            }
         }
     }
 }
