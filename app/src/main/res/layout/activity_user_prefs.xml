@@ -91,7 +91,9 @@
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/padding_regular"
         android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_large"
         android:text="@string/notification_auto_hide"
         />
 </LinearLayout>

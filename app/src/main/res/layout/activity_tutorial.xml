@@ -1,35 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_primary"
+        app:theme="@style/MyToolBar">
+
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            tools:text="Define" />
+
+        <in.workarounds.typography.Button
+            android:id="@+id/btn_next"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="@string/menu_next"
+            android:textColor="@color/white" />
+
+    </android.support.v7.widget.Toolbar>
+
     <in.workarounds.typography.TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/copy_something"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:layout_marginLeft="@dimen/margin_large"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_large"
-        />
+        android:text="@string/copy_something"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <in.workarounds.typography.TextView
         android:id="@+id/text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
         android:padding="@dimen/padding_huge"
         android:text="@string/selection"
-        />
+        android:textSize="14sp" />
+
     <in.workarounds.typography.Button
         android:id="@+id/button_copy"
+        style="@style/ColoredButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ColoredButton"
-        android:text="@string/copy"
         android:layout_gravity="center_horizontal"
-        />
+        android:text="@string/copy" />
 </LinearLayout>

@@ -49,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, DashboardActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

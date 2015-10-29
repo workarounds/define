@@ -2,7 +2,6 @@ package in.workarounds.define.ui.activity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -14,13 +13,14 @@ import in.workarounds.define.util.PrefUtils;
 /**
  * Created by manidesto on 24/10/15.
  */
-public class TutorialActivity extends BaseActivity{
+public class TutorialActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
-        findViewById(R.id.button_copy).setOnClickListener(copyClickListener);
+        findViewById(R.id.button_copy).setOnClickListener(this);
+        findViewById(R.id.btn_next).setOnClickListener(this);
     }
 
     @Override
@@ -37,20 +37,33 @@ public class TutorialActivity extends BaseActivity{
         return getString(R.string.app_name);
     }
 
-    private View.OnClickListener copyClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Define", getString(R.string.selection));
-            clipboard.setPrimaryClip(clip);
-            Context context = TutorialActivity.this;
-            if(!PrefUtils.getTutorialDone(context)) {
-                Intent intent = new Intent(context, SplashActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                finish();
-            }
-            PrefUtils.setTutorialDone(true, context);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PrefUtils.setTutorialDone(true, this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button_copy:
+                onCopyClicked();
+                break;
+            case R.id.btn_next:
+                next();
+                break;
         }
-    };
+    }
+
+    public void next(){
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void onCopyClicked(){
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Define", getString(R.string.selection));
+        clipboard.setPrimaryClip(clip);
+    }
 }
