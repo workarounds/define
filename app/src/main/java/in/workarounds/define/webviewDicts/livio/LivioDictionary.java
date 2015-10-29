@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
 import org.jsoup.select.Elements;
 
 import javax.inject.Inject;
@@ -69,7 +70,6 @@ public class LivioDictionary implements IHtmlDictionary {
             String htmlString  = c.getString(c.getColumnIndexOrThrow("suggest_text_2"));
             localObject1 = Jsoup.parse(htmlString);
             (localObject1).select("dl").remove();
-           // (localObject1).select("ul").remove();
             (localObject1).select("head").remove();
 
             for( Element element : localObject1.select("silence") ) {
@@ -80,21 +80,20 @@ public class LivioDictionary implements IHtmlDictionary {
             }
 
             Elements elementsByClass = (localObject1).getElementsByClass("head");
-            if(elementsByClass.size() > 0) {
-                Element etymologyElement = elementsByClass.get(0);
-                if (etymologyElement.text().equals("etymology")) {
-                    etymologyElement.remove(); //remove etymology
-                    Element etymologyContentElement = (localObject1).select("p").get(0);
-                    etymologyContentElement.remove();
-                    Element bodyElement = localObject1.select("body").get(0);
-                    bodyElement.appendChild(etymologyElement); //add at the end
-                    bodyElement.appendChild(etymologyContentElement);
+            if(elementsByClass != null) {
+                for (Element etymologyElement : elementsByClass) {
+                    if (etymologyElement.text().equals("etymology")) {
+                        Element etymologyContentElement = etymologyElement.nextElementSibling();
+                        if (etymologyContentElement != null && !etymologyContentElement.tag().equals(Tag.valueOf("span"))) {
+                            etymologyContentElement.remove();
+                        }
+                        etymologyElement.remove(); //remove etymology
+                    }
                 }
             }
 
             htmlBuilder.append(localObject1.html());
             html = htmlBuilder.toString();
-            System.out.print(html);
             c.close();
         }
         return html;
