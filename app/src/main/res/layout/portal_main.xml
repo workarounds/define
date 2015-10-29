@@ -93,7 +93,7 @@
             android:id="@+id/sliding_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cardview_light_background" />
+            android:background="@color/theme_primary_dark" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/vp_pages"

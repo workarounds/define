@@ -6,22 +6,31 @@
     android:orientation="horizontal"
     android:paddingLeft="@dimen/padding_small"
     android:paddingRight="@dimen/padding_small">
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"/>
 
     <in.workarounds.typography.Button
         android:id="@+id/button_search"
         style="@style/ActionButton"
         android:text="@string/button_search"
-        app:font_variant="Semibold" />
+        />
 
     <in.workarounds.typography.Button
         android:id="@+id/button_wiki"
         style="@style/ActionButton"
         android:text="@string/button_wiki"
-        app:font_variant="Semibold" />
+        />
 
     <in.workarounds.typography.Button
         android:id="@+id/button_copy"
         style="@style/ActionButton"
         android:text="@string/button_copy"
-        app:font_variant="Semibold" />
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"/>
 </LinearLayout>

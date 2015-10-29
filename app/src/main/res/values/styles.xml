@@ -51,6 +51,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">@color/theme_accent</item>
+        <item name="android:textSize">@dimen/font_smaller</item>
         <item name="android:minHeight">@dimen/bar_medium</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:paddingLeft">@dimen/padding_large</item>
