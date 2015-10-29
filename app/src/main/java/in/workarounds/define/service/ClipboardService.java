@@ -1,11 +1,8 @@
 package in.workarounds.define.service;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,10 +11,10 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.webkit.URLUtil;
 
+import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
 import in.workarounds.portal.PortalManager;
