@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import in.workarounds.define.R;
-import in.workarounds.define.constants.DictionaryId;
 import in.workarounds.define.util.PrefUtils;
 
 /**
@@ -33,6 +32,13 @@ public class SplashActivity extends AppCompatActivity{
         if(!PrefUtils.getTutorialDone(this)){
             Intent tutorial = new Intent(this, TutorialActivity.class);
             startActivity(tutorial);
+            finish();
+            return;
+        }
+
+        if(!PrefUtils.getSettingsDone(this)){
+            Intent settings = new Intent(this, UserPrefActivity.class);
+            startActivity(settings);
             finish();
             return;
         }

@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringRes;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
@@ -32,8 +33,23 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
     protected String getToolbarTitle() {
         return "Settings";
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PrefUtils.setSettingsDone(true, this);
     }
 
     @Override

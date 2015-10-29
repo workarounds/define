@@ -72,8 +72,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_margin="@dimen/margin_large"
         android:background="@color/lighter_gray"
-        android:layout_marginLeft="@dimen/margin_large"
         />
 
     <in.workarounds.typography.TextView

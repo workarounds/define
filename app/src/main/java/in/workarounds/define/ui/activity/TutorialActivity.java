@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 
 import in.workarounds.define.R;
@@ -20,6 +21,15 @@ public class TutorialActivity extends BaseActivity{
         setContentView(R.layout.activity_tutorial);
 
         findViewById(R.id.button_copy).setOnClickListener(copyClickListener);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
