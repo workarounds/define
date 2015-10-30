@@ -20,8 +20,6 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
-import com.squareup.okhttp.internal.Util;
-
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +27,10 @@ import java.util.List;
 import in.workarounds.define.R;
 import in.workarounds.define.base.MeaningPagerAdapter;
 import in.workarounds.define.base.MeaningPresenter;
+import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
 import in.workarounds.portal.Portal;
