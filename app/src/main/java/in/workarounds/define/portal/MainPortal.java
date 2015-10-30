@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import com.squareup.okhttp.internal.Util;
@@ -131,7 +133,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
             @Override
             public void onWordSelected(String word) {
                 selectedText = word;
-                meaningPagesContainer.setVisibility(View.VISIBLE);
+                animateMeaningsContainer();
                 for (MeaningPresenter presenter : presenters) {
                     presenter.onWordUpdated(word);
                 }
@@ -147,6 +149,25 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
                 }
             }
         }, 150);
+    }
+
+    private void animateMeaningsContainer(){
+        if(meaningPagesContainer.getVisibility() != View.VISIBLE){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                meaningPagesContainer.setAlpha(0);
+                meaningPagesContainer.setTranslationY(meaningPagesContainer.getHeight() / 3);
+                meaningPagesContainer.setVisibility(View.VISIBLE);
+                meaningPagesContainer.animate()
+                        .alpha(1)
+                        .withLayer()
+                        .translationY(0)
+                        .setDuration(350)
+                        .setInterpolator(new DecelerateInterpolator(4))
+                        .start();
+            } else {
+                meaningPagesContainer.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void extractClipText(Bundle bundle) {
