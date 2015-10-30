@@ -11,29 +11,30 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.webkit.URLUtil;
 
+import com.squareup.okhttp.internal.Util;
+
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.portal.MainPortal;
+import in.workarounds.define.portal.UtilPortlet;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
 import in.workarounds.portal.PortalManager;
+import in.workarounds.portal.Portlet;
 
 public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
     private static final String TAG = LogUtils.makeLogTag(ClipboardService.class);
     private static boolean isRunning = false;
-    private Handler notificationHandler;
-    private Runnable notificationHandlerRunnable;
-    public static final int SILENT_NOTIFICATION_ID = 201;
+    public static final String BUNDLE_SELECTED_TEXT_KEY = "BUNDLE_SELECTED_TEXT_KEY";
 
     @Override
     public void onCreate() {
         isRunning = true;
-        notificationHandler = new Handler();
         ClipboardManager clipboardManager = getClipboardManager();
         clipboardManager.addPrimaryClipChangedListener(this);
-        setNotificationClearer();
+        Portlet.with(this).id(UtilPortlet.UTIL_PORTLET_ID).open(UtilPortlet.class);
     }
 
     private ClipboardManager getClipboardManager() {
@@ -63,7 +64,9 @@ public class ClipboardService extends Service implements
     public void onPrimaryClipChanged() {
         String text = getClipData();
         if(!TextUtils.isEmpty(text)) {
-            startActionResolver(text);
+            Bundle bundle = new Bundle();
+            bundle.putString(BUNDLE_SELECTED_TEXT_KEY,text);
+            Portlet.with(this).id(UtilPortlet.UTIL_PORTLET_ID).data(bundle).send(UtilPortlet.class);
         }
     }
 
@@ -76,41 +79,5 @@ public class ClipboardService extends Service implements
         } else {
             return null;
         }
-    }
-
-    private void startActionResolver(String text) {
-        int state = PortalManager.getPortalState(this, MainPortal.class);
-
-        @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(this);
-        if(notifyMode == UserPrefActivity.OPTION_SILENT || notifyMode == UserPrefActivity.OPTION_PRIORITY) {
-//Set notification priority as high for priority mode, default for silent mode
-            int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
-                    ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
-
-            NotificationUtils.INSTANCE.sendMeaningNotification(text, SILENT_NOTIFICATION_ID, priority);
-
-            if(PrefUtils.getNotificationAutoHideFlag(this)) {
-                notificationHandler.removeCallbacks(notificationHandlerRunnable);
-                notificationHandler.postDelayed(notificationHandlerRunnable, 10000);
-            }
-        }
-        else{
-            startPortal(text);
-        }
-    }
-
-    private void startPortal(String text){
-        Bundle bundle = new Bundle();
-        bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
-        Portal.with(this).data(bundle).send(MainPortal.class);
-    }
-
-    private void setNotificationClearer(){
-        notificationHandlerRunnable =  new Runnable() {
-            @Override
-            public void run() {
-                NotificationUtils.INSTANCE.getNotificationManager().cancel(SILENT_NOTIFICATION_ID);
-            }
-        };
     }
 }

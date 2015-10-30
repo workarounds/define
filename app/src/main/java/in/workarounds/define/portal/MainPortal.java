@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.squareup.okhttp.internal.Util;
+
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -260,8 +262,9 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     // called when someone is ringing to this phone
-                    NotificationUtils.INSTANCE.sendSilentMeaningNotification(mTvClipText.getText().toString(),
-                            ClipboardService.SILENT_NOTIFICATION_ID);
+                    UtilPortlet portlet = (UtilPortlet) getPortlet(UtilPortlet.UTIL_PORTLET_ID);
+                    if(portlet != null) portlet.cancelCurrentNotificationClearer(); //remove notification hide handler
+                    NotificationUtils.INSTANCE.sendSilentMeaningNotification(mTvClipText.getText().toString());
                     finish();
                     break;
             }

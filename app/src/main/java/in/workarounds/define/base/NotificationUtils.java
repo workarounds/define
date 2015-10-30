@@ -20,6 +20,7 @@ public enum NotificationUtils {
     INSTANCE;
     private NotificationManager notificationManager;
     private Context context;
+    public static final int SILENT_NOTIFICATION_ID = 201;
 
     NotificationUtils(){
         context = DefineApp.getContext();
@@ -35,15 +36,15 @@ public enum NotificationUtils {
         return notificationManager;
     }
 
-    public void sendSilentMeaningNotification(String text,int notificationId){
-        sendMeaningNotification(text, notificationId, NotificationCompat.PRIORITY_DEFAULT);
+    public void sendSilentMeaningNotification(String text){
+        sendMeaningNotification(text, NotificationCompat.PRIORITY_DEFAULT);
     }
 
-    public void sendPriorityMeaningNotification(String text,int notificationId){
-        sendMeaningNotification(text, notificationId, NotificationCompat.PRIORITY_HIGH);
+    public void sendPriorityMeaningNotification(String text){
+        sendMeaningNotification(text, NotificationCompat.PRIORITY_HIGH);
     }
 
-    public void sendMeaningNotification(String text,int notificationId,int priority){
+    public void sendMeaningNotification(String text,int priority){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getContext())
                         .setAutoCancel(true)
@@ -69,6 +70,6 @@ public enum NotificationUtils {
                 );
         mBuilder.setContentIntent(resultPendingIntent);
 
-        getNotificationManager().notify(notificationId, mBuilder.build());
+        getNotificationManager().notify(SILENT_NOTIFICATION_ID, mBuilder.build());
     }
 }
