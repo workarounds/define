@@ -33,6 +33,7 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
     public static final String DRAW_OVER_OTHER_APPS = "android.permission.DRAW_OVER_OTHER_APPS";
     private static final String[] REQUIRED = {DRAW_OVER_OTHER_APPS};
     private static final String[] OPTIONAL = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private static final String[] GIVEN = {Manifest.permission.READ_PHONE_STATE};
 
     private interface IntentKey{
         String REQUIRED_PERMISSION = "required_permission";
@@ -181,6 +182,19 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
             permission.required = isPermissionInIntent(identifier);
             permissions.add(permission);
         }
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            for (String identifier : GIVEN) {
+                Permission permission = new Permission(
+                        identifier,
+                        getPermissionTitle(identifier),
+                        getPermissionRationale(identifier)
+                );
+                permission.required = false;
+                permission.given = true;
+                permissions.add(permission);
+            }
+        }
     }
 
     private void checkPermissions(){
@@ -213,7 +227,7 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
         }
 
         nextButton.setVisibility(
-                granted ? View.VISIBLE : View.GONE
+                granted && isFromSplash() ? View.VISIBLE : View.GONE
         );
     }
 
@@ -297,6 +311,8 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
             return R.string.permission_title_draw_over_other_apps;
         } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(identifier)){
             return R.string.permission_title_storage;
+        } else if(Manifest.permission.READ_PHONE_STATE.equals(identifier)){
+            return R.string.permission_title_phone;
         } else {
             return R.string.permission_title_unknown;
         }
@@ -307,6 +323,8 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
             return R.string.permission_rationale_draw_over_other_apps;
         } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(identifier)){
             return R.string.permission_rationale_storage;
+        } else if(Manifest.permission.READ_PHONE_STATE.equals(identifier)){
+            return R.string.permission_rationale_phone;
         } else {
             return R.string.permission_rationale_unknown;
         }
@@ -317,6 +335,8 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
             return R.string.permission_request_message_draw_over_other_apps;
         } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(identifier)){
             return R.string.permission_request_message_storage;
+        } else if(Manifest.permission.READ_PHONE_STATE.equals(identifier)){
+            return R.string.permission_request_message_phone;
         } else {
             return R.string.permission_request_message_unknown;
         }
@@ -328,6 +348,7 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
         public @StringRes int rationale;
         public boolean granted = false;
         public boolean required = false;
+        public boolean given = false;
 
         public Permission(String identifier, @StringRes int title, @StringRes int rationale){
             this.identifier = identifier;

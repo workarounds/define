@@ -72,6 +72,7 @@
     <string name="dashboard_tutorial">Tutorial</string>
     <string name="dashboard_sort_dictionaries">Sort Dictionaries</string>
     <string name="dashboard_settings">Settings</string>
+    <string name="dashboard_permissions">Permissions</string>
 
     <string name="menu_next">Next</string>
 
@@ -87,19 +88,26 @@
     <string name="notification_auto_hide">Auto hide notifications after 10s</string>
 
     <!-- Permissions-->
+    <string name="permissions_page_description">For optimal performance we need the following permissions. Grant the required permissions for the app to function as expected</string>
     <string name="permissions_page_title">Permissions</string>
     <string name="button_grant">Grant permission</string>
     <string name="button_granted">Granted</string>
+    <string name="button_lollipop">Lollipop and below</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_go_to_settings">Go to settings</string>
+    <string name="permission_required">(required)</string>
     <string name="permission_optional">(optional)</string>
     <string name="permission_title_draw_over_other_apps">Draw over other apps</string>
-    <string name="permission_rationale_draw_over_other_apps">To provide meanings in every app</string>
-    <string name="permission_request_message_draw_over_other_apps">We need draw over other permission to provide you meanings in every app</string>
+    <string name="permission_rationale_draw_over_other_apps">To show meanings without moving you from the app you are using</string>
+    <string name="permission_request_message_draw_over_other_apps">We need draw over other permission to without moving you from the app you are using</string>
     <string name="permission_title_storage">Storage</string>
     <string name="permission_rationale_storage">To store dictionary for offline use</string>
     <string name="permission_request_message_storage">We need storage permission to store dictionary for offline use.
         Go to settings -> Permissions -> Enable Storage</string>
+    <string name="permission_title_phone">Read phone state</string>
+    <string name="permission_rationale_phone">To hide overlays when you receive a call</string>
+    <string name="permission_request_message_phone">We will remove the overlays when you receive a call to allow you to answer it.
+    Go to settings -> Permissions -> Enable Phone</string>
     <string name="permission_title_unknown">Unknown</string>
     <string name="permission_rationale_unknown">We do not need this</string>
     <string name="permission_request_message_unknown">Ignore this message</string>

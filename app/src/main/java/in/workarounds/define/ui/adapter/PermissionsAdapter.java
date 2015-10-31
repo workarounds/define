@@ -36,7 +36,7 @@ public class PermissionsAdapter extends RecyclerView.Adapter<PermissionsAdapter.
         final Permission permission = permissions.get(position);
         holder.title.setText(permission.title);
         holder.rationale.setText(permission.rationale);
-        if(permission.granted){
+        if(permission.granted && !permission.given){
             holder.grant.setEnabled(false);
             holder.grant.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.medium_gray));
             holder.grant.setText(R.string.button_granted);
@@ -54,8 +54,8 @@ public class PermissionsAdapter extends RecyclerView.Adapter<PermissionsAdapter.
             }
         }
 
-        holder.optional.setVisibility(
-                permission.required ? View.GONE : View.VISIBLE
+        holder.required.setText(
+                permission.required ? R.string.permission_required : R.string.permission_optional
         );
     }
 
@@ -71,7 +71,7 @@ public class PermissionsAdapter extends RecyclerView.Adapter<PermissionsAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
         TextView rationale;
-        View optional;
+        TextView required;
         Button grant;
 
         public ViewHolder(View itemView) {
@@ -79,7 +79,7 @@ public class PermissionsAdapter extends RecyclerView.Adapter<PermissionsAdapter.
             title = (TextView) itemView.findViewById(R.id.tv_permission_title);
             rationale = (TextView) itemView.findViewById(R.id.tv_permission_rationale);
             grant = (Button) itemView.findViewById(R.id.button_grant);
-            optional = itemView.findViewById(R.id.tv_optional);
+            required = (TextView) itemView.findViewById(R.id.tv_required);
         }
     }
 
