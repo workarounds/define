@@ -2,6 +2,7 @@ package in.workarounds.define.ui.activity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringRes;
@@ -30,6 +31,14 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_user_prefs);
 
         init();
+
+        View nextButton = findViewById(R.id.btn_next);
+        if(!PrefUtils.getSettingsDone(this)){
+            nextButton.setVisibility(View.VISIBLE);
+        } else {
+            nextButton.setVisibility(View.GONE);
+        }
+        nextButton.setOnClickListener(this);
     }
 
     @Override
@@ -49,7 +58,6 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        PrefUtils.setSettingsDone(true, this);
     }
 
     @Override
@@ -75,9 +83,11 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
                         break;
                 }
             }
-        } else if(id == R.id.button_test){
+        } else if(id == R.id.button_test) {
             demoNotificationMode();
-        }else if(id == R.id.notification_autocancel_checkbox){
+        } else if(id == R.id.btn_next){
+            next();
+        } else if(id == R.id.notification_autocancel_checkbox){
             PrefUtils.setNotificationAutoHideFlag(((CheckBox) v).isChecked(), this);
         }
     }
@@ -114,6 +124,12 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
 
         notificationAutoHide.setChecked(PrefUtils.getNotificationAutoHideFlag(this));
         findViewById(R.id.button_test).setOnClickListener(this);
+    }
+
+    public void next(){
+        PrefUtils.setSettingsDone(true, this);
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
     }
 
     private void demoNotificationMode(){

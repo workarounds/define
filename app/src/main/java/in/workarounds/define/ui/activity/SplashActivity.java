@@ -23,6 +23,7 @@ public class SplashActivity extends AppCompatActivity{
 
         if(!PermissionsActivity.areRequiredPermissionGranted(this)){
             Intent permissions = PermissionsActivity.fromSplash(this);
+            permissions.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(permissions);
             finish();
             return;
@@ -30,6 +31,7 @@ public class SplashActivity extends AppCompatActivity{
 
         if(!PrefUtils.getDictionariesDone(this)){
             Intent dictionaries = new Intent(this, DictionariesActivity.class);
+            dictionaries.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(dictionaries);
             finish();
             return;
@@ -37,6 +39,7 @@ public class SplashActivity extends AppCompatActivity{
 
         if(!PrefUtils.getTutorialDone(this)){
             Intent tutorial = new Intent(this, TutorialActivity.class);
+            tutorial.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(tutorial);
             finish();
             return;
@@ -44,6 +47,7 @@ public class SplashActivity extends AppCompatActivity{
 
         if(!PrefUtils.getSettingsDone(this)){
             Intent settings = new Intent(this, UserPrefActivity.class);
+            settings.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(settings);
             finish();
             return;

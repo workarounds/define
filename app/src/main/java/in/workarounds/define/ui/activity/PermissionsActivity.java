@@ -158,7 +158,6 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
             Intent intent = new Intent(this, SplashActivity.class);
             startActivity(intent);
         }
-        finish();
     }
 
     private void createPermissions(){

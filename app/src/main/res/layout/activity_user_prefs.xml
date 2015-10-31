@@ -5,8 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/theme_primary"
+        android:theme="@style/MyToolBar">
+
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            tools:text="Define" />
+
+        <in.workarounds.typography.Button
+            android:id="@+id/btn_next"
+            style="?android:borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:text="@string/menu_next"
+            android:textColor="@color/white" />
+
+    </android.support.v7.widget.Toolbar>
 
     <in.workarounds.typography.TextView
         android:id="@+id/tv_pref_name_notification"

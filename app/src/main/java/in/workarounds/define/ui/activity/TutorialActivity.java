@@ -40,7 +40,6 @@ public class TutorialActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        PrefUtils.setTutorialDone(true, this);
     }
 
     @Override
@@ -56,9 +55,9 @@ public class TutorialActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void next(){
+        PrefUtils.setTutorialDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void onCopyClicked(){

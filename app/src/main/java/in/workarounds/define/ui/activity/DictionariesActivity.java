@@ -200,8 +200,6 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         statusTv.setVisibility(View.GONE);
 
         setDictionaryFlags();
-        //Set the user has visited dictionaries screen
-        PrefUtils.setDictionariesDone(true, this);
     }
 
     @Override
@@ -419,8 +417,9 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     }
 
     public void next(){
+        //Set the user has visited dictionaries screen
+        PrefUtils.setDictionariesDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
-        finish();
     }
 }
