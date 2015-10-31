@@ -333,7 +333,7 @@ public class UnzipService extends Service {
         // TODO add pending intent ?
         mNotificationBuilder.setContentTitle(getResources().getString(R.string.unzip_noti_finish_title));
         mNotificationBuilder.setContentText(fileHelper.downloadFileName());
-        mNotificationBuilder.setProgress(100, 100, false);
+        mNotificationBuilder.setProgress(0, 0, false);
         mNotifyManager.notify(id, mNotificationBuilder.build());
     }
 

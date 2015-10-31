@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <in.workarounds.typography.TextView
+        android:id="@+id/tv_permission_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_large"
+        android:textSize="@dimen/font_medium"
+        android:textColor="@color/black"
+        tools:text="@string/permission_title_draw_over_other_apps"
+        />
+
+    <in.workarounds.typography.TextView
+        android:id="@+id/tv_optional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_smaller"
+        android:text="@string/permission_optional"
+        android:textColor="@color/light_gray"
+        android:layout_toRightOf="@id/tv_permission_title"
+        android:layout_toEndOf="@id/tv_permission_title"
+        android:layout_alignBaseline="@id/tv_permission_title"
+        />
+
+    <in.workarounds.typography.TextView
+        android:id="@+id/tv_permission_rationale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_permission_title"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_large"
+        android:textSize="@dimen/font_small"
+        android:textColor="@color/medium_gray"
+        tools:text="@string/permission_rationale_draw_over_other_apps"
+        />
+
+    <in.workarounds.typography.Button
+        android:id="@+id/button_grant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_permission_rationale"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        style="?android:borderlessButtonStyle"
+        android:text="@string/button_grant"
+        android:textColor="@color/theme_accent"
+        />
+</RelativeLayout>

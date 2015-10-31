@@ -21,6 +21,12 @@ public class SplashActivity extends AppCompatActivity{
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        if(!PermissionsActivity.areRequiredPermissionGranted(this)){
+            Intent permissions = PermissionsActivity.fromSplash(this);
+            startActivity(permissions);
+            finish();
+            return;
+        }
 
         if(!PrefUtils.getDictionariesDone(this)){
             Intent dictionaries = new Intent(this, DictionariesActivity.class);
