@@ -26,6 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Random;
+
 import javax.inject.Inject;
 
 import in.workarounds.define.R;
@@ -76,7 +78,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     private AsyncTask livioTask;
     private AsyncTask wordnetTask;
     private AlertDialog permissionDialog;
-    private static final String testWord = "define";
+    private static final String[] testWords = new String[]{"define","pure","heavy","beat","apple","test"};
     @Inject
     WordnetDictionary wordnetDictionary;
     @Inject
@@ -141,7 +143,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         @Override
         protected Void doInBackground(String... params) {
             try {
-                livioDictionary.results(testWord);
+                livioDictionary.results(testWords[0]);
             } catch (DictionaryException exception) {
                 livioException = exception;
             }
@@ -166,7 +168,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         @Override
         protected Void doInBackground(String... params) {
             try {
-                wordnetDictionary.results(testWord);
+                wordnetDictionary.results(testWords[new Random().nextInt(5)]);
             } catch (DictionaryException exception) {
                 wordnetException = exception;
             }
