@@ -30,7 +30,6 @@ public class SplashActivity extends AppCompatActivity{
 
         if(!PrefUtils.getDictionariesDone(this)){
             Intent dictionaries = new Intent(this, DictionariesActivity.class);
-            dictionaries.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(dictionaries);
             finish();
             return;

@@ -423,5 +423,6 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         PrefUtils.setDictionariesDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
+        finishOnStop = true;
     }
 }
