@@ -130,6 +130,7 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         PrefUtils.setSettingsDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
+        finishOnStop = true;
     }
 
     private void demoNotificationMode(){

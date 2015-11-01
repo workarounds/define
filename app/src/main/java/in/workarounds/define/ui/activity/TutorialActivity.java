@@ -58,6 +58,7 @@ public class TutorialActivity extends BaseActivity implements View.OnClickListen
         PrefUtils.setTutorialDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
+        finishOnStop = true;
     }
 
     public void onCopyClicked(){
