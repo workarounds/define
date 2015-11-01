@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -86,6 +87,17 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
     @Override
     protected String getToolbarTitle() {
         return getString(R.string.permissions_page_title);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if(!isFromSplash()){
+            ActionBar actionBar = getSupportActionBar();
+            if(actionBar != null){
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
     }
 
     @Override
