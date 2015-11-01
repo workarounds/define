@@ -18,6 +18,7 @@ import in.workarounds.define.service.ClipboardService;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     TextView titleTextView;
+    boolean finishOnStop = false;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -59,6 +60,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         startClipboardService();
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(finishOnStop){
+            finish();
+        }
     }
 
     /**

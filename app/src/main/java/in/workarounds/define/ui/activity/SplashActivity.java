@@ -23,7 +23,6 @@ public class SplashActivity extends AppCompatActivity{
 
         if(!PermissionsActivity.areRequiredPermissionGranted(this)){
             Intent permissions = PermissionsActivity.fromSplash(this);
-            permissions.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(permissions);
             finish();
             return;

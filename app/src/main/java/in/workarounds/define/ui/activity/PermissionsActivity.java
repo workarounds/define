@@ -158,6 +158,7 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
         if(isFromSplash()) {
             Intent intent = new Intent(this, SplashActivity.class);
             startActivity(intent);
+            finishOnStop = true;
         }
     }
 
