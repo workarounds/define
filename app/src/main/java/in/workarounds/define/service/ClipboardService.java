@@ -81,9 +81,6 @@ public class ClipboardService extends Service implements
 
     private void startActionResolver(String text) {
         int state = PortalManager.getPortalState(this, MainPortal.class);
-        if(state == State.ACTIVE){
-            return;
-        }
 
         @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(this);
         if(notifyMode == UserPrefActivity.OPTION_SILENT || notifyMode == UserPrefActivity.OPTION_PRIORITY) {
@@ -91,7 +88,9 @@ public class ClipboardService extends Service implements
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
                     ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
 
-            NotificationUtils.INSTANCE.sendMeaningNotification(text, SILENT_NOTIFICATION_ID, priority);
+            if(state != State.ACTIVE) {
+                NotificationUtils.INSTANCE.sendMeaningNotification(text, SILENT_NOTIFICATION_ID, priority);
+            }
 
             if(PrefUtils.getNotificationAutoHideFlag(this)) {
                 notificationHandler.removeCallbacks(notificationHandlerRunnable);
