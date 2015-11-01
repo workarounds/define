@@ -36,7 +36,7 @@ public class PermissionsAdapter extends RecyclerView.Adapter<PermissionsAdapter.
         final Permission permission = permissions.get(position);
         holder.title.setText(permission.title);
         holder.rationale.setText(permission.rationale);
-        if(permission.granted && !permission.given){
+        if(permission.granted || permission.given){
             holder.grant.setEnabled(false);
             holder.grant.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.medium_gray));
             holder.grant.setText(R.string.button_granted);
