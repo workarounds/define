@@ -28,6 +28,7 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.service.ClipboardService;
+import in.workarounds.define.ui.activity.DashboardActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
@@ -188,9 +189,16 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     }
 
     private void initButtons() {
+        findViewById(R.id.button_define).setOnClickListener(this);
         findViewById(R.id.button_search).setOnClickListener(this);
         findViewById(R.id.button_copy).setOnClickListener(this);
         findViewById(R.id.button_wiki).setOnClickListener(this);
+    }
+
+    private void openDefineApp(){
+        Intent intent = new Intent(this, DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void copySelectedText() {
@@ -203,19 +211,24 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     }
 
     private void searchSelectedText() {
-        if(TextUtils.isEmpty(selectedText)) return;
-
+        String textToSearch = mClipText;
+        if(!TextUtils.isEmpty(selectedText)){
+            textToSearch = selectedText;
+        }
         Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-        intent.putExtra(SearchManager.QUERY, selectedText);
+        intent.putExtra(SearchManager.QUERY, textToSearch);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     private void wikiSelectedText() {
-        if(TextUtils.isEmpty(selectedText)) return;
+        String textToSearch = mClipText;
+        if(!TextUtils.isEmpty(selectedText)){
+            textToSearch = selectedText;
+        }
         Intent intent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://en.m.wikipedia.org/wiki/" + selectedText));
+                Uri.parse("https://en.m.wikipedia.org/wiki/" + textToSearch));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
@@ -237,6 +250,10 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     public void onClick(View v) {
        int id = v.getId();
         switch (id) {
+            case R.id.button_define:
+                openDefineApp();
+                finish();
+                break;
             case R.id.button_search:
                 searchSelectedText();
                 finish();
