@@ -122,7 +122,7 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
     private void showPermissionDialog(final String identifier){
         AlertDialog permissionDialog = new AlertDialog.Builder(this)
                 .setTitle("Permission")
-                .setMessage(getPermissionRequestMessage(identifier))
+                .setMessage(new Permission(identifier).requestMessage)
                 .setPositiveButton(R.string.button_go_to_settings, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -164,32 +164,20 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
     private void createPermissions(){
         permissions = new ArrayList<>(REQUIRED.length + OPTIONAL.length);
         for(String identifier : REQUIRED){
-            Permission permission = new Permission(
-                    identifier,
-                    getPermissionTitle(identifier),
-                    getPermissionRationale(identifier)
-            );
+            Permission permission = new Permission(identifier);
             permission.required = true;
             permissions.add(permission);
         }
 
         for(String identifier : OPTIONAL){
-            Permission permission = new Permission(
-                    identifier,
-                    getPermissionTitle(identifier),
-                    getPermissionRationale(identifier)
-            );
+            Permission permission = new Permission(identifier);
             permission.required = isPermissionInIntent(identifier);
             permissions.add(permission);
         }
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             for (String identifier : GIVEN) {
-                Permission permission = new Permission(
-                        identifier,
-                        getPermissionTitle(identifier),
-                        getPermissionRationale(identifier)
-                );
+                Permission permission = new Permission(identifier);
                 permission.required = false;
                 permission.given = true;
                 permissions.add(permission);
@@ -306,54 +294,30 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
         return granted;
     }
 
-    private static @StringRes int getPermissionTitle(String identifier){
-        if(DRAW_OVER_OTHER_APPS.equals(identifier)){
-            return R.string.permission_title_draw_over_other_apps;
-        } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(identifier)){
-            return R.string.permission_title_storage;
-        } else if(Manifest.permission.READ_PHONE_STATE.equals(identifier)){
-            return R.string.permission_title_phone;
-        } else {
-            return R.string.permission_title_unknown;
-        }
-    }
-
-    private static @StringRes int getPermissionRationale(String identifier){
-        if(DRAW_OVER_OTHER_APPS.equals(identifier)){
-            return R.string.permission_rationale_draw_over_other_apps;
-        } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(identifier)){
-            return R.string.permission_rationale_storage;
-        } else if(Manifest.permission.READ_PHONE_STATE.equals(identifier)){
-            return R.string.permission_rationale_phone;
-        } else {
-            return R.string.permission_rationale_unknown;
-        }
-    }
-
-    private static @StringRes int getPermissionRequestMessage(String identifier){
-        if(DRAW_OVER_OTHER_APPS.equals(identifier)){
-            return R.string.permission_request_message_draw_over_other_apps;
-        } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(identifier)){
-            return R.string.permission_request_message_storage;
-        } else if(Manifest.permission.READ_PHONE_STATE.equals(identifier)){
-            return R.string.permission_request_message_phone;
-        } else {
-            return R.string.permission_request_message_unknown;
-        }
-    }
-
     public static class Permission{
         public String identifier;
         public @StringRes int title;
         public @StringRes int rationale;
+        public @StringRes int requestMessage;
         public boolean granted = false;
         public boolean required = false;
         public boolean given = false;
 
-        public Permission(String identifier, @StringRes int title, @StringRes int rationale){
+        Permission(String identifier){
             this.identifier = identifier;
-            this.title = title;
-            this.rationale = rationale;
+            if(DRAW_OVER_OTHER_APPS.equals(identifier)){
+                this.title = R.string.permission_title_draw_over_other_apps;
+                this.rationale = R.string.permission_rationale_draw_over_other_apps;
+                this.requestMessage = R.string.permission_request_message_draw_over_other_apps;
+            } else if(Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(identifier)){
+                this.title = R.string.permission_title_storage;
+                this.rationale = R.string.permission_rationale_storage;
+                this.requestMessage = R.string.permission_request_message_storage;
+            } else if(Manifest.permission.READ_PHONE_STATE.equals(identifier)){
+                this.title = R.string.permission_title_phone;
+                this.rationale = R.string.permission_rationale_phone;
+                this.requestMessage = R.string.permission_request_message_phone;
+            }
         }
     }
 }
