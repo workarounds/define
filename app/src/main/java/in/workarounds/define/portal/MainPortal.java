@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import java.text.BreakIterator;
@@ -25,12 +27,12 @@ import java.util.List;
 import in.workarounds.define.R;
 import in.workarounds.define.base.MeaningPagerAdapter;
 import in.workarounds.define.base.MeaningPresenter;
+import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.ui.activity.DashboardActivity;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
 import in.workarounds.portal.Portal;
@@ -41,6 +43,8 @@ import in.workarounds.portal.Portal;
 public class MainPortal extends Portal implements ComponentProvider, View.OnClickListener {
     private static final String TAG = LogUtils.makeLogTag(MainPortal.class);
     public static final String BUNDLE_KEY_CLIP_TEXT = "bundle_key_clip_text";
+    private static final int SELECTION_CARD_ANIMATION_TIME = 350;
+    private static final int MEANING_PAGE_ANIMATION_TIME = 350;
     private String mClipText;
 
     private SelectableTextView mTvClipText;
@@ -50,6 +54,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
 
     private View mPortalContainer;
     private View meaningPagesContainer;
+    private View selectionCard;
     private PortalComponent component;
 
     private List<MeaningPresenter> presenters = new ArrayList<>();
@@ -106,6 +111,8 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         mPortalContainer = findViewById(R.id.rl_main_portal_container);
         mTvClipText = (SelectableTextView) findViewById(R.id.tv_clip_text);
         meaningPagesContainer = findViewById(R.id.ll_meaning_pages_container);
+        selectionCard = findViewById(R.id.cv_action_card);
+        selectionCard.setVisibility(View.GONE);
 //        if (meaningPagesContainer != null) {
 //            meaningPagesContainer.setVisibility(View.INVISIBLE);
 //        }
@@ -130,22 +137,65 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
             @Override
             public void onWordSelected(String word) {
                 selectedText = word;
-                meaningPagesContainer.setVisibility(View.VISIBLE);
+                animateMeaningsContainer();
                 for (MeaningPresenter presenter : presenters) {
                     presenter.onWordUpdated(word);
                 }
             }
         });
         initButtons();
+        selectionCard.post(new Runnable() {
+            @Override
+            public void run() {
+                animateSelectionCard();
+            }
+        });
         //pre-drawing the meaning container to reduce lag
-        meaningPagesContainer.postDelayed(new Runnable() {
+        selectionCard.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(meaningPagesContainer.getVisibility() == View.GONE) {
                     meaningPagesContainer.setVisibility(View.INVISIBLE);
                 }
             }
-        }, 150);
+        }, SELECTION_CARD_ANIMATION_TIME + 50);
+    }
+
+    private void animateSelectionCard(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int translation = getResources().getDimensionPixelSize(R.dimen.bubble_card_height);
+            selectionCard.setAlpha(0);
+            selectionCard.setTranslationY(-translation);
+            selectionCard.setVisibility(View.VISIBLE);
+            selectionCard.animate()
+                    .alpha(1)
+                    .withLayer()
+                    .translationY(0)
+                    .setDuration(SELECTION_CARD_ANIMATION_TIME)
+                    .setInterpolator(new DecelerateInterpolator(3))
+                    .start();
+        } else {
+            selectionCard.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void animateMeaningsContainer(){
+        if(meaningPagesContainer.getVisibility() != View.VISIBLE){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                meaningPagesContainer.setAlpha(0);
+                meaningPagesContainer.setTranslationY(meaningPagesContainer.getHeight() / 3);
+                meaningPagesContainer.setVisibility(View.VISIBLE);
+                meaningPagesContainer.animate()
+                        .alpha(1)
+                        .withLayer()
+                        .translationY(0)
+                        .setDuration(MEANING_PAGE_ANIMATION_TIME)
+                        .setInterpolator(new DecelerateInterpolator(4))
+                        .start();
+            } else {
+                meaningPagesContainer.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void extractClipText(Bundle bundle) {
