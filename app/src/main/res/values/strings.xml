@@ -117,4 +117,5 @@
     <string name="overlay_permission_notification">Need additional permissions to show meanings</string>
     <string name="overlay_permission_rationale">Define needs this permission to show the meanings on top of the current app, without having to navigate you from it.</string>
     <string name="overlay_permission_granted_notification">Permission granted, tap to define</string>
+    <string name="foreground_notification">Showing meanings. Tap to close</string>
 </resources>
