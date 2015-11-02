@@ -157,8 +157,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 installLivioButton.setOnClickListener(DictionariesActivity.this);
                 installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.theme_accent));
             } else {
-                installLivioButton.setImageResource(R.drawable.ic_tick);
-                installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
+                setLivioTick();
             }
         }
     }
@@ -183,10 +182,19 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 downloadButton.setOnClickListener(DictionariesActivity.this);
                 cancelButton.setOnClickListener(DictionariesActivity.this);
             }else {
-                downloadButton.setImageResource(R.drawable.ic_tick);
-                downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
+                setWordnetTick();
             }
         }
+    }
+
+    private void setWordnetTick(){
+        downloadButton.setImageResource(R.drawable.ic_tick);
+        downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
+    }
+
+    private void setLivioTick(){
+        installLivioButton.setImageResource(R.drawable.ic_tick);
+        installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
     }
 
     @Override
@@ -292,7 +300,10 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
             unzipProgress.setProgress(progress);
         } else if(progress == 100) {
             unzipProgress.setVisibility(View.GONE);
-            statusTv.setText("Finished downloading dictionary");
+            downloadProgress.setVisibility(View.GONE);
+            statusTv.setVisibility(View.GONE);
+            downloadButton.setVisibility(View.VISIBLE);
+            setWordnetTick();
         }
     }
 
@@ -381,7 +392,12 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0]);
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initWordnetDownload();
+                    try {
+                        livioDictionary.results(testWords[0]);
+                        setLivioTick();
+                    } catch (DictionaryException exception) {
+                        initWordnetDownload();
+                    }
                 }else if(!showRationale){ // when user clicked never allow before
                     requestPermissionForStorageAfterNeverAllow();
                 } else {
