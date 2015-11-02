@@ -35,13 +35,13 @@
             android:layout_height="@dimen/icon_small"
             android:padding="@dimen/padding_regular"
             android:src="@drawable/ic_search"
-            android:tint="@color/medium_gray"
+            android:tint="@color/theme_accent"
             />
     </LinearLayout>
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="0.15"/>
     <LinearLayout
         android:id="@+id/button_wiki"
         android:layout_width="wrap_content"
@@ -54,13 +54,13 @@
             android:layout_height="@dimen/icon_small"
             android:padding="6dp"
             android:src="@drawable/ic_wikipedia"
-            android:tint="@color/medium_gray"
+            android:tint="@color/theme_accent"
             />
     </LinearLayout>
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="0.15"/>
     <LinearLayout
         android:id="@+id/button_copy"
         android:layout_width="wrap_content"
@@ -73,11 +73,45 @@
             android:layout_height="@dimen/icon_small"
             android:padding="10dp"
             android:src="@drawable/ic_content_copy"
-            android:tint="@color/medium_gray"
+            android:tint="@color/theme_accent"
             />
     </LinearLayout>
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="0.15"/>
+    <LinearLayout
+        android:id="@+id/button_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        >
+        <ImageView
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
+            android:padding="10dp"
+            android:src="@drawable/ic_share"
+            android:tint="@color/theme_accent"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.15"/>
+    <LinearLayout
+        android:id="@+id/button_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        >
+        <ImageView
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
+            android:padding="@dimen/padding_regular"
+            android:src="@drawable/ic_settings"
+            android:tint="@color/theme_accent"
+            />
+    </LinearLayout>
 </LinearLayout>
