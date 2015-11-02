@@ -3,6 +3,7 @@ package in.workarounds.define.ui.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringRes;
@@ -98,6 +99,11 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         RadioButton priority = (RadioButton) findViewById(R.id.rb_option_priority);
         CheckBox notificationAutoHide = (CheckBox) findViewById(R.id.notification_autocancel_checkbox);
         description = (TextView) findViewById(R.id.tv_mode_description);
+
+        boolean belowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+        if(belowLollipop){
+            priority.setVisibility(View.GONE);
+        }
 
         int notifyMode = PrefUtils.getNotifyMode(this);
         switch(notifyMode){

@@ -2,6 +2,7 @@ package in.workarounds.define.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.annotation.Nullable;
 
 import in.workarounds.define.api.Constants;
@@ -41,7 +42,14 @@ public class PrefUtils {
     }
 
     public static int getNotifyMode( Context context) {
-        return getSharedPreferences(context).getInt(KEY_NOTIFY_MODE, DEFAULT_NOTIFY_MODE);
+        boolean belowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+        int defaultNotifyMode = belowLollipop ? UserPrefActivity.OPTION_DIRECT : DEFAULT_NOTIFY_MODE;
+        int notifyMode = getSharedPreferences(context).getInt(KEY_NOTIFY_MODE, defaultNotifyMode);
+        if(belowLollipop && notifyMode == UserPrefActivity.OPTION_PRIORITY){
+            setNotifyMode(UserPrefActivity.OPTION_DIRECT, context);
+            return UserPrefActivity.OPTION_DIRECT;
+        }
+        return notifyMode;
     }
 
     public static long getDownloadId(String key, Context context) {
