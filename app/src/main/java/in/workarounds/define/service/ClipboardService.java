@@ -25,7 +25,6 @@ public class ClipboardService extends Service implements
     private static boolean isRunning = false;
     private Handler notificationHandler;
     private Runnable notificationHandlerRunnable;
-    public static final int SILENT_NOTIFICATION_ID = 201;
 
     @Override
     public void onCreate() {
@@ -87,9 +86,10 @@ public class ClipboardService extends Service implements
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
                     ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
 
-            NotificationUtils.INSTANCE.sendMeaningNotification(text, SILENT_NOTIFICATION_ID, priority);
+            NotificationUtils.INSTANCE.sendMeaningNotification(text, priority);
 
             if(PrefUtils.getNotificationAutoHideFlag(this)) {
+                NotificationUtils.INSTANCE.cancelBackupNotification();
                 notificationHandler.removeCallbacks(notificationHandlerRunnable);
                 notificationHandler.postDelayed(notificationHandlerRunnable, 10000);
             }
@@ -109,7 +109,7 @@ public class ClipboardService extends Service implements
         notificationHandlerRunnable =  new Runnable() {
             @Override
             public void run() {
-                NotificationUtils.INSTANCE.getNotificationManager().cancel(SILENT_NOTIFICATION_ID);
+                NotificationUtils.INSTANCE.getNotificationManager().cancel(NotificationUtils.SILENT_NOTIFICATION_ID);
             }
         };
     }

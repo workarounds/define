@@ -5,7 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,7 +31,6 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.ui.activity.DashboardActivity;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.LogUtils;
@@ -105,8 +104,13 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     @Override
     protected WindowManager.LayoutParams getLayoutParams() {
         WindowManager.LayoutParams params = super.getLayoutParams();
-        params.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
         return params;
+    }
+
+    public void finishWithNotification(){
+        NotificationUtils.INSTANCE.sendSilentBackupNotification(mTvClipText.getText().toString());
+        finish();
     }
 
     private void initViews() {
@@ -395,9 +399,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     // called when someone is ringing to this phone
-                    NotificationUtils.INSTANCE.sendSilentMeaningNotification(mTvClipText.getText().toString(),
-                            ClipboardService.SILENT_NOTIFICATION_ID);
-                    finish();
+                    finishWithNotification();
                     break;
             }
         }

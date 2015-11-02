@@ -19,6 +19,8 @@ import in.workarounds.portal.Portal;
 public enum NotificationUtils {
 
     INSTANCE;
+    public static final int SILENT_NOTIFICATION_ID = 201;
+    public static final int SILENT_BACKUP_NOTIFICATION_ID = 202;
     private NotificationManager notificationManager;
     private Context context;
 
@@ -36,15 +38,27 @@ public enum NotificationUtils {
         return notificationManager;
     }
 
-    public void sendSilentMeaningNotification(String text,int notificationId){
-        sendMeaningNotification(text, notificationId, NotificationCompat.PRIORITY_DEFAULT);
+    public void cancelBackupNotification(){
+        getNotificationManager().cancel(SILENT_BACKUP_NOTIFICATION_ID);
     }
 
-    public void sendPriorityMeaningNotification(String text,int notificationId){
-        sendMeaningNotification(text, notificationId, NotificationCompat.PRIORITY_HIGH);
+    public void sendSilentBackupNotification(String text){
+        sendNotification(text, SILENT_BACKUP_NOTIFICATION_ID, NotificationCompat.PRIORITY_DEFAULT);
     }
 
-    public void sendMeaningNotification(String text,int notificationId,int priority){
+    public void sendSilentMeaningNotification(String text){
+        sendNotification(text,SILENT_NOTIFICATION_ID, NotificationCompat.PRIORITY_DEFAULT);
+    }
+
+    public void sendPriorityMeaningNotification(String text){
+        sendNotification(text,SILENT_NOTIFICATION_ID, NotificationCompat.PRIORITY_HIGH);
+    }
+
+    public void sendMeaningNotification(String text,int priority){
+        sendNotification(text,SILENT_NOTIFICATION_ID, priority);
+    }
+
+    public void sendNotification(String text,int notificationid,int priority){
         int color = ContextCompat.getColor(getContext(), R.color.theme_primary);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getContext())
@@ -72,6 +86,6 @@ public enum NotificationUtils {
                 );
         mBuilder.setContentIntent(resultPendingIntent);
 
-        getNotificationManager().notify(notificationId, mBuilder.build());
+        getNotificationManager().notify(notificationid, mBuilder.build());
     }
 }
