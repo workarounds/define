@@ -84,7 +84,7 @@
         android:padding="@dimen/padding_medium"
         tools:text="@string/notify_tutorial_priority"
         />
-    <in.workarounds.typography.Button
+    <in.workarounds.typography.AppCompatButton
         android:id="@+id/button_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

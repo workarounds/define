@@ -18,15 +18,15 @@
     <string name="copy">copy</string>
     <string name="close">CLOSE</string>
 
-    <string name="btn_download_data">Download Data</string>
-    <string name="btn_cancel_download">Cancel Download</string>
-    <string name="btn_find_meaning">Find Meaning</string>
+    <string name="btn_download_data">DOWNLOAD DATA</string>
+    <string name="btn_cancel_download">CANCEL DOWNLOAD</string>
+    <string name="btn_find_meaning">FIND MEANING</string>
     <string name="hint_type_here">Type the word here</string>
 
     <string name="label_synonyms">synonyms : </string>
     
-    <string name="btn_set_american">American</string>
-    <string name="btn_set_british">British</string>
+    <string name="btn_set_american">AMERICAN</string>
+    <string name="btn_set_british">BRITISH</string>
 
     <string name="hint_multiple_words_selected">Multiple words selected. Click to choose a single word</string>
     <string name="hint_no_meaning">No meaning found</string>
@@ -46,7 +46,7 @@
     <string name="unzip_noti_finish_title">Finished unzipping dictionary</string>
     <string name="title_livio_dictionary">Livio Dictionary</string>
     <string name="description_livio_dictionary">The free offline English dictionary app based on English Wiktionary</string>
-    <string name="btn_install_livio">Install Livio</string>
+    <string name="btn_install_livio">INSTALL LIVIO</string>
     <string name="exception_livio">Livio is not installed on your device</string>
     <string name="exception_urban">Unable to fetch data from Urban Dictionary servers. Please check your network connection.</string>
     <string name="exception_wordnet">Unable to load wordnet dictionary. Make sure you have downloaded wordnet dictionary</string>
@@ -56,7 +56,7 @@
     <string name="description_urban_dictionary">Urban Dictionary is a crowdsourced online dictionary of slang words and phrases. It requires internet to use this dictionary.</string>
     <string name="get_offline_dictionaries">Get offline dictionaries</string>
     <string name="online_dictionaries">Online dictionaries</string>
-    <string name="btn_download_wordnet_dictionary">Download Wordnet</string>
+    <string name="btn_download_wordnet_dictionary">DOWNLOAD WORDNET</string>
     <string name="pref_name_notification">How would you like define to notify you?</string>
     <string name="pref_other_settings">Other settings</string>
     <string name="option_silent">Silent Notification</string>
@@ -76,10 +76,10 @@
 
     <string name="menu_next">Next</string>
 
-    <string name="button_test">Test</string>
-    <string name="button_search">Search</string>
-    <string name="button_copy">Copy</string>
-    <string name="button_wiki">Wiki</string>
+    <string name="button_test">TEST</string>
+    <string name="button_search">SEARCH</string>
+    <string name="button_copy">COPY</string>
+    <string name="button_wiki">WIKI</string>
 
     <string name="notify_tutorial_silent">Most unobtrusive setting. Whenever a text is copied a silent notification is shown. Tap on notification to define</string>
     <string name="notify_tutorial_priority">Recommended setting for Lollipop and above. Whenever a text is copied a priority notification is shown. Tap on notification to define</string>
@@ -90,11 +90,11 @@
     <!-- Permissions-->
     <string name="permissions_page_description">For optimal performance we need the following permissions. Grant the required permissions for the app to function as expected</string>
     <string name="permissions_page_title">Permissions</string>
-    <string name="button_grant">Grant permission</string>
-    <string name="button_granted">Granted</string>
-    <string name="button_lollipop">Lollipop and below</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_go_to_settings">Go to settings</string>
+    <string name="button_grant">GRANT PERMISSION</string>
+    <string name="button_granted">GRANTED</string>
+    <string name="button_lollipop">LOLLIPOP AND BELOW</string>
+    <string name="button_cancel">CANCEL</string>
+    <string name="button_go_to_settings">GO TO SETTINGS</string>
     <string name="permission_required">(required)</string>
     <string name="permission_optional">(optional)</string>
     <string name="permission_title_draw_over_other_apps">Draw over other apps</string>

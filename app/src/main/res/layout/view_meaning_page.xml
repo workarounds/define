@@ -39,9 +39,9 @@
             android:textColor="@color/light_gray"
             android:visibility="gone" />
 
-        <in.workarounds.typography.AppCompatButton
+        <in.workarounds.typography.Button
             android:id="@+id/btn_download_wordnet"
-            style="@style/ColoredButton"
+            style="@style/PortalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_load_status"
@@ -50,9 +50,9 @@
             android:text="@string/btn_download_wordnet_dictionary"
             android:visibility="gone" />
 
-        <in.workarounds.typography.AppCompatButton
+        <in.workarounds.typography.Button
             android:id="@+id/btn_cancel_download_wordnet"
-            style="@style/ColoredButton"
+            style="@style/PortalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_load_status"
