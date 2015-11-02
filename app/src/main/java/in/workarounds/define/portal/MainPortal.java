@@ -16,6 +16,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
@@ -121,7 +122,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         mPortalContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                animateOutAndFinish();
             }
         });
         pager = (ViewPager) findViewById(R.id.vp_pages);
@@ -138,7 +139,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
             @Override
             public void onWordSelected(String word) {
                 selectedText = word;
-                animateMeaningsContainer();
+                animateMeaningsContainerIn();
                 for (MeaningPresenter presenter : presenters) {
                     presenter.onWordUpdated(word);
                 }
@@ -148,7 +149,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         selectionCard.post(new Runnable() {
             @Override
             public void run() {
-                animateSelectionCard();
+                animateSelectionCardIn();
             }
         });
         //pre-drawing the meaning container to reduce lag
@@ -162,7 +163,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         }, SELECTION_CARD_ANIMATION_TIME + 50);
     }
 
-    private void animateSelectionCard(){
+    private void animateSelectionCardIn(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             int translation = getResources().getDimensionPixelSize(R.dimen.bubble_card_height);
             selectionCard.setAlpha(0);
@@ -180,7 +181,47 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         }
     }
 
-    private void animateMeaningsContainer(){
+    private void animateOutAndFinish(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int translation = getResources().getDimensionPixelSize(R.dimen.bubble_card_height);
+            ViewPropertyAnimator selectionCardAnimator = selectionCard.animate()
+                    .alpha(0)
+                    .withLayer()
+                    .translationY(-translation)
+                    .setDuration(SELECTION_CARD_ANIMATION_TIME)
+                    .setInterpolator(new DecelerateInterpolator(3));
+            ViewPropertyAnimator meaningPageAnimator = null;
+            if(meaningPagesContainer.getVisibility() == View.VISIBLE){
+                meaningPageAnimator = meaningPagesContainer.animate()
+                        .alpha(0)
+                        .withLayer()
+                        .translationY(meaningPagesContainer.getHeight() / 3)
+                        .setDuration(MEANING_PAGE_ANIMATION_TIME);
+            }
+            selectionCardAnimator.start();
+            if(meaningPageAnimator != null) {
+                meaningPageAnimator.start();
+            }
+            int animTime = Math.max(SELECTION_CARD_ANIMATION_TIME, MEANING_PAGE_ANIMATION_TIME);
+            mPortalContainer.animate()
+                    .alpha(0)
+                    .withEndAction(finishRunnable)
+                    .setDuration(animTime)
+                    .withLayer()
+                    .start();
+        } else {
+            finish();
+        }
+    }
+
+    private Runnable finishRunnable = new Runnable() {
+        @Override
+        public void run() {
+            finish();
+        }
+    };
+
+    private void animateMeaningsContainerIn(){
         if(meaningPagesContainer.getVisibility() != View.VISIBLE){
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 meaningPagesContainer.setAlpha(0);
