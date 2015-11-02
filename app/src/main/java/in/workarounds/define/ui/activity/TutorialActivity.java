@@ -20,7 +20,13 @@ public class TutorialActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_tutorial);
 
         findViewById(R.id.button_copy).setOnClickListener(this);
-        findViewById(R.id.btn_next).setOnClickListener(this);
+
+        View next = findViewById(R.id.btn_next);
+        next.setOnClickListener(this);
+
+        if(PrefUtils.getTutorialDone(this)){
+            next.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -17,7 +17,7 @@ public class PrefUtils {
     public static final String KEY_NOTIFY_MODE = "key_notify_mode";
     public static final String KEY_TUTORIAL_DONE = "key_tutorial_done";
     public static final String KEY_DICTIONARIES_DONE = "key_dictionaries_done";
-    public static final String KEY_SETTINGS_DONE = "key_settings_done";
+    public static final String KEY_SORT_DONE = "key_sort_done";
     public static final String KEY_DICTIONARY_ORDER = "key_dictionary_order";
     private static final String KEY_DICTIONARY_VISIBILITY = "key_dictionary_visibility";
     private static final String KEY_NOTIFICATION_AUTO_HIDE = "key_notification_auto_hide";
@@ -84,15 +84,15 @@ public class PrefUtils {
         return prefKey != null && getSharedPreferences(context).getBoolean(prefKey, false);
     }
 
-    public static void setSettingsDone(boolean done, Context context){
+    public static void setSortDone(boolean done, Context context){
         getSharedPreferences(context)
                 .edit()
-                .putBoolean(KEY_SETTINGS_DONE, done)
+                .putBoolean(KEY_SORT_DONE, done)
                 .apply();
     }
 
-    public static boolean getSettingsDone(Context context){
-        return getSharedPreferences(context).getBoolean(KEY_SETTINGS_DONE, false);
+    public static boolean getSortDone(Context context){
+        return getSharedPreferences(context).getBoolean(KEY_SORT_DONE, false);
     }
 
     public static void setTutorialDone(boolean done, Context context){

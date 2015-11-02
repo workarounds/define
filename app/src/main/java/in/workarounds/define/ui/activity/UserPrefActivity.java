@@ -34,7 +34,7 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         init();
 
         View nextButton = findViewById(R.id.btn_next);
-        if(!PrefUtils.getSettingsDone(this)){
+        if(!PrefUtils.getSortDone(this)){
             nextButton.setVisibility(View.VISIBLE);
         } else {
             nextButton.setVisibility(View.GONE);
@@ -133,7 +133,7 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void next(){
-        PrefUtils.setSettingsDone(true, this);
+        PrefUtils.setSortDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
         finishOnStop = true;

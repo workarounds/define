@@ -3,6 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <in.workarounds.typography.TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reorder_or_remove_dictionaries"
+        android:textColor="@color/black"
+        android:padding="@dimen/padding_large"
+        android:textSize="@dimen/font_regular"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_dictionaries"
