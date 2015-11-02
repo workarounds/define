@@ -125,7 +125,8 @@ public class PermissionsActivity extends BaseActivity implements PermissionsAdap
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         String identifier = permissions[0];
-        if(!ActivityCompat.shouldShowRequestPermissionRationale(this, identifier)){
+        boolean granted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+        if(!ActivityCompat.shouldShowRequestPermissionRationale(this, identifier) && !granted){
             showPermissionDialog(identifier);
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
