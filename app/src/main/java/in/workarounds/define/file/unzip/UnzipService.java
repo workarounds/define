@@ -102,7 +102,7 @@ public class UnzipService extends Service {
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon(R.drawable.ic_stat_name);
+        mNotificationBuilder.setSmallIcon(R.drawable.ic_notification_icon);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mNotificationBuilder.setColor(ContextCompat.getColor(this, R.color.theme_primary));
         }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
@@ -44,11 +45,13 @@ public enum NotificationUtils {
     }
 
     public void sendMeaningNotification(String text,int notificationId,int priority){
+        int color = ContextCompat.getColor(getContext(), R.color.theme_primary);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getContext())
                         .setAutoCancel(true)
                         .setSmallIcon(R.drawable.ic_notification_icon)
                         .setPriority(priority)
+                        .setColor(color)
                         .setVibrate(new long[0]) //mandatory for high priority,setting no vibration
                         .setContentTitle(getContext().getString(R.string.app_name))
                         .setContentText(getContext().getString(R.string.notification_content));
