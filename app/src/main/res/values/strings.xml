@@ -111,4 +111,10 @@
     <string name="permission_title_unknown">Unknown</string>
     <string name="permission_rationale_unknown">We do not need this</string>
     <string name="permission_request_message_unknown">Ignore this message</string>
+
+    <!-- Portal library strings -->
+    <string name="overlay_permission_denied">Draw over other apps permission denied. Define will not work. Please go to the app to change this.</string>
+    <string name="overlay_permission_notification">Need additional permissions to show meanings</string>
+    <string name="overlay_permission_rationale">Define needs this permission to show the meanings on top of the current app, without having to navigate you from it.</string>
+    <string name="overlay_permission_granted_notification">Permission granted, tap to define</string>
 </resources>
