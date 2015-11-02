@@ -1,5 +1,6 @@
 package in.workarounds.define.wordnet;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.IntDef;
@@ -23,6 +24,7 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.helper.DownloadResolver;
 import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.portal.PerPortal;
+import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
 
@@ -36,6 +38,7 @@ public class WordnetPresenter implements MeaningPresenter{
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
 
+    private MainPortal portal;
     private DictionaryException dictionaryException;
     private WordnetDictionary dictionary;
     private WordnetMeaningPage wordnetMeaningPage;
@@ -51,6 +54,7 @@ public class WordnetPresenter implements MeaningPresenter{
     public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, MainPortal portal) {
         this.dictionary = dictionary;
         this.adapter = adapter;
+        this.portal = portal;
         portal.addPresenter(this);
     }
 
@@ -155,8 +159,14 @@ public class WordnetPresenter implements MeaningPresenter{
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DownloadResolver
-                        .startDownload(Constants.WORDNET, DefineApp.getContext());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Intent downloadIntent = new Intent(portal, DictionariesActivity.class);
+                    portal.startActivity(downloadIntent);
+                    portal.finishWithNotification();
+                }else {
+                    DownloadResolver
+                            .startDownload(Constants.WORDNET, DefineApp.getContext());
+                }
             }
         });
     }
