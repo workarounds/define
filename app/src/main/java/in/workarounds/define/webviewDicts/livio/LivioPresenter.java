@@ -3,13 +3,11 @@ package in.workarounds.define.webviewDicts.livio;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.IntDef;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
@@ -30,7 +28,6 @@ import in.workarounds.define.webviewDicts.DaggerWebViewComponent;
 import in.workarounds.define.webviewDicts.JavaScriptInterface;
 import in.workarounds.define.webviewDicts.WebViewComponent;
 import in.workarounds.define.webviewDicts.WebViewModule;
-import in.workarounds.portal.Portal;
 import in.workarounds.typography.TextView;
 
 /**
@@ -213,6 +210,8 @@ public class LivioPresenter implements MeaningPresenter {
             showException();
         } else if (webviewHtml != null) {
             onResultsUpdated(webviewHtml);
+        } else if(task != null && task.getStatus() == AsyncTask.Status.RUNNING){
+            showProgress();
         } else {
             showStatus("Sorry, no results found");
         }

@@ -155,7 +155,9 @@ public class UrbanPresenter implements MeaningPresenter {
             showList();
         } else if (getDictionaryException() != null) {
             showException();
-        } else {
+        } else if(task != null && task.getStatus() == AsyncTask.Status.RUNNING){
+            showProgress();
+        } else{
             showStatus("Sorry, no results found");
         }
     }

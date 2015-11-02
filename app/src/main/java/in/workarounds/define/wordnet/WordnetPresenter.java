@@ -169,6 +169,8 @@ public class WordnetPresenter implements MeaningPresenter{
             showList();
         } else if (getDictionaryException() != null) {
             showException();
+        } else if(task != null && task.getStatus() == AsyncTask.Status.RUNNING){
+            showProgress();
         } else {
             showStatus("Sorry, no results found");
         }
