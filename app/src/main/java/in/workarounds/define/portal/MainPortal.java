@@ -32,6 +32,7 @@ import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.ui.activity.DashboardActivity;
+import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
@@ -243,6 +244,8 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         findViewById(R.id.button_search).setOnClickListener(this);
         findViewById(R.id.button_copy).setOnClickListener(this);
         findViewById(R.id.button_wiki).setOnClickListener(this);
+        findViewById(R.id.button_share).setOnClickListener(this);
+        findViewById(R.id.button_settings).setOnClickListener(this);
     }
 
     private void openDefineApp(){
@@ -261,10 +264,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     }
 
     private void searchSelectedText() {
-        String textToSearch = mClipText;
-        if(!TextUtils.isEmpty(selectedText)){
-            textToSearch = selectedText;
-        }
+        String textToSearch = getSelectedText();
         Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
         intent.putExtra(SearchManager.QUERY, textToSearch);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -273,14 +273,33 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     }
 
     private void wikiSelectedText() {
-        String textToSearch = mClipText;
-        if(!TextUtils.isEmpty(selectedText)){
-            textToSearch = selectedText;
-        }
+        String textToSearch = getSelectedText();
         Intent intent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://en.m.wikipedia.org/wiki/" + textToSearch));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void shareText(){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, getSelectedText());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setType("text/plain");
+        startActivity(Intent.createChooser(intent, "Share text to"));
+    }
+
+    private void openSettings(){
+        Intent intent = new Intent(this, UserPrefActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private String getSelectedText(){
+       if(!TextUtils.isEmpty(selectedText)){
+           return selectedText;
+       } else {
+           return mClipText;
+       }
     }
 
     @Override
@@ -314,6 +333,14 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
                 break;
             case R.id.button_wiki:
                 wikiSelectedText();
+                finish();
+                break;
+            case R.id.button_share:
+                shareText();
+                finish();
+                break;
+            case R.id.button_settings:
+                openSettings();
                 finish();
                 break;
             default:
