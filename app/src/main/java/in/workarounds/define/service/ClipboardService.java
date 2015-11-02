@@ -18,7 +18,6 @@ import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
 import in.workarounds.portal.PortalManager;
-import in.workarounds.portal.State;
 
 public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
@@ -88,9 +87,7 @@ public class ClipboardService extends Service implements
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
                     ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
 
-            if(state != State.ACTIVE) {
-                NotificationUtils.INSTANCE.sendMeaningNotification(text, SILENT_NOTIFICATION_ID, priority);
-            }
+            NotificationUtils.INSTANCE.sendMeaningNotification(text, SILENT_NOTIFICATION_ID, priority);
 
             if(PrefUtils.getNotificationAutoHideFlag(this)) {
                 notificationHandler.removeCallbacks(notificationHandlerRunnable);
