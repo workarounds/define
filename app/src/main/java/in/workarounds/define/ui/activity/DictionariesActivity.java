@@ -69,6 +69,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
 
     private static final int MY_PERMISSIONS_REQUEST_STORAGE = 101;// stricly below 255
 
+    private boolean downloadPending = false;
     private ProgressBar unzipProgress;
     private ProgressBar downloadProgress;
     private TextView statusTv;
@@ -134,6 +135,12 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     }
 
     private void setDictionaryFlags(){
+        if(livioTask != null){
+            livioTask.cancel(true);
+        }
+        if(wordnetTask != null){
+            wordnetTask.cancel(true);
+        }
         livioTask = new LivioMeaningsTask().execute();
         wordnetTask = new WordnetMeaningsTask().execute();
     }
@@ -181,7 +188,14 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.theme_accent));
                 downloadButton.setOnClickListener(DictionariesActivity.this);
                 cancelButton.setOnClickListener(DictionariesActivity.this);
+                if(downloadPending){
+                    downloadPending = false;
+                    initWordnetDownload();
+                }
             }else {
+                if(downloadPending){
+                    downloadPending = false;
+                }
                 setWordnetTick();
             }
         }
@@ -392,12 +406,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0]);
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    try {
-                        wordnetDictionary.results(testWords[0]);
-                        setWordnetTick();
-                    } catch (DictionaryException exception) {
-                        initWordnetDownload();
-                    }
+                    downloadPending = true;
+                    setDictionaryFlags();
                 }else if(!showRationale){ // when user clicked never allow before
                     requestPermissionForStorageAfterNeverAllow();
                 } else {
