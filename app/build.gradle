@@ -9,7 +9,7 @@ android {
         applicationId "in.workarounds.define"
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 8
+        versionCode 9
         versionName "1.1"
     }
     buildTypes {
