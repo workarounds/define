@@ -23,5 +23,5 @@
 
     <!-- portal library colors -->
     <color name="portal_permission_notification">@color/theme_primary</color>
-    <color name="portal_foreground_notification">@color/theme_primary</color>
+    <color name="portal_foreground_notification">@color/light_gray</color>
 </resources>
