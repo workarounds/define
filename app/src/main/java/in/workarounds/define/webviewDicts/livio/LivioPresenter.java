@@ -130,7 +130,9 @@ public class LivioPresenter implements MeaningPresenter {
             if (html != null && !html.isEmpty()) {
                 meaningList.post(new Runnable() {
                     public void run() {
-                        meaningList.loadDataWithBaseURL("file:///android_asset/", html, mime, encoding, null);
+                        if(meaningList != null) {
+                            meaningList.loadDataWithBaseURL("file:///android_asset/", html, mime, encoding, null);
+                        }
                     }
                 });
             } else {
