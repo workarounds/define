@@ -393,8 +393,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        livioDictionary.results(testWords[0]);
-                        setLivioTick();
+                        wordnetDictionary.results(testWords[0]);
+                        setWordnetTick();
                     } catch (DictionaryException exception) {
                         initWordnetDownload();
                     }
