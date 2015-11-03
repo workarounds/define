@@ -20,4 +20,8 @@
     <color name="off_white">#F7F7F7</color>
     <color name="translucent_gray">#33777777</color>
     <color name="translucent_black">#77000000</color>
+
+    <!-- portal library colors -->
+    <color name="portal_permission_notification">@color/theme_primary</color>
+    <color name="portal_foreground_notification">@color/theme_primary</color>
 </resources>
