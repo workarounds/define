@@ -7,13 +7,20 @@ import android.support.annotation.IntDef;
  */
 public interface DictionaryId {
     int WORDNET = 0;
-    int LIVIO   = 1;
-    int URBAN   = 2;
+    int LIVIO_EN = 1;
+    int URBAN = 2;
+    int LIVIO_FR = 3;
+    int LIVIO_IT = 4;
+    int LIVIO_ES = 5;
+    int LIVIO_DE = 6;
 
-    int[] defaultOrder = {WORDNET, LIVIO, URBAN};
-    boolean[] defaultVisibility = {true, true, true};
+    int[] defaultOrder = {WORDNET, LIVIO_EN, URBAN};
 
-    @IntDef({WORDNET, LIVIO, URBAN})
+    int[] allIds = {WORDNET, LIVIO_EN, URBAN, LIVIO_FR, LIVIO_IT, LIVIO_ES, LIVIO_DE};
+    String[] dictNames = {"Wordnet", "English", "Urban", "French", "Italian", "Spanish", "German"};
+
+
+    @IntDef({WORDNET, LIVIO_EN, URBAN, LIVIO_DE, LIVIO_ES, LIVIO_FR, LIVIO_IT})
     @interface DictId {
     }
 }

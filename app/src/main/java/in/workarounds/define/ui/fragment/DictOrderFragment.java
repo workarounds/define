@@ -84,9 +84,9 @@ public class DictOrderFragment extends Fragment {
             this.context = context;
 
             dictionaryMap = new HashMap<>();
-            dictionaryMap.put(DictionaryId.WORDNET, "Wordnet Dictionary");
-            dictionaryMap.put(DictionaryId.URBAN, "Urban Dictionary");
-            dictionaryMap.put(DictionaryId.LIVIO, "Livio Dictionary");
+            for(int i : DictionaryId.allIds) {
+                dictionaryMap.put(i, DictionaryId.dictNames[i] + " Dictionary");
+            }
 
             int[] prefOrder = PrefUtils.getDictionaryOrder(context);
             order = arrayToArrayList(prefOrder);

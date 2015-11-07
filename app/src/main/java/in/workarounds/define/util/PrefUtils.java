@@ -19,7 +19,6 @@ public class PrefUtils {
     public static final String KEY_DICTIONARIES_DONE = "key_dictionaries_done";
     public static final String KEY_SORT_DONE = "key_sort_done";
     public static final String KEY_DICTIONARY_ORDER = "key_dictionary_order";
-    private static final String KEY_DICTIONARY_VISIBILITY = "key_dictionary_visibility";
     private static final String KEY_NOTIFICATION_AUTO_HIDE = "key_notification_auto_hide";
     private static final String DELIMITER = ",";
     public static final int DEFAULT_NOTIFY_MODE = UserPrefActivity.OPTION_PRIORITY;
@@ -154,21 +153,6 @@ public class PrefUtils {
         editor.apply();
     }
 
-    public static boolean[] getDictionaryVisibility(Context context) {
-        String visibility = getSharedPreferences(context).getString(KEY_DICTIONARY_VISIBILITY, null);
-        if(visibility != null) {
-            return stringToBooleanArray(visibility.split(DELIMITER));
-
-        }
-        return DictionaryId.defaultVisibility;
-    }
-
-    public static void setDictionaryVisibility(Context context, boolean[] visibility) {
-        SharedPreferences.Editor editor = getSharedPreferences(context).edit();
-        editor.putString(KEY_DICTIONARY_VISIBILITY, arrayToString(booleanToStringArray(visibility)));
-        editor.apply();
-    }
-
     private static int[] stringToIntArray(String[] stringArray) {
         int[] intArray = new int[stringArray.length];
         for(int i=0; i<stringArray.length; i++) {
@@ -181,22 +165,6 @@ public class PrefUtils {
         String[] stringArray = new String[intArray.length];
         for(int i=0; i<intArray.length; i++) {
             stringArray[i] = Integer.toString(intArray[i]);
-        }
-        return stringArray;
-    }
-
-    private static boolean[] stringToBooleanArray(String[] stringArray) {
-        boolean[] booleanArray = new boolean[stringArray.length];
-        for(int i=0; i<stringArray.length; i++) {
-            booleanArray[i] = Boolean.valueOf(stringArray[i]);
-        }
-        return booleanArray;
-    }
-
-    private static String[] booleanToStringArray(boolean[] booleanArray) {
-         String[] stringArray = new String[booleanArray.length];
-        for(int i=0; i<booleanArray.length; i++) {
-            stringArray[i] = Boolean.toString(booleanArray[i]);
         }
         return stringArray;
     }

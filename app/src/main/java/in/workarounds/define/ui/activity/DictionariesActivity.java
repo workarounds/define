@@ -150,7 +150,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         @Override
         protected Void doInBackground(String... params) {
             try {
-                livioDictionary.results(testWords[0]);
+                livioDictionary.results(testWords[0], LivioDictionary.PackageName.ENGLISH);
             } catch (DictionaryException exception) {
                 livioException = exception;
             }

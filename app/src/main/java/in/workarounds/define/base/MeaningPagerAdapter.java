@@ -2,43 +2,28 @@ package in.workarounds.define.base;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
-
-import in.workarounds.define.R;
 import in.workarounds.define.constants.DictionaryId;
+import in.workarounds.define.urban.UrbanMeaningPage;
 import in.workarounds.define.util.PrefUtils;
+import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
+import in.workarounds.define.wordnet.WordnetMeaningPage;
 
 /**
  * Created by madki on 27/09/15.
  */
 public class MeaningPagerAdapter extends PagerAdapter {
-    private HashMap<Integer, String> titleMap;
-    private HashMap<Integer, Integer> layoutMap;
 
     private Context context;
     private int[] order;
 
     public MeaningPagerAdapter(Context context) {
-        initMaps();
         this.context = context;
         order = PrefUtils.getDictionaryOrder(context);
     }
 
-    private void initMaps() {
-        titleMap = new HashMap<>();
-        titleMap.put(DictionaryId.WORDNET, "Wordnet");
-        titleMap.put(DictionaryId.LIVIO, "Livio");
-        titleMap.put(DictionaryId.URBAN, "Urban");
-
-        layoutMap = new HashMap<>();
-        layoutMap.put(DictionaryId.WORDNET, R.layout.layout_wordnet_page);
-        layoutMap.put(DictionaryId.LIVIO, R.layout.layout_livio_page);
-        layoutMap.put(DictionaryId.URBAN, R.layout.layout_urban_page);
-    }
 
     @Override
     public int getCount() {
@@ -47,9 +32,26 @@ public class MeaningPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View view = LayoutInflater.from(
-                container.getContext()).cloneInContext(container.getContext())
-                .inflate(layoutMap.get(order[position]), container, false);
+        View view;
+        int dictId = order[position];
+        switch (dictId) {
+            case DictionaryId.WORDNET:
+                view = new WordnetMeaningPage(context);
+                break;
+            case DictionaryId.URBAN:
+                view = new UrbanMeaningPage(context);
+                break;
+            case DictionaryId.LIVIO_EN:
+            case DictionaryId.LIVIO_ES:
+            case DictionaryId.LIVIO_IT:
+            case DictionaryId.LIVIO_DE:
+            case DictionaryId.LIVIO_FR:
+                view = new LivioMeaningPage(context, dictId);
+                break;
+            default:
+                throw new IllegalStateException("Unknown DictionaryId provided in MeaningPagerAdapter");
+        }
+
         container.addView(view);
         return view;
     }
@@ -66,7 +68,7 @@ public class MeaningPagerAdapter extends PagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titleMap.get(order[position]);
+        return DictionaryId.dictNames[order[position]];
     }
 
 }
