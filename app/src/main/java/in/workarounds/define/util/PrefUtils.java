@@ -6,7 +6,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 
 import in.workarounds.define.api.Constants;
-import in.workarounds.define.constants.DictionaryId;
+import in.workarounds.define.constants.DictionaryConstants;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 
 /**
@@ -144,7 +144,7 @@ public class PrefUtils {
             return stringToIntArray(order.split(DELIMITER));
 
         }
-        return DictionaryId.defaultOrder;
+        return DictionaryConstants.defaultOrder;
     }
 
     public static void setDictionaryOrder(Context context, int[] order) {

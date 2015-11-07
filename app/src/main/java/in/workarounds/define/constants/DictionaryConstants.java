@@ -5,7 +5,7 @@ import android.support.annotation.IntDef;
 /**
  * Created by madki on 26/10/15.
  */
-public interface DictionaryId {
+public interface DictionaryConstants {
     int WORDNET = 0;
     int LIVIO_EN = 1;
     int URBAN = 2;

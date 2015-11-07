@@ -7,7 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import in.workarounds.define.R;
-import in.workarounds.define.constants.DictionaryId;
+import in.workarounds.define.constants.DictionaryConstants;
 import in.workarounds.define.portal.ComponentProvider;
 import in.workarounds.define.portal.PortalComponent;
 import in.workarounds.define.util.LogUtils;
@@ -66,19 +66,19 @@ public class LivioMeaningPage extends RelativeLayout {
         if (!isInEditMode()) {
             PortalComponent component = ((ComponentProvider) getContext()).component();
             switch (dictId) {
-                case DictionaryId.LIVIO_EN:
+                case DictionaryConstants.LIVIO_EN:
                     presenter = component.livioEnglishPresenter();
                     break;
-                case DictionaryId.LIVIO_FR:
+                case DictionaryConstants.LIVIO_FR:
                     presenter = component.livioFrenchPresenter();
                     break;
-                case DictionaryId.LIVIO_IT:
+                case DictionaryConstants.LIVIO_IT:
                     presenter = component.livioItalianPresenter();
                     break;
-                case DictionaryId.LIVIO_ES:
+                case DictionaryConstants.LIVIO_ES:
                     presenter = component.livioSpanishPresenter();
                     break;
-                case DictionaryId.LIVIO_DE:
+                case DictionaryConstants.LIVIO_DE:
                     presenter = component.livioGermanPresenter();
                     break;
                 default:

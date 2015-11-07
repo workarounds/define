@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import in.workarounds.define.R;
-import in.workarounds.define.constants.DictionaryId;
+import in.workarounds.define.constants.DictionaryConstants;
 import in.workarounds.define.util.PrefUtils;
 
 /**
@@ -84,8 +84,8 @@ public class DictOrderFragment extends Fragment {
             this.context = context;
 
             dictionaryMap = new HashMap<>();
-            for(int i : DictionaryId.allIds) {
-                dictionaryMap.put(i, DictionaryId.dictNames[i] + " Dictionary");
+            for(int i : DictionaryConstants.allIds) {
+                dictionaryMap.put(i, DictionaryConstants.dictNames[i] + " Dictionary");
             }
 
             int[] prefOrder = PrefUtils.getDictionaryOrder(context);

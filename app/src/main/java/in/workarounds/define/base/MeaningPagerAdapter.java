@@ -5,7 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import in.workarounds.define.constants.DictionaryId;
+import in.workarounds.define.constants.DictionaryConstants;
 import in.workarounds.define.urban.UrbanMeaningPage;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
@@ -35,17 +35,17 @@ public class MeaningPagerAdapter extends PagerAdapter {
         View view;
         int dictId = order[position];
         switch (dictId) {
-            case DictionaryId.WORDNET:
+            case DictionaryConstants.WORDNET:
                 view = new WordnetMeaningPage(context);
                 break;
-            case DictionaryId.URBAN:
+            case DictionaryConstants.URBAN:
                 view = new UrbanMeaningPage(context);
                 break;
-            case DictionaryId.LIVIO_EN:
-            case DictionaryId.LIVIO_ES:
-            case DictionaryId.LIVIO_IT:
-            case DictionaryId.LIVIO_DE:
-            case DictionaryId.LIVIO_FR:
+            case DictionaryConstants.LIVIO_EN:
+            case DictionaryConstants.LIVIO_ES:
+            case DictionaryConstants.LIVIO_IT:
+            case DictionaryConstants.LIVIO_DE:
+            case DictionaryConstants.LIVIO_FR:
                 view = new LivioMeaningPage(context, dictId);
                 break;
             default:
@@ -68,7 +68,7 @@ public class MeaningPagerAdapter extends PagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return DictionaryId.dictNames[order[position]];
+        return DictionaryConstants.dictNames[order[position]];
     }
 
 }
