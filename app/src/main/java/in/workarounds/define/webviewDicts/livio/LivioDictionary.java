@@ -69,7 +69,7 @@ public class LivioDictionary implements IHtmlDictionary {
             for(String name : c.getColumnNames()) System.out.println(name);
             String htmlString  = c.getString(c.getColumnIndexOrThrow("suggest_text_2"));
             localObject1 = Jsoup.parse(htmlString);
-            (localObject1).select("dl").remove();
+            //(localObject1).select("dl").remove();
             (localObject1).select("head").remove();
 
             for( Element element : localObject1.select("silence") ) {
