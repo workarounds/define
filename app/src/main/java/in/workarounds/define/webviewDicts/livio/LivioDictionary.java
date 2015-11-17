@@ -3,6 +3,7 @@ package in.workarounds.define.webviewDicts.livio;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.StringDef;
 import android.text.TextUtils;
 
 import org.jsoup.Jsoup;
@@ -16,7 +17,6 @@ import javax.inject.Inject;
 import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
-import in.workarounds.define.base.IHtmlDictionary;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PackageManagerUtils;
@@ -25,11 +25,9 @@ import in.workarounds.define.util.PackageManagerUtils;
  * Created by madki on 26/09/15.
  */
 @PerPortal
-public class LivioDictionary implements IHtmlDictionary {
+public class LivioDictionary {
     private static final String TAG = LogUtils.makeLogTag(LivioDictionary.class);
-    public static final String packageName = "livio.pack.lang.en_US";
-    public static final String contentProvider = "livio.pack.lang.en_US.DictionaryProvider";
-    public static final Uri contentUri = Uri.parse("content://" + contentProvider + "/dictionary");
+    public static final String providerName = "DictionaryProvider";
 
     private Context context;
 
@@ -38,9 +36,9 @@ public class LivioDictionary implements IHtmlDictionary {
         this.context = context;
     }
 
-    @Override
-    public String results(String word) throws DictionaryException {
-        if(!PackageManagerUtils.isAppInstalled(context,packageName)){
+
+    public String results(String word, @PACKAGE_NAME String packageName) throws DictionaryException {
+        if (!PackageManagerUtils.isAppInstalled(context, packageName)) {
             throw new DictionaryException(
                     DictionaryException.DICTIONARY_NOT_FOUND,
                     DefineApp.getContext().getString(R.string.exception_livio)
@@ -48,12 +46,16 @@ public class LivioDictionary implements IHtmlDictionary {
         }
         String results = "";
         if (!TextUtils.isEmpty(word)) {
-            results = getHtml(word);
+            results = getHtml(word, packageName);
         }
         return results;
     }
 
-    public String getHtml(String word){
+    private Uri getContentUri(@PACKAGE_NAME String packageName) {
+        return Uri.parse("content://" + packageName + "." + providerName + "/dictionary");
+    }
+
+    public String getHtml(String word, @PACKAGE_NAME String packageName) {
         StringBuilder htmlBuilder = new StringBuilder();
         String html = "";
         //add css and js
@@ -61,26 +63,25 @@ public class LivioDictionary implements IHtmlDictionary {
                 .append("<HTML><HEAD><LINK href=\"css/livio.css\" type=\"text/css\" rel=\"stylesheet\"/>" +
                         "<script src=\"js/livio.js\" type=\"text/javascript\" > </script>" +
                         "</HEAD>");
-        Cursor c = context.getContentResolver().query(contentUri, null, null, new String[]{word}, null);
+        Cursor c = context.getContentResolver().query(getContentUri(packageName), null, null, new String[]{word}, null);
 
         Document localObject1;
-        if ((c != null) && c.moveToFirst())
-        {
-            for(String name : c.getColumnNames()) System.out.println(name);
-            String htmlString  = c.getString(c.getColumnIndexOrThrow("suggest_text_2"));
+        if ((c != null) && c.moveToFirst()) {
+            for (String name : c.getColumnNames()) System.out.println(name);
+            String htmlString = c.getString(c.getColumnIndexOrThrow("suggest_text_2"));
             localObject1 = Jsoup.parse(htmlString);
-            (localObject1).select("dl").remove();
+            //(localObject1).select("dl").remove();
             (localObject1).select("head").remove();
 
-            for( Element element : localObject1.select("silence") ) {
+            for (Element element : localObject1.select("silence")) {
                 element.remove();
             }
-            for(Element element : localObject1.select("hr")) {
+            for (Element element : localObject1.select("hr")) {
                 element.remove();
             }
 
             Elements elementsByClass = (localObject1).getElementsByClass("head");
-            if(elementsByClass != null) {
+            if (elementsByClass != null) {
                 for (Element etymologyElement : elementsByClass) {
                     if (etymologyElement.text().equals("etymology")) {
                         Element etymologyContentElement = etymologyElement.nextElementSibling();
@@ -97,5 +98,18 @@ public class LivioDictionary implements IHtmlDictionary {
             c.close();
         }
         return html;
+    }
+
+    public interface PackageName {
+        String ENGLISH = "livio.pack.lang.en_US";
+        String FRENCH = "livio.pack.lang.fr_FR";
+        String ITALIAN = "livio.pack.lang.it_IT";
+        String SPANISH = "livio.pack.lang.es_ES";
+        String GERMAN = "livio.pack.lang.de_DE";
+    }
+
+    @StringDef({PackageName.ENGLISH, PackageName.FRENCH, PackageName.ITALIAN,
+            PackageName.SPANISH, PackageName.GERMAN})
+    public @interface PACKAGE_NAME {
     }
 }
