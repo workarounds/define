@@ -129,7 +129,7 @@ public class SelectMovementMethod extends LinkMovementMethod{
         int end = current.index;
         if (approximate) {
             start = getApproximateEdge(down);
-            if (start != down.index) {
+            if (start != down.index && start < total.size()) {
                 down = total.get(start);
             }
             end = getApproximateEdge(current);
