@@ -20,7 +20,7 @@ import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
-import in.workarounds.define.portal.PortalPresenter;
+import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
 import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
@@ -37,7 +37,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
     private static final String mime = "text/html";
     private static final String encoding = "utf-8";
 
-    private PortalPresenter portal;
+    private MeaningsController controller;
     private DictionaryException dictionaryException;
     private LivioDictionary dictionary;
     private LivioMeaningPage livioMeaningPage;
@@ -50,11 +50,11 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
     private MeaningsTask task;
     private Handler handler;
 
-    public LivioBasePresenter(LivioDictionary dictionary, PortalPresenter portal) {
+    public LivioBasePresenter(LivioDictionary dictionary, MeaningsController controller) {
         this.dictionary = dictionary;
-        this.portal = portal;
+        this.controller = controller;
         this.handler = new Handler();
-        portal.addMeaningPresenter(this);
+        controller.addMeaningPresenter(this);
     }
 
     @Override
@@ -187,6 +187,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
             @Override
             public void onClick(View view) {
                 installLivio();
+                controller.onInstallClicked();
             }
         });
     }
@@ -201,7 +202,6 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
                     Uri.parse("https://play.google.com/store/apps/details?id=" + packageName))
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
-        portal.finish();
     }
 
     private void setInitialViews() {

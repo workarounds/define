@@ -23,8 +23,8 @@ import in.workarounds.define.api.Constants;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.helper.DownloadResolver;
+import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.portal.PortalPresenter;
 import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
@@ -39,7 +39,7 @@ public class WordnetPresenter implements MeaningPresenter{
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
 
-    private PortalPresenter portal;
+    private MeaningsController controller;
     private DictionaryException dictionaryException;
     private WordnetDictionary dictionary;
     private WordnetMeaningPage wordnetMeaningPage;
@@ -52,11 +52,11 @@ public class WordnetPresenter implements MeaningPresenter{
     private MeaningsTask task;
 
     @Inject
-    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, PortalPresenter portal) {
+    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, MeaningsController controller) {
         this.dictionary = dictionary;
         this.adapter = adapter;
-        this.portal = portal;
-        portal.addMeaningPresenter(this);
+        this.controller = controller;
+        controller.addMeaningPresenter(this);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class WordnetPresenter implements MeaningPresenter{
                     Context context = view.getContext();
                     Intent downloadIntent = new Intent(context, DictionariesActivity.class);
                     context.startActivity(downloadIntent);
-                    portal.finishWithNotification();
+                    controller.onDownloadClicked();
                 }else {
                     DownloadResolver
                             .startDownload(Constants.WORDNET, DefineApp.getContext());

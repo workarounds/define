@@ -4,6 +4,7 @@ import dagger.Component;
 import in.workarounds.define.network.NetworkComponent;
 import in.workarounds.define.urban.UrbanMeaningPage;
 import in.workarounds.define.urban.UrbanModule;
+import in.workarounds.define.view.SelectionCard.SelectionCardView;
 import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
 import in.workarounds.define.webviewDicts.livio.LivioModule;
 import in.workarounds.define.webviewDicts.livio.presenter.LivioEnglishPresenter;
@@ -26,6 +27,8 @@ public interface PortalComponent {
     void inject(UrbanMeaningPage urbanMeaningPage);
 
     void inject(WordnetMeaningPage wordnetMeaningPage);
+
+    void inject(SelectionCardView selectionCardView);
 
     void inject(MainPortal mainPortal);
 

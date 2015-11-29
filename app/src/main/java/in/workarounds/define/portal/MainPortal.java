@@ -14,27 +14,32 @@ import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import in.workarounds.define.R;
 import in.workarounds.define.base.MeaningPagerAdapter;
+import in.workarounds.define.base.MeaningPresenter;
+import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.util.LogUtils;
+import in.workarounds.define.view.SelectionCard.SelectionCardListener;
+import in.workarounds.define.view.SelectionCard.SelectionCardPresenter;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
-import in.workarounds.define.view.swipeselect.SelectableTextView;
 import in.workarounds.portal.Portal;
 
 /**
  * Created by madki on 20/09/15.
  */
-public class MainPortal extends Portal implements ComponentProvider, View.OnClickListener, PortalView {
+public class MainPortal extends Portal implements ComponentProvider,  SelectionCardListener, MeaningsController{
     private static final String TAG = LogUtils.makeLogTag(MainPortal.class);
     public static final String BUNDLE_KEY_CLIP_TEXT = "bundle_key_clip_text";
     private static final int SELECTION_CARD_ANIMATION_TIME = 350;
     private static final int MEANING_PAGE_ANIMATION_TIME = 350;
 
-    private SelectableTextView mTvClipText;
     private ViewPager pager;
 
     private View mPortalContainer;
@@ -46,7 +51,13 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     private TelephonyManager telephonyManager;
 
     @Inject
-    PortalPresenter portalPresenter;
+    SelectionCardPresenter selectionCardPresenter;
+    @Inject
+    NotificationUtils notificationUtils;
+
+    String selectedText;
+    String clipText;
+    private Set<MeaningPresenter> meaningPresenters;
 
     public MainPortal(Context base) {
         super(base);
@@ -56,9 +67,10 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         initComponents();
+        meaningPresenters = new HashSet<>();
         setContentView(R.layout.portal_main);
         initViews();
-        portalPresenter.onClipTextChanged(extractClipText(bundle));
+        selectionCardPresenter.onClipTextChanged(extractClipText(bundle));
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         callStateListener = new CallStateListener();
     }
@@ -66,7 +78,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
     @Override
     protected void onData(Bundle data) {
         super.onData(data);
-        portalPresenter.onClipTextChanged(extractClipText(data));
+        selectionCardPresenter.onClipTextChanged(extractClipText(data));
     }
 
     private void initComponents() {
@@ -94,9 +106,8 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
 
     private void initViews() {
         mPortalContainer = findViewById(R.id.rl_main_portal_container);
-        mTvClipText = (SelectableTextView) findViewById(R.id.tv_clip_text);
         meaningPagesContainer = findViewById(R.id.ll_meaning_pages_container);
-        selectionCard = findViewById(R.id.cv_action_card);
+        selectionCard = findViewById(R.id.selection_card);
         selectionCard.setVisibility(View.GONE);
 //        if (meaningPagesContainer != null) {
 //            meaningPagesContainer.setVisibility(View.INVISIBLE);
@@ -118,8 +129,6 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
             slidingTabLayout.setViewPager(pager);
         }
 
-        mTvClipText.setOnWordSelectedListener(portalPresenter);
-        initButtons();
         selectionCard.post(new Runnable() {
             @Override
             public void run() {
@@ -195,7 +204,29 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         }
     };
 
-    private void animateMeaningsContainerIn(){
+    private String extractClipText(Bundle bundle) {
+        if(bundle != null && bundle.containsKey(BUNDLE_KEY_CLIP_TEXT)) {
+            LogUtils.LOGD(TAG, "bundle clip text: " + bundle.getString(BUNDLE_KEY_CLIP_TEXT));
+            clipText = bundle.getString(BUNDLE_KEY_CLIP_TEXT);
+            return clipText;
+        }
+        return null;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
+        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        super.onResume();
+    }
+
+    private void showMeaningContainer() {
         if(meaningPagesContainer.getVisibility() != View.VISIBLE){
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 meaningPagesContainer.setAlpha(0);
@@ -214,85 +245,58 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
         }
     }
 
-    private String extractClipText(Bundle bundle) {
-        if(bundle != null && bundle.containsKey(BUNDLE_KEY_CLIP_TEXT)) {
-            LogUtils.LOGD(TAG, "bundle clip text: " + bundle.getString(BUNDLE_KEY_CLIP_TEXT));
-            return bundle.getString(BUNDLE_KEY_CLIP_TEXT);
-        }
-        return null;
-    }
-
-    private void initButtons() {
-        findViewById(R.id.button_define).setOnClickListener(this);
-        findViewById(R.id.button_search).setOnClickListener(this);
-        findViewById(R.id.button_copy).setOnClickListener(this);
-        findViewById(R.id.button_wiki).setOnClickListener(this);
-        findViewById(R.id.button_share).setOnClickListener(this);
-        findViewById(R.id.button_settings).setOnClickListener(this);
-    }
     @Override
-    protected void onPause() {
-        super.onPause();
-        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
-        finish();
+    public void onWordSelected(String word) {
+        onWordUpdated(word);
     }
 
     @Override
-    protected void onResume() {
-        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-        super.onResume();
-    }
-
-    @Override
-    public void onClick(View v) {
-       int id = v.getId();
-        switch (id) {
-            case R.id.button_define:
-                portalPresenter.onDefineClicked();
-                break;
-            case R.id.button_search:
-                portalPresenter.onSearchClicked();
-                break;
-            case R.id.button_copy:
-                portalPresenter.onCopyClicked();
-                break;
-            case R.id.button_wiki:
-                portalPresenter.onWikiClicked();
-                break;
-            case R.id.button_share:
-                portalPresenter.onShareClicked();
-                break;
-            case R.id.button_settings:
-                portalPresenter.onSettingsClicked();
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void hideAndFinish() {
+    public void onButtonClicked() {
         animateOutAndFinish();
     }
 
     @Override
-    public void showMeaningContainer() {
-        animateMeaningsContainerIn();
+    public void onWordUpdated(String word) {
+        selectedText = word;
+        showMeaningContainer();
+        for(MeaningPresenter presenter : meaningPresenters) {
+            presenter.onWordUpdated(word);
+        }
     }
 
     @Override
-    public void setTextForSelection(String text) {
-        mTvClipText.setSelectableText(text);
+    public void addMeaningPresenter(MeaningPresenter presenter) {
+        boolean added = meaningPresenters.add(presenter);
+        if(added) {
+            if (selectedText != null) {
+                presenter.onWordUpdated(selectedText);
+            }
+        } else {
+            LogUtils.LOGE(TAG, "Presenter already added");
+        }
     }
 
     @Override
-    public void selectAll() {
-        mTvClipText.selectAll();
+    public void removeMeaningPresenter(MeaningPresenter presenter) {
+        boolean removed = meaningPresenters.remove(presenter);
+        if(!removed) {
+            LogUtils.LOGE(TAG, "Presenter not added. Cannot remove");
+        }
     }
 
     @Override
-    public Context getContext() {
-        return this;
+    public void onInstallClicked() {
+        animateOutAndFinish();
+    }
+
+    @Override
+    public void onDownloadClicked() {
+        finishWithNotification();
+    }
+
+    public void finishWithNotification() {
+        notificationUtils.sendSilentBackupNotification(clipText);
+        animateOutAndFinish();
     }
 
     private class CallStateListener extends PhoneStateListener {
@@ -301,7 +305,7 @@ public class MainPortal extends Portal implements ComponentProvider, View.OnClic
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     // called when someone is ringing to this phone
-                    portalPresenter.onCall();
+                    finishWithNotification();
                     break;
             }
         }
