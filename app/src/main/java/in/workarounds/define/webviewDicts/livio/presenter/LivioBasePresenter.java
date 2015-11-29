@@ -20,7 +20,7 @@ import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
-import in.workarounds.define.portal.MainPortal;
+import in.workarounds.define.portal.PortalPresenter;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
 import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
@@ -37,7 +37,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
     private static final String mime = "text/html";
     private static final String encoding = "utf-8";
 
-    private MainPortal portal;
+    private PortalPresenter portal;
     private DictionaryException dictionaryException;
     private LivioDictionary dictionary;
     private LivioMeaningPage livioMeaningPage;
@@ -50,11 +50,11 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
     private MeaningsTask task;
     private Handler handler;
 
-    public LivioBasePresenter(LivioDictionary dictionary, MainPortal portal) {
+    public LivioBasePresenter(LivioDictionary dictionary, PortalPresenter portal) {
         this.dictionary = dictionary;
         this.portal = portal;
         this.handler = new Handler();
-        portal.addPresenter(this);
+        portal.addMeaningPresenter(this);
     }
 
     @Override

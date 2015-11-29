@@ -13,8 +13,8 @@ import javax.inject.Inject;
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
-import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.portal.PerPortal;
+import in.workarounds.define.portal.PortalPresenter;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
 
@@ -39,10 +39,10 @@ public class UrbanPresenter implements MeaningPresenter {
     private MeaningsTask task;
 
     @Inject
-    public UrbanPresenter(UrbanDictionary dictionary, UrbanMeaningAdapter adapter, MainPortal portal) {
+    public UrbanPresenter(UrbanDictionary dictionary, UrbanMeaningAdapter adapter, PortalPresenter portal) {
         this.dictionary = dictionary;
         this.adapter = adapter;
-        portal.addPresenter(this);
+        portal.addMeaningPresenter(this);
     }
 
     @Override

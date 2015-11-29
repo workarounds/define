@@ -2,6 +2,7 @@ package in.workarounds.define.portal;
 
 import dagger.Module;
 import dagger.Provides;
+import in.workarounds.define.base.NotificationUtils;
 
 /**
  * Created by madki on 26/09/15.
@@ -14,9 +15,18 @@ public class PortalModule {
         this.portal = portal;
     }
 
-    @Provides
-    public MainPortal provideMainPortal() {
+    @Provides @PerPortal
+    public NotificationUtils provideNotificationUtils() {
+        return new NotificationUtils(portal);
+    }
+
+    @Provides @PerPortal
+    public PortalView providesPortalView() {
         return portal;
     }
-}
 
+    @Provides @PerPortal
+    public PortalPresenter providesPortalPresenter(PortalView portalView, NotificationUtils notificationUtils) {
+        return new MainPortalPresenter(portalView, notificationUtils);
+    }
+}

@@ -86,10 +86,11 @@ public class ClipboardService extends Service implements
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
                     ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
 
-            NotificationUtils.INSTANCE.sendMeaningNotification(text, priority);
+            NotificationUtils notificationUtils = new NotificationUtils(this);
+            notificationUtils.sendMeaningNotification(text, priority);
 
             if(PrefUtils.getNotificationAutoHideFlag(this)) {
-                NotificationUtils.INSTANCE.cancelBackupNotification();
+                notificationUtils.cancelBackupNotification();
                 notificationHandler.removeCallbacks(notificationHandlerRunnable);
                 notificationHandler.postDelayed(notificationHandlerRunnable, 10000);
             }
@@ -109,7 +110,7 @@ public class ClipboardService extends Service implements
         notificationHandlerRunnable =  new Runnable() {
             @Override
             public void run() {
-                NotificationUtils.INSTANCE.getNotificationManager().cancel(NotificationUtils.SILENT_NOTIFICATION_ID);
+                new NotificationUtils(ClipboardService.this).getNotificationManager().cancel(NotificationUtils.SILENT_NOTIFICATION_ID);
             }
         };
     }

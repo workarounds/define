@@ -27,6 +27,8 @@ public interface PortalComponent {
 
     void inject(WordnetMeaningPage wordnetMeaningPage);
 
+    void inject(MainPortal mainPortal);
+
     LivioEnglishPresenter livioEnglishPresenter();
 
     LivioFrenchPresenter livioFrenchPresenter();

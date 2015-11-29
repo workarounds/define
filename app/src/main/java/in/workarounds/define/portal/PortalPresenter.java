@@ -17,4 +17,6 @@ public interface PortalPresenter extends SelectableTextView.OnWordSelectedListen
     void onWikiClicked();
     void onShareClicked();
     void onSettingsClicked();
+    void finish();
+    void finishWithNotification();
 }

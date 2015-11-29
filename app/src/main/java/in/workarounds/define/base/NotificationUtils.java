@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
-import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.portal.MainPortal;
 import in.workarounds.portal.Portal;
@@ -16,16 +15,14 @@ import in.workarounds.portal.Portal;
 /**
  * Created by Nithin on 29/10/15.
  */
-public enum NotificationUtils {
-
-    INSTANCE;
+public class NotificationUtils {
     public static final int SILENT_NOTIFICATION_ID = 201;
     public static final int SILENT_BACKUP_NOTIFICATION_ID = 202;
     private NotificationManager notificationManager;
     private Context context;
 
-    NotificationUtils(){
-        context = DefineApp.getContext();
+    public NotificationUtils(Context context){
+        this.context = context;
         notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }

@@ -1,5 +1,6 @@
 package in.workarounds.define.wordnet;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,8 +23,8 @@ import in.workarounds.define.api.Constants;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.helper.DownloadResolver;
-import in.workarounds.define.portal.MainPortal;
 import in.workarounds.define.portal.PerPortal;
+import in.workarounds.define.portal.PortalPresenter;
 import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
@@ -38,7 +39,7 @@ public class WordnetPresenter implements MeaningPresenter{
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
 
-    private MainPortal portal;
+    private PortalPresenter portal;
     private DictionaryException dictionaryException;
     private WordnetDictionary dictionary;
     private WordnetMeaningPage wordnetMeaningPage;
@@ -51,11 +52,11 @@ public class WordnetPresenter implements MeaningPresenter{
     private MeaningsTask task;
 
     @Inject
-    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, MainPortal portal) {
+    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, PortalPresenter portal) {
         this.dictionary = dictionary;
         this.adapter = adapter;
         this.portal = portal;
-        portal.addPresenter(this);
+        portal.addMeaningPresenter(this);
     }
 
     @Override
@@ -160,8 +161,9 @@ public class WordnetPresenter implements MeaningPresenter{
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Intent downloadIntent = new Intent(portal, DictionariesActivity.class);
-                    portal.startActivity(downloadIntent);
+                    Context context = view.getContext();
+                    Intent downloadIntent = new Intent(context, DictionariesActivity.class);
+                    context.startActivity(downloadIntent);
                     portal.finishWithNotification();
                 }else {
                     DownloadResolver
