@@ -4,7 +4,6 @@ import dagger.Module;
 import dagger.Provides;
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.view.SelectionCard.SelectionCardListener;
-import in.workarounds.define.view.SelectionCard.SelectionCardPresenter;
 
 /**
  * Created by madki on 26/09/15.
@@ -30,10 +29,5 @@ public class PortalModule {
     @Provides @PerPortal
     public SelectionCardListener providesSelectionCardListener() {
         return portal;
-    }
-
-    @Provides @PerPortal
-    public SelectionCardPresenter providesSelectionCardPresenter(SelectionCardListener listener) {
-        return new SelectionCardPresenter(listener);
     }
 }

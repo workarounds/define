@@ -14,6 +14,7 @@ import java.text.BreakIterator;
 
 import javax.inject.Inject;
 
+import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.ui.activity.DashboardActivity;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.view.swipeselect.SelectableTextView;
@@ -21,6 +22,7 @@ import in.workarounds.define.view.swipeselect.SelectableTextView;
 /**
  * Created by manidesto on 30/11/15.
  */
+@PerPortal
 public class SelectionCardPresenter implements SelectableTextView.OnWordSelectedListener{
     String clipText;
     String selected;
