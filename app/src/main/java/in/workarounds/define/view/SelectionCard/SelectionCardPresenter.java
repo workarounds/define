@@ -36,6 +36,7 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
 
     public void onClipTextChanged(@NonNull String clipText) {
         this.clipText = clipText.trim();
+        this.selected = null;
         if(selectionCardView != null) {
             selectionCardView.setTextForSelection(this.clipText);
             if (isLessThanNWords(this.clipText, 3)) {

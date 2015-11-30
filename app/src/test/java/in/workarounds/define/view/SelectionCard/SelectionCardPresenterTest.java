@@ -119,16 +119,19 @@ public class SelectionCardPresenterTest {
 
         presenter.onClipTextChanged(clipText);
         presenter.onSearchClicked();
-        verify(contextHelper).searchWeb(clipText);
-        verify(controller).onButtonClicked();
+        verifySearchClicked(clipText);
 
-        reset(contextHelper);
-        reset(controller);
+        resetAllMocks();
 
         presenter.onWordSelected(selected);
         presenter.onSearchClicked();
-        verify(contextHelper).searchWeb(selected);
-        verify(controller).onButtonClicked();
+        verifySearchClicked(selected);
+
+        resetAllMocks();
+
+        presenter.onClipTextChanged(clipText);
+        presenter.onSearchClicked();
+        verifySearchClicked(clipText);
     }
 
     @Test
@@ -138,16 +141,19 @@ public class SelectionCardPresenterTest {
 
         presenter.onClipTextChanged(clipText);
         presenter.onWikiClicked();
-        verify(contextHelper).searchWiki(clipText);
-        verify(controller).onButtonClicked();
+        verifyWikiClicked(clipText);
 
-        reset(contextHelper);
-        reset(controller);
+        resetAllMocks();
 
         presenter.onWordSelected(selected);
         presenter.onWikiClicked();
-        verify(contextHelper).searchWiki(selected);
-        verify(controller).onButtonClicked();
+        verifyWikiClicked(selected);
+
+        resetAllMocks();
+
+        presenter.onClipTextChanged(clipText);
+        presenter.onWikiClicked();
+        verifyWikiClicked(clipText);
     }
 
     @Test
@@ -157,16 +163,19 @@ public class SelectionCardPresenterTest {
 
         presenter.onClipTextChanged(clipText);
         presenter.onShareClicked();
-        verify(contextHelper).sharePlainText(clipText);
-        verify(controller).onButtonClicked();
+        verifyShareClicked(clipText);
 
-        reset(contextHelper);
-        reset(controller);
+        resetAllMocks();
 
         presenter.onWordSelected(selected);
         presenter.onShareClicked();
-        verify(contextHelper).sharePlainText(selected);
-        verify(controller).onButtonClicked();
+        verifyShareClicked(selected);
+
+        resetAllMocks();
+
+        presenter.onClipTextChanged(clipText);
+        presenter.onShareClicked();
+        verifyShareClicked(clipText);
     }
 
     @Test
@@ -176,22 +185,56 @@ public class SelectionCardPresenterTest {
 
         presenter.onClipTextChanged(clipText);
         presenter.onCopyClicked();
-        verify(contextHelper, never()).copyToClipboard(clipText);
-        verify(controller).onButtonClicked();
+        verifyNotCopied(clipText);
 
-        reset(contextHelper);
-        reset(controller);
+        resetAllMocks();
 
         presenter.onWordSelected(selected);
         presenter.onCopyClicked();
-        verify(contextHelper).copyToClipboard(selected);
-        verify(controller).onButtonClicked();
+        verifyCopied(selected);
+
+        resetAllMocks();
+
+        presenter.onClipTextChanged(clipText);
+        presenter.onCopyClicked();
+        verifyNotCopied(clipText);
     }
 
     @Test
     public void testOnSettingsClicked() throws Exception {
         presenter.onSettingsClicked();
         verify(contextHelper).openSettings();
+        verify(controller).onButtonClicked();
+    }
+
+    private void resetAllMocks() {
+        reset(contextHelper);
+        reset(controller);
+        reset(selectionCardView);
+    }
+
+    private void verifySearchClicked(String text) {
+        verify(contextHelper).searchWeb(text);
+        verify(controller).onButtonClicked();
+    }
+
+    private void verifyWikiClicked(String text) {
+        verify(contextHelper).searchWiki(text);
+        verify(controller).onButtonClicked();
+    }
+
+    private void verifyCopied(String text) {
+        verify(contextHelper).copyToClipboard(text);
+        verify(controller).onButtonClicked();
+    }
+
+    private void verifyNotCopied(String text) {
+        verify(contextHelper, never()).copyToClipboard(text);
+        verify(controller).onButtonClicked();
+    }
+
+    private void verifyShareClicked(String text) {
+        verify(contextHelper).sharePlainText(text);
         verify(controller).onButtonClicked();
     }
 }
