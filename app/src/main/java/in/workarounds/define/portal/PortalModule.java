@@ -3,6 +3,7 @@ package in.workarounds.define.portal;
 import dagger.Module;
 import dagger.Provides;
 import in.workarounds.define.base.NotificationUtils;
+import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.view.SelectionCard.SelectionCardController;
 
 /**
@@ -29,5 +30,10 @@ public class PortalModule {
     @Provides @PerPortal
     public SelectionCardController providesSelectionCardListener() {
         return portal;
+    }
+
+    @Provides @PerPortal
+    public ContextHelper providesContextHelper() {
+        return new ContextHelper(portal, true);
     }
 }
