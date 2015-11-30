@@ -3,7 +3,7 @@ package in.workarounds.define.portal;
 import dagger.Module;
 import dagger.Provides;
 import in.workarounds.define.base.NotificationUtils;
-import in.workarounds.define.view.SelectionCard.SelectionCardListener;
+import in.workarounds.define.view.SelectionCard.SelectionCardController;
 
 /**
  * Created by madki on 26/09/15.
@@ -27,7 +27,7 @@ public class PortalModule {
     }
 
     @Provides @PerPortal
-    public SelectionCardListener providesSelectionCardListener() {
+    public SelectionCardController providesSelectionCardListener() {
         return portal;
     }
 }

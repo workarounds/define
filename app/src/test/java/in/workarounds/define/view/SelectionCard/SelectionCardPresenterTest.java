@@ -13,7 +13,8 @@ import static org.mockito.Mockito.verify;
  * Created by manidesto on 30/11/15.
  */
 public class SelectionCardPresenterTest {
-    @Mock SelectionCardListener listener;
+    @Mock
+    SelectionCardController listener;
     @Mock SelectionCardView selectionCardView;
     SelectionCardPresenter presenter;
 

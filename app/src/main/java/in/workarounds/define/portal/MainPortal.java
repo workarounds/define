@@ -26,7 +26,7 @@ import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.view.SelectionCard.SelectionCardListener;
+import in.workarounds.define.view.SelectionCard.SelectionCardController;
 import in.workarounds.define.view.SelectionCard.SelectionCardPresenter;
 import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.portal.Portal;
@@ -34,7 +34,7 @@ import in.workarounds.portal.Portal;
 /**
  * Created by madki on 20/09/15.
  */
-public class MainPortal extends Portal implements ComponentProvider,  SelectionCardListener, MeaningsController{
+public class MainPortal extends Portal implements ComponentProvider, SelectionCardController, MeaningsController{
     private static final String TAG = LogUtils.makeLogTag(MainPortal.class);
     public static final String BUNDLE_KEY_CLIP_TEXT = "bundle_key_clip_text";
     private static final int SELECTION_CARD_ANIMATION_TIME = 350;

@@ -27,17 +27,17 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
     String clipText;
     String selected;
     @Nullable SelectionCardView selectionCardView;
-    SelectionCardListener listener;
+    SelectionCardController controller;
 
     @Inject
-    public SelectionCardPresenter(SelectionCardListener listener) {
-        this.listener = listener;
+    public SelectionCardPresenter(SelectionCardController controller) {
+        this.controller = controller;
     }
 
     @Override
     public void onWordSelected(String word) {
         selected = word;
-        listener.onWordSelected(word);
+        controller.onWordSelected(word);
     }
 
     public void onClipTextChanged(@NonNull String clipText) {
@@ -68,7 +68,7 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
-        listener.onButtonClicked();
+        controller.onButtonClicked();
     }
 
     public void onSearchClicked() {
@@ -77,7 +77,7 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        listener.onButtonClicked();
+        controller.onButtonClicked();
     }
 
     public void onCopyClicked() {
@@ -88,14 +88,14 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
             clipboard.setPrimaryClip(clip);
             Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show();
         }
-        listener.onButtonClicked();
+        controller.onButtonClicked();
     }
 
     public void onWikiClicked() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://en.m.wikipedia.org/wiki/" + getTextInFocus()));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        listener.onButtonClicked();
+        controller.onButtonClicked();
     }
 
     public void onShareClicked() {
@@ -104,14 +104,14 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setType("text/plain");
         startActivity(intent);
-        listener.onButtonClicked();
+        controller.onButtonClicked();
     }
 
     public void onSettingsClicked() {
         Intent intent = new Intent(getContext(), UserPrefActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        listener.onButtonClicked();
+        controller.onButtonClicked();
     }
 
     private void startActivity(Intent intent) {
