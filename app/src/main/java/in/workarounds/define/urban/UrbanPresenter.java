@@ -1,7 +1,6 @@
 package in.workarounds.define.urban;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,13 +15,21 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.typography.TextView;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
  * Created by madki on 13/10/15.
  */
 @PerPortal
-public class UrbanPresenter implements MeaningPresenter {
+public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
     private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
@@ -36,6 +43,7 @@ public class UrbanPresenter implements MeaningPresenter {
     private ProgressBar loadProgress;
     private RecyclerView meaningList;
     private MeaningsTask task;
+    private Subscription subscription;
 
     @Inject
     public UrbanPresenter(UrbanDictionary dictionary, UrbanMeaningAdapter adapter, MeaningsController controller) {
@@ -61,23 +69,49 @@ public class UrbanPresenter implements MeaningPresenter {
     @Override
     public void onWordUpdated(String word) {
         Timber.d("Word updated : " + word);
-        if (word != null && !word.equals(this.word)) {
-            showProgress();
-            this.word = word;
-            if (urbanMeaningPage != null) {
-                urbanMeaningPage.title(word);
-            }
-            if(task != null) {
-                task.cancel(true);
-            }
-
-            task = new MeaningsTask();
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
-            } else {
-                task.execute(word);
-            }
+        if(subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
         }
+
+        subscription = Observable.just(word)
+                .filter(new Func1<String, Boolean>() {
+                    @Override
+                    public Boolean call(String w) {
+                        return w != null && !w.equals(UrbanPresenter.this.word);
+                    }
+                })
+                .doOnNext(new Action1<String>() {
+                    @Override
+                    public void call(String w) {
+                        UrbanPresenter.this.word = w;
+                        if (urbanMeaningPage != null) {
+                            urbanMeaningPage.title(w);
+                        }
+                        UrbanPresenter.this.showProgress();
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<String, Observable<UrbanResult>>() {
+                         @Override
+                         public Observable<UrbanResult> call(String s) {
+                             final String word = s;
+                             return Observable.create(new Observable.OnSubscribe<UrbanResult>() {
+                                 @Override
+                                 public void call(Subscriber<? super UrbanResult> subscriber) {
+                                     try {
+                                         UrbanResult result = dictionary.results(word);
+                                         subscriber.onNext(result);
+                                         subscriber.onCompleted();
+                                     } catch (DictionaryException e) {
+                                         subscriber.onError(e);
+                                     }
+                                 }
+                             });
+                         }
+                     }
+                )
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
     }
 
     public DictionaryException getDictionaryException() {
@@ -106,6 +140,31 @@ public class UrbanPresenter implements MeaningPresenter {
                 showStatus("Sorry, no results found.");
             }
         }
+    }
+
+    @Override
+    public void onCompleted() {
+
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        DictionaryException exception;
+        if(e instanceof DictionaryException) {
+            exception = (DictionaryException) e;
+        } else {
+            //noinspection ThrowableInstanceNeverThrown
+            exception = new DictionaryException(
+                    DictionaryException.UNKNOWN,
+                    "Sorry, something went wrong"
+            );
+        }
+        showException(exception);
+    }
+
+    @Override
+    public void onNext(UrbanResult urbanResult) {
+        onResultsUpdated(urbanResult);
     }
 
     private class MeaningsTask extends AsyncTask<String, Integer, UrbanResult> {
@@ -172,6 +231,12 @@ public class UrbanPresenter implements MeaningPresenter {
     private void showException() {
         if(urbanMeaningPage != null) {
             showStatus(getDictionaryException().getMessage());
+        }
+    }
+
+    private void showException(DictionaryException exception) {
+        if(urbanMeaningPage != null) {
+            showStatus(exception.getMessage());
         }
     }
 

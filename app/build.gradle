@@ -5,6 +5,12 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+    //Use Java 8 Compiler
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
         applicationId "in.workarounds.define"
         minSdkVersion 15
@@ -55,6 +61,10 @@ dependencies {
     //Timber for logging
     compile 'com.jakewharton.timber:timber:4.1.0'
 
+    //rx-java and rx-android
+    compile 'io.reactivex:rxjava:1.0.16'
+    compile 'io.reactivex:rxandroid:1.0.1'
+
     // Needed specifically for annotations in Java 1.6
     compile 'org.glassfish:javax.annotation:10.0-b28'
 
@@ -63,4 +73,26 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // Set this dependency if you want to use Mockito
     testCompile 'org.mockito:mockito-core:1.10.19'
+}
+
+/*RETRO LAMBDA*/
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+    }
+}
+// Required because retrolambda is on maven central
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'me.tatarka.retrolambda'
+
+retrolambda {
+    oldJdk JAVA7_HOME
+    jdk JAVA8_HOME
 }
