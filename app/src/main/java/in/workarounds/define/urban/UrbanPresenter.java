@@ -15,15 +15,14 @@ import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
+import timber.log.Timber;
 
 /**
  * Created by madki on 13/10/15.
  */
 @PerPortal
 public class UrbanPresenter implements MeaningPresenter {
-    private static final String TAG = LogUtils.makeLogTag(UrbanPresenter.class);
     private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
@@ -47,7 +46,6 @@ public class UrbanPresenter implements MeaningPresenter {
 
     @Override
     public void addView(View view) {
-        LogUtils.LOGD(TAG, "View added");
         this.urbanMeaningPage = (UrbanMeaningPage) view;
         initViews();
         setInitialViews();
@@ -55,7 +53,6 @@ public class UrbanPresenter implements MeaningPresenter {
 
     @Override
     public void dropView() {
-        LogUtils.LOGD(TAG, "View dropped");
         this.urbanMeaningPage = null;
         if(task != null) task.cancel(true);
         dropViews();
@@ -63,12 +60,11 @@ public class UrbanPresenter implements MeaningPresenter {
 
     @Override
     public void onWordUpdated(String word) {
-        LogUtils.LOGD(TAG, "Word updated: " + word);
+        Timber.d("Word updated : " + word);
         if (word != null && !word.equals(this.word)) {
             showProgress();
             this.word = word;
             if (urbanMeaningPage != null) {
-                LogUtils.LOGD(TAG, "urbanMeaningPage not null");
                 urbanMeaningPage.title(word);
             }
             if(task != null) {
