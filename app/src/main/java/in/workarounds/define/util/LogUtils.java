@@ -6,6 +6,13 @@ import android.util.Log;
 import in.workarounds.define.BuildConfig;
 
 
+/**
+ * Logging Util that can be used to make log tags and clip the tags
+ * to max log tag length of 23
+ *
+ * @deprecated use Timber instead
+ */
+@Deprecated
 public class LogUtils {
     private static final String LOG_PREFIX = "df_";
     private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();

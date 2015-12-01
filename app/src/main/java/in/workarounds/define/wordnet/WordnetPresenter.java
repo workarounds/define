@@ -26,7 +26,6 @@ import in.workarounds.define.helper.DownloadResolver;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.ui.activity.DictionariesActivity;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
 
 /**
@@ -34,7 +33,6 @@ import in.workarounds.typography.TextView;
  */
 @PerPortal
 public class WordnetPresenter implements MeaningPresenter{
-    private static final String TAG = LogUtils.makeLogTag(WordnetPresenter.class);
     private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
