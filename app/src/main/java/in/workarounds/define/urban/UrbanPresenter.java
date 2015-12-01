@@ -20,8 +20,6 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -42,7 +40,6 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
     private TextView loadStatus;
     private ProgressBar loadProgress;
     private RecyclerView meaningList;
-    private MeaningsTask task;
     private Subscription subscription;
 
     @Inject
@@ -62,7 +59,9 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
     @Override
     public void dropView() {
         this.urbanMeaningPage = null;
-        if(task != null) task.cancel(true);
+        if(subscription != null && !subscription.isUnsubscribed()){
+            subscription.unsubscribe();
+        }
         dropViews();
     }
 
@@ -74,44 +73,39 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
         }
 
         subscription = Observable.just(word)
-                .filter(new Func1<String, Boolean>() {
-                    @Override
-                    public Boolean call(String w) {
-                        return w != null && !w.equals(UrbanPresenter.this.word);
-                    }
+                .filter(w -> w != null && !w.equals(UrbanPresenter.this.word))
+                .doOnNext(w -> {
+                    showProgress();
+                    updateWordOnPage(w);
                 })
-                .doOnNext(new Action1<String>() {
-                    @Override
-                    public void call(String w) {
-                        UrbanPresenter.this.word = w;
-                        if (urbanMeaningPage != null) {
-                            urbanMeaningPage.title(w);
-                        }
-                        UrbanPresenter.this.showProgress();
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<String, Observable<UrbanResult>>() {
-                         @Override
-                         public Observable<UrbanResult> call(String s) {
-                             final String word = s;
-                             return Observable.create(new Observable.OnSubscribe<UrbanResult>() {
-                                 @Override
-                                 public void call(Subscriber<? super UrbanResult> subscriber) {
-                                     try {
-                                         UrbanResult result = dictionary.results(word);
-                                         subscriber.onNext(result);
-                                         subscriber.onCompleted();
-                                     } catch (DictionaryException e) {
-                                         subscriber.onError(e);
-                                     }
-                                 }
-                             });
-                         }
-                     }
-                )
+                .observeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
+                .flatMap(this::getResults)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
+    }
+
+    private Observable<UrbanResult> getResults(final String w) {
+        return Observable.create(new Observable.OnSubscribe<UrbanResult>() {
+            @Override
+            public void call(Subscriber<? super UrbanResult> subscriber) {
+                try {
+                    UrbanResult result = dictionary.results(w);
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onNext(result);
+                        subscriber.onCompleted();
+                    }
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
+
+    private void updateWordOnPage(String word) {
+        this.word = word;
+        if (urbanMeaningPage != null) {
+            urbanMeaningPage.title(word);
+        }
     }
 
     public DictionaryException getDictionaryException() {
@@ -159,41 +153,13 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
                     "Sorry, something went wrong"
             );
         }
-        showException(exception);
+        setDictionaryException(exception);
+        showException();
     }
 
     @Override
     public void onNext(UrbanResult urbanResult) {
         onResultsUpdated(urbanResult);
-    }
-
-    private class MeaningsTask extends AsyncTask<String, Integer, UrbanResult> {
-
-        @Override
-        protected UrbanResult doInBackground(String... params) {
-            UrbanResult results = null;
-            try {
-                results = dictionary.results(params[0]);
-                setDictionaryException(null);
-            } catch (DictionaryException exception) {
-                exception.printStackTrace();
-                setDictionaryException(exception);
-            } catch (Exception exception){
-                exception.printStackTrace();
-                setDictionaryException(new DictionaryException(
-                        DictionaryException.UNKNOWN,"Sorry, something went wrong."));
-            }
-            return results;
-        }
-
-        @Override
-        protected void onPostExecute(UrbanResult results) {
-            if (getDictionaryException() != null) {
-                showException();
-            }else {
-                onResultsUpdated(results);
-            }
-        }
     }
 
     private void initViews() {
@@ -210,7 +176,7 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
             showList();
         } else if (getDictionaryException() != null) {
             showException();
-        } else if(task != null && task.getStatus() == AsyncTask.Status.RUNNING){
+        } else if(subscription != null && !subscription.isUnsubscribed()){
             showProgress();
         } else{
             showStatus("Sorry, no results found");
@@ -231,12 +197,6 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
     private void showException() {
         if(urbanMeaningPage != null) {
             showStatus(getDictionaryException().getMessage());
-        }
-    }
-
-    private void showException(DictionaryException exception) {
-        if(urbanMeaningPage != null) {
-            showStatus(exception.getMessage());
         }
     }
 
