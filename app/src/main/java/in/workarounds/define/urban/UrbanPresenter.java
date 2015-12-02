@@ -17,7 +17,6 @@ import in.workarounds.define.portal.PerPortal;
 import in.workarounds.typography.TextView;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -85,20 +84,7 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
     }
 
     private Observable<UrbanResult> getResults(final String w) {
-        return Observable.create(new Observable.OnSubscribe<UrbanResult>() {
-            @Override
-            public void call(Subscriber<? super UrbanResult> subscriber) {
-                try {
-                    UrbanResult result = dictionary.results(w);
-                    if (!subscriber.isUnsubscribed()) {
-                        subscriber.onNext(result);
-                        subscriber.onCompleted();
-                    }
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-            }
-        });
+        return Observable.fromCallable(() -> dictionary.results(w));
     }
 
     private void updateWordOnPage(String word) {

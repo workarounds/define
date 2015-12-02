@@ -28,7 +28,6 @@ import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.typography.TextView;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -99,20 +98,7 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
     }
 
     private Observable<List<Synset>> getResults(final String w) {
-        return Observable.create(new Observable.OnSubscribe<List<Synset>>() {
-            @Override
-            public void call(Subscriber<? super List<Synset>> subscriber) {
-                try {
-                    List<Synset> result = dictionary.results(w);
-                    if(!subscriber.isUnsubscribed()){
-                        subscriber.onNext(result);
-                        subscriber.onCompleted();
-                    }
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-            }
-        });
+        return Observable.fromCallable(() -> dictionary.results(w));
     }
 
     private void updateWordOnPage(String word) {
