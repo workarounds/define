@@ -82,7 +82,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.4'
     }
 }
 // Required because retrolambda is on maven central
@@ -93,6 +93,9 @@ repositories {
 apply plugin: 'me.tatarka.retrolambda'
 
 retrolambda {
-    oldJdk JAVA7_HOME
-    jdk JAVA8_HOME
+    jdk System.getenv("JAVA8_HOME")
+    oldJdk System.getenv("JAVA7_HOME")
+    javaVersion JavaVersion.VERSION_1_7
+    defaultMethods false
+    incremental true
 }
