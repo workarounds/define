@@ -81,7 +81,7 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
 
     @Override
     public void onWordUpdated(String word) {
-        Timber.d("Word updated : " + word);
+        Timber.d("Word updated : %s", word);
         if(subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
@@ -153,7 +153,7 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
 
     @Override
     public void onCompleted() {
-
+        setDictionaryException(null);
     }
 
     @Override

@@ -67,7 +67,7 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
 
     @Override
     public void onWordUpdated(String word) {
-        Timber.d("Word updated : " + word);
+        Timber.d("Word updated : %s", word);
         if(subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
@@ -138,7 +138,7 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
 
     @Override
     public void onCompleted() {
-
+        setDictionaryException(null);
     }
 
     @Override
