@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,12 +26,19 @@ import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.typography.TextView;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by madki on 26/09/15.
  */
 @PerPortal
-public class WordnetPresenter implements MeaningPresenter{
+public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>>{
     private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
@@ -47,7 +53,7 @@ public class WordnetPresenter implements MeaningPresenter{
     private Button downloadButton;
     private ProgressBar loadProgress;
     private RecyclerView meaningList;
-    private MeaningsTask task;
+    private Subscription subscription;
 
     @Inject
     public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, MeaningsController controller) {
@@ -67,28 +73,52 @@ public class WordnetPresenter implements MeaningPresenter{
     @Override
     public void dropView() {
         this.wordnetMeaningPage = null;
-        if(task != null) task.cancel(true);
+        if(subscription != null && !subscription.isUnsubscribed()){
+            subscription.unsubscribe();
+        }
         dropViews();
     }
 
     @Override
     public void onWordUpdated(String word) {
-        if (word != null && !word.equals(this.word)) {
-            showProgress();
-            this.word = word;
-            if (wordnetMeaningPage != null) {
-                wordnetMeaningPage.title(word);
-            }
-            if(task != null) {
-                task.cancel(true);
-            }
+        Timber.d("Word updated : " + word);
+        if(subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
 
-            task = new MeaningsTask();
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
-            } else {
-                task.execute(word);
+        subscription = Observable.just(word)
+                .filter(w -> w != null && !w.equals(WordnetPresenter.this.word))
+                .doOnNext(w -> {
+                    showProgress();
+                    updateWordOnPage(w);
+                })
+                .observeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
+                .flatMap(this::getResults)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
+    }
+
+    private Observable<List<Synset>> getResults(final String w) {
+        return Observable.create(new Observable.OnSubscribe<List<Synset>>() {
+            @Override
+            public void call(Subscriber<? super List<Synset>> subscriber) {
+                try {
+                    List<Synset> result = dictionary.results(w);
+                    if(!subscriber.isUnsubscribed()){
+                        subscriber.onNext(result);
+                        subscriber.onCompleted();
+                    }
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
             }
+        });
+    }
+
+    private void updateWordOnPage(String word) {
+        this.word = word;
+        if (wordnetMeaningPage != null) {
+            wordnetMeaningPage.title(word);
         }
     }
 
@@ -121,33 +151,30 @@ public class WordnetPresenter implements MeaningPresenter{
         }
     }
 
-    private class MeaningsTask extends AsyncTask<String, Integer, List<Synset>> {
-        @Override
-        protected List<Synset> doInBackground(String... params) {
-            List<Synset> results = new ArrayList<>();
-            setDictionaryException(null);
-            try {
-                results = dictionary.results(params[0]);
-                setDictionaryException(null);
-            } catch (DictionaryException exception) {
-                exception.printStackTrace();
-                setDictionaryException(exception);
-            } catch (Exception exception){
-                exception.printStackTrace();
-                setDictionaryException(new DictionaryException(
-                        DictionaryException.UNKNOWN,"Sorry, something went wrong."));
-            }
-            return results;
-        }
+    @Override
+    public void onCompleted() {
 
-        @Override
-        protected void onPostExecute(List<Synset> results) {
-            if(getDictionaryException() != null){
-                showException();
-            }else {
-                onResultsUpdated(results);
-            }
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        DictionaryException exception;
+        if(e instanceof DictionaryException) {
+            exception = (DictionaryException) e;
+        } else {
+            //noinspection ThrowableInstanceNeverThrown
+            exception = new DictionaryException(
+                    DictionaryException.UNKNOWN,
+                    "Sorry, something went wrong"
+            );
         }
+        setDictionaryException(exception);
+        showException();
+    }
+
+    @Override
+    public void onNext(List<Synset> synsets) {
+        onResultsUpdated(synsets);
     }
 
     private void initViews() {
@@ -179,7 +206,7 @@ public class WordnetPresenter implements MeaningPresenter{
             showList();
         } else if (getDictionaryException() != null) {
             showException();
-        } else if(task != null && task.getStatus() == AsyncTask.Status.RUNNING){
+        } else if(subscription != null && !subscription.isUnsubscribed()){
             showProgress();
         } else {
             showStatus("Sorry, no results found");
