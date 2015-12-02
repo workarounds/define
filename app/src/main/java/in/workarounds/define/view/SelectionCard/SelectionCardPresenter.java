@@ -102,8 +102,8 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
         iterator.first();
         int count = 0;
         for(int end = iterator.next(); end != BreakIterator.DONE; end = iterator.next()){
-            count++;
+            if(++count > n) return false;
         }
-        return count <= n;
+        return true;
     }
 }
