@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.IntDef;
 import android.text.TextUtils;
@@ -23,12 +22,17 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
 import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
  * Created by madki on 07/11/15.
  */
-public abstract class LivioBasePresenter implements MeaningPresenter {
+public abstract class LivioBasePresenter implements MeaningPresenter, Observer<String> {
     private static final int LOAD_STATUS = 1;
     private static final int LOAD_PROGRESS = 2;
     private static final int MEANING_LIST = 3;
@@ -46,7 +50,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
     private ProgressBar loadProgress;
     private WebView meaningList;
     private String webviewHtml;
-    private MeaningsTask task;
+    private Subscription subscription;
     private Handler handler;
 
     public LivioBasePresenter(LivioDictionary dictionary, MeaningsController controller) {
@@ -66,7 +70,9 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
     @Override
     public void dropView() {
         this.livioMeaningPage = null;
-        if (task != null) task.cancel(true);
+        if(subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
         dropViews();
     }
 
@@ -83,23 +89,31 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
 
     @Override
     public void onWordUpdated(String word) {
-        Timber.d("Word updates : " + word);
-        if (word != null && !word.equals(this.word)) {
-            showProgress();
-            this.word = word;
-            if (livioMeaningPage != null) {
-                livioMeaningPage.title(word);
-            }
-            if (task != null) {
-                task.cancel(true);
-            }
+        Timber.d("Word updates : %s", word);
+        if(subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
 
-            task = new MeaningsTask();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
-            } else {
-                task.execute(word);
-            }
+        subscription = Observable.just(word)
+                .filter(w -> w != null && !w.equals(LivioBasePresenter.this.word))
+                .doOnNext(w -> {
+                    showProgress();
+                    updateWordOnPage(w);
+                })
+                .observeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
+                .flatMap(this::getResults)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
+    }
+
+    private Observable<String> getResults(final String word) {
+        return Observable.fromCallable(() -> dictionary.results(word, getPackageName()));
+    }
+
+    private void updateWordOnPage(String word) {
+        this.word = word;
+        if(livioMeaningPage != null) {
+            livioMeaningPage.title(word);
         }
     }
 
@@ -136,33 +150,30 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
         }
     }
 
-    private class MeaningsTask extends AsyncTask<String, Integer, String> {
+    @Override
+    public void onCompleted() {
+        setDictionaryException(null);
+    }
 
-        @Override
-        protected String doInBackground(String... params) {
-            String html = "";
-            try {
-                html = dictionary.results(params[0], getPackageName());
-                setDictionaryException(null);
-            } catch (DictionaryException exception) {
-                exception.printStackTrace();
-                setDictionaryException(exception);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                setDictionaryException(new
-                        DictionaryException(DictionaryException.UNKNOWN, "Sorry, something went wrong."));
-            }
-            return html;
+    @Override
+    public void onError(Throwable e) {
+        DictionaryException exception;
+        if(e instanceof DictionaryException) {
+            exception = (DictionaryException) e;
+        } else {
+            //noinspection ThrowableInstanceNeverThrown
+            exception = new DictionaryException(
+                    DictionaryException.UNKNOWN,
+                    "Sorry, something went wrong"
+            );
         }
+        setDictionaryException(exception);
+        showException();
+    }
 
-        @Override
-        protected void onPostExecute(String html) {
-            if (getDictionaryException() != null) {
-                showException();
-            } else {
-                onResultsUpdated(html);
-            }
-        }
+    @Override
+    public void onNext(String result) {
+        onResultsUpdated(result);
     }
 
     /* Ignore security vulnerability warnings for sdk below below jelly bean as we are in control of the html */
@@ -207,7 +218,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter {
             showException();
         } else if (webviewHtml != null) {
             onResultsUpdated(webviewHtml);
-        } else if (task != null && task.getStatus() == AsyncTask.Status.RUNNING) {
+        } else if (subscription != null && !subscription.isUnsubscribed()) {
             showProgress();
         } else {
             showStatus("Sorry, no results found");
