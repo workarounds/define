@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import in.workarounds.define.ui.activity.DashboardActivity;
+import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 
 /**
@@ -60,6 +61,11 @@ public class ContextHelper {
 
     public void openSettings() {
         Intent intent = new Intent(context, UserPrefActivity.class);
+        startActivity(intent);
+    }
+
+    public void openDictionariesActivity() {
+        Intent intent = new Intent(context, DictionariesActivity.class);
         startActivity(intent);
     }
 

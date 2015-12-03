@@ -1,6 +1,10 @@
 package in.workarounds.define.wordnet;
 
 
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +19,9 @@ import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.IWordnetDictionary;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
+import rx.Observable;
+import rx.android.schedulers.HandlerScheduler;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by madki on 26/09/15.
@@ -44,5 +51,11 @@ public class WordnetDictionary implements IWordnetDictionary {
             );
         }
         return results;
+    }
+
+    public Observable<List<Synset>> resultsObservable(String word) {
+        return Observable.fromCallable(() -> results(word))
+                .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
+                .observeOn(HandlerScheduler.from(new Handler(Looper.myLooper())));
     }
 }
