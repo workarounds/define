@@ -91,14 +91,6 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
         this.dictionaryException = dictionaryException;
     }
 
-    public String word() {
-        return word;
-    }
-
-    public WordnetMeaningAdapter adapter() {
-        return adapter;
-    }
-
     private void onResultsUpdated(List<Synset> results) {
         adapter.update(results);
         if(wordnetMeaningPage != null) {

@@ -49,7 +49,6 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
         }
     }
 
-
     @Override
     public void onWordUpdated(String word) {
         Timber.d("Word updates : %s", word);
@@ -161,5 +160,4 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
             }
         }
     }
-
 }

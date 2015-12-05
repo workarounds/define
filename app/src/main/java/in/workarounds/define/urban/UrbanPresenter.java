@@ -81,14 +81,6 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
         this.dictionaryException = dictionaryException;
     }
 
-    public String word() {
-        return word;
-    }
-
-    public UrbanMeaningAdapter adapter() {
-        return adapter;
-    }
-
     private void onResultsUpdated(UrbanResult results) {
         adapter.update(results);
         if(urbanMeaningPage != null) {
