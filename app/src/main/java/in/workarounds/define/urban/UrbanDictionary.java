@@ -11,16 +11,16 @@ import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.IUrbanDictionary;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.util.LogUtils;
 import retrofit.Call;
 import retrofit.Response;
+import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by madki on 26/09/15.
  */
 @PerPortal
 public class UrbanDictionary implements IUrbanDictionary {
-    private static final String TAG = LogUtils.makeLogTag(UrbanDictionary.class);
     private final UrbanApi api;
 
     @Inject
@@ -44,5 +44,10 @@ public class UrbanDictionary implements IUrbanDictionary {
             }
         }
         return results;
+    }
+
+    public Observable<UrbanResult> resultsObservable(String word) {
+        return Observable.fromCallable(() -> results(word))
+                .subscribeOn(Schedulers.io());
     }
 }

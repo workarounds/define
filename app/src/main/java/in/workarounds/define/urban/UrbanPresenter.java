@@ -1,25 +1,18 @@
 package in.workarounds.define.urban;
 
-import android.os.AsyncTask;
-import android.support.annotation.IntDef;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import javax.inject.Inject;
 
-import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.typography.TextView;
+import in.workarounds.define.util.AndroidSchedulersUtil;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -27,18 +20,11 @@ import timber.log.Timber;
  */
 @PerPortal
 public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
-    private static final int LOAD_STATUS = 1;
-    private static final int LOAD_PROGRESS = 2;
-    private static final int MEANING_LIST = 3;
-
     private DictionaryException dictionaryException;
     private UrbanDictionary dictionary;
     private UrbanMeaningPage urbanMeaningPage;
     private String word;
     private UrbanMeaningAdapter adapter;
-    private TextView loadStatus;
-    private ProgressBar loadProgress;
-    private RecyclerView meaningList;
     private Subscription subscription;
 
     @Inject
@@ -51,8 +37,7 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
     @Override
     public void addView(View view) {
         this.urbanMeaningPage = (UrbanMeaningPage) view;
-        initViews();
-        setInitialViews();
+        initMeaningPage();
     }
 
     @Override
@@ -61,7 +46,6 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
         if(subscription != null && !subscription.isUnsubscribed()){
             subscription.unsubscribe();
         }
-        dropViews();
     }
 
     @Override
@@ -74,17 +58,12 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
         subscription = Observable.just(word)
                 .filter(w -> w != null && !w.equals(UrbanPresenter.this.word))
                 .doOnNext(w -> {
-                    showProgress();
+                    onMeaningsLoading();
                     updateWordOnPage(w);
                 })
-                .observeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
-                .flatMap(this::getResults)
-                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(dictionary::resultsObservable)
+                .observeOn(AndroidSchedulersUtil.mainThread())
                 .subscribe(this);
-    }
-
-    private Observable<UrbanResult> getResults(final String w) {
-        return Observable.fromCallable(() -> dictionary.results(w));
     }
 
     private void updateWordOnPage(String word) {
@@ -115,9 +94,9 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
         if(urbanMeaningPage != null) {
             adapter.notifyDataSetChanged();
             if (results != null && results.getMeanings().size() != 0) {
-                showList();
+                urbanMeaningPage.meaningsLoaded();
             } else {
-                showStatus("Sorry, no results found.");
+                urbanMeaningPage.error("Sorry, no results found.");
             }
         }
     }
@@ -148,79 +127,31 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
         onResultsUpdated(urbanResult);
     }
 
-    private void initViews() {
-        loadStatus = (TextView) urbanMeaningPage.findViewById(R.id.tv_load_status);
-        loadProgress = (ProgressBar) urbanMeaningPage.findViewById(R.id.pb_load_progress);
-        meaningList = (RecyclerView) urbanMeaningPage.findViewById(R.id.rv_meaning_list);
-    }
-
-    private void setInitialViews() {
+    private void initMeaningPage() {
+        urbanMeaningPage.title(word);
+        urbanMeaningPage.setAdapter(adapter);
         if (TextUtils.isEmpty(word)) {
-            showStatus("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
+            urbanMeaningPage.error("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
         } else if (adapter != null && adapter.getItemCount() != 0) {
-            adapter.notifyDataSetChanged();
-            showList();
+            urbanMeaningPage.meaningsLoaded();
         } else if (getDictionaryException() != null) {
             showException();
         } else if(subscription != null && !subscription.isUnsubscribed()){
-            showProgress();
+            urbanMeaningPage.meaningsLoading();
         } else{
-            showStatus("Sorry, no results found");
+            urbanMeaningPage.error("Sorry, no results found");
         }
-    }
-
-    private void dropViews() {
-        loadStatus = null;
-        loadProgress = null;
-        meaningList = null;
-    }
-
-    private void showStatus(String status) {
-        loadStatus.setText(status);
-        showView(LOAD_STATUS);
     }
 
     private void showException() {
         if(urbanMeaningPage != null) {
-            showStatus(getDictionaryException().getMessage());
+            urbanMeaningPage.error(getDictionaryException().getMessage());
         }
     }
 
-    private void showProgress() {
-        showView(LOAD_PROGRESS);
-    }
-
-    private void showList() {
-        showView(MEANING_LIST);
-    }
-
-    private void showView(@ViewEnum int view) {
-        switch (view) {
-            case LOAD_STATUS:
-                changeViewVisibilities(true, false, false);
-                break;
-            case LOAD_PROGRESS:
-                changeViewVisibilities(false, true, false);
-                break;
-            case MEANING_LIST:
-                changeViewVisibilities(false, false, true);
-                break;
+    private void onMeaningsLoading() {
+        if(urbanMeaningPage != null) {
+            urbanMeaningPage.meaningsLoading();
         }
-    }
-
-    private void changeViewVisibilities(boolean status, boolean progress, boolean list) {
-        if (loadStatus != null) {
-            loadStatus.setVisibility(status ? View.VISIBLE : View.GONE);
-        }
-        if (loadProgress != null) {
-            loadProgress.setVisibility(progress ? View.VISIBLE : View.GONE);
-        }
-        if (meaningList != null) {
-            meaningList.setVisibility(list ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    @IntDef({LOAD_PROGRESS, LOAD_STATUS, MEANING_LIST})
-    private @interface ViewEnum {
     }
 }
