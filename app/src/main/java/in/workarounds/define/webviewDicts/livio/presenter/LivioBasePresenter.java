@@ -1,6 +1,5 @@
 package in.workarounds.define.webviewDicts.livio.presenter;
 
-import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -14,7 +13,6 @@ import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -65,7 +63,6 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
                     onMeaningsLoading();
                     updateWordOnPage(w);
                 })
-                .observeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR))
                 .flatMap(w -> dictionary.resultsObservable(w, getPackageName()))
                 .observeOn(AndroidSchedulersUtil.mainThread())
                 .subscribe(this);

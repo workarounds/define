@@ -3,6 +3,7 @@ package in.workarounds.define.webviewDicts.livio;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.StringDef;
 import android.text.TextUtils;
 
@@ -21,6 +22,7 @@ import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PackageManagerUtils;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by madki on 26/09/15.
@@ -53,7 +55,8 @@ public class LivioDictionary {
     }
 
     public Observable<String> resultsObservable(String word, @PACKAGE_NAME String packageName) {
-        return Observable.fromCallable(() -> results(word, packageName));
+        return Observable.fromCallable(() -> results(word, packageName))
+                .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
     }
 
     private Uri getContentUri(@PACKAGE_NAME String packageName) {
