@@ -79,11 +79,6 @@ public class WordnetMeaningPage extends RelativeLayout {
         loadingIndicator = findViewById(R.id.pb_load_progress);
     }
 
-    public void setWord(String word) {
-        presenter.onWordUpdated(word);
-        title(word);
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
