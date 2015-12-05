@@ -9,14 +9,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import edu.smu.tspell.wordnet.Synset;
-import in.workarounds.define.DefineApp;
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.helper.ContextHelper;
-import in.workarounds.define.helper.DownloadResolver;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
+import in.workarounds.define.util.AndroidSchedulersUtil;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -73,6 +72,7 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
                     updateWordOnPage(w);
                 })
                 .flatMap(dictionary::resultsObservable)
+                .observeOn(AndroidSchedulersUtil.mainThread())
                 .subscribe(this);
     }
 
@@ -127,11 +127,9 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
                     DictionaryException.UNKNOWN,
                     "Sorry, something went wrong"
             );
+            Timber.e("Unknown exception: %s", e);
         }
         setDictionaryException(exception);
-        if(wordnetMeaningPage != null) {
-            wordnetMeaningPage.error(exception.getMessage());
-        }
         showException();
     }
 
@@ -145,8 +143,7 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
             contextHelper.openDictionariesActivity();
             controller.onDownloadClicked();
         }else {
-            DownloadResolver
-                    .startDownload(Constants.WORDNET, DefineApp.getContext());
+            contextHelper.startDownload(Constants.WORDNET);
         }
     }
 

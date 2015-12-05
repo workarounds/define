@@ -69,6 +69,10 @@ public class ContextHelper {
         startActivity(intent);
     }
 
+    public void startDownload(String identifier) {
+        DownloadResolver.startDownload(identifier, context);
+    }
+
     private void startActivity (Intent intent) {
         if(startNewTask) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
