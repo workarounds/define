@@ -1,5 +1,7 @@
 package in.workarounds.define.wordnet;
 
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,7 @@ import java.util.List;
 import edu.smu.tspell.wordnet.Synset;
 import in.workarounds.define.BuildConfig;
 import in.workarounds.define.RxAndroidHook;
+import in.workarounds.define.api.Constants;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.MeaningsController;
@@ -131,6 +134,17 @@ public class WordnetPresenterTest {
         when(dictionary.resultsObservable(anyString())).thenReturn(Observable.just(new ArrayList<>()));
         presenter.onWordUpdated(someOtherWord);
         verify(meaningPage).error(anyString());
+    }
+
+    @Test
+    public void testDownloadClicked() throws Exception {
+        presenter.onDownloadClicked();
+        verify(contextHelper).startDownload(Constants.WORDNET);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            verify(controller).onDownloadClicked();
+        } else {
+            verify(controller, never()).onDownloadClicked();
+        }
     }
 
     @After
