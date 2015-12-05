@@ -2,6 +2,7 @@ package in.workarounds.define.webviewDicts.livio.presenter;
 
 import javax.inject.Inject;
 
+import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
@@ -13,8 +14,8 @@ import in.workarounds.define.webviewDicts.livio.LivioDictionary;
 public class LivioGermanPresenter extends LivioBasePresenter {
 
     @Inject
-    public LivioGermanPresenter(LivioDictionary dictionary, MeaningsController controller) {
-        super(dictionary, controller);
+    public LivioGermanPresenter(LivioDictionary dictionary, MeaningsController controller, ContextHelper contextHelper) {
+        super(dictionary, controller, contextHelper);
     }
 
     @Override
