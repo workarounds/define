@@ -1,6 +1,7 @@
 package in.workarounds.define.helper;
 
 import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -71,6 +72,17 @@ public class ContextHelper {
 
     public void startDownload(String identifier) {
         DownloadResolver.startDownload(identifier, context);
+    }
+
+    public void openPlayStore(String packageName) {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" + packageName)));
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=" + packageName))
+                    );
+        }
     }
 
     private void startActivity (Intent intent) {
