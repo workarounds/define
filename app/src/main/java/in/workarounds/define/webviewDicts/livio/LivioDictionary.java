@@ -20,6 +20,7 @@ import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PackageManagerUtils;
+import rx.Observable;
 
 /**
  * Created by madki on 26/09/15.
@@ -49,6 +50,10 @@ public class LivioDictionary {
             results = getHtml(word, packageName);
         }
         return results;
+    }
+
+    public Observable<String> resultsObservable(String word, @PACKAGE_NAME String packageName) {
+        return Observable.fromCallable(() -> results(word, packageName));
     }
 
     private Uri getContentUri(@PACKAGE_NAME String packageName) {
