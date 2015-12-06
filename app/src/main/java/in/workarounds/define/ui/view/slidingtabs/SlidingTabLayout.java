@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package in.workarounds.define.view.slidingtabs;
+package in.workarounds.define.ui.view.slidingtabs;
 
 import android.content.Context;
 import android.graphics.Typeface;

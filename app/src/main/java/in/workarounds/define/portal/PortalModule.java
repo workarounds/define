@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.helper.ContextHelper;
-import in.workarounds.define.view.SelectionCard.SelectionCardController;
+import in.workarounds.define.ui.view.SelectionCard.SelectionCardController;
 
 /**
  * Created by madki on 26/09/15.

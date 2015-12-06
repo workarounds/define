@@ -15,7 +15,7 @@
         android:orientation="vertical"
         >
 
-        <in.workarounds.define.view.MaxHeightScrollView
+        <in.workarounds.define.ui.view.MaxHeightScrollView
             android:id="@+id/sv_text_container"
             android:layout_width="match_parent"
             android:scrollbarThumbVertical="@drawable/scrollbar_rounded"
@@ -24,7 +24,7 @@
             app:maxHeight="@dimen/bubble_card_height"
             android:layout_height="match_parent">
 
-            <in.workarounds.define.view.swipeselect.SelectableTextView
+            <in.workarounds.define.ui.view.swipeselect.SelectableTextView
                 android:id="@+id/tv_clip_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 app:font_variant="light"
                 android:textSize="18sp" />
 
-        </in.workarounds.define.view.MaxHeightScrollView>
+        </in.workarounds.define.ui.view.MaxHeightScrollView>
 
         <View
             android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package in.workarounds.define.view;
+package in.workarounds.define.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

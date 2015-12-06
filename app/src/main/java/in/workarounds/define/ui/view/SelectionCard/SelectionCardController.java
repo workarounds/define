@@ -1,4 +1,4 @@
-package in.workarounds.define.view.SelectionCard;
+package in.workarounds.define.ui.view.SelectionCard;
 
 /**
  * Created by manidesto on 30/11/15.

@@ -7,7 +7,7 @@
     android:background="@color/translucent_black">
 
 
-    <in.workarounds.define.view.SelectionCard.SelectionCardView
+    <in.workarounds.define.ui.view.SelectionCard.SelectionCardView
         android:id="@+id/selection_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -39,7 +39,7 @@
         android:layout_marginRight="@dimen/margin_regular"
         >
 
-        <in.workarounds.define.view.slidingtabs.SlidingTabLayout
+        <in.workarounds.define.ui.view.slidingtabs.SlidingTabLayout
             android:id="@+id/sliding_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

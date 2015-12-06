@@ -1,4 +1,4 @@
-package in.workarounds.define.view.SelectionCard;
+package in.workarounds.define.ui.view.SelectionCard;
 
 import org.junit.Before;
 import org.junit.Test;

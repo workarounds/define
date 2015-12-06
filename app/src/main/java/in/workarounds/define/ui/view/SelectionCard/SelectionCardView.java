@@ -1,4 +1,4 @@
-package in.workarounds.define.view.SelectionCard;
+package in.workarounds.define.ui.view.SelectionCard;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import in.workarounds.define.R;
 import in.workarounds.define.portal.ComponentProvider;
-import in.workarounds.define.view.swipeselect.SelectableTextView;
+import in.workarounds.define.ui.view.swipeselect.SelectableTextView;
 
 /**
  * Created by manidesto on 30/11/15.

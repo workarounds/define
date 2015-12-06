@@ -26,9 +26,9 @@ import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.view.SelectionCard.SelectionCardController;
-import in.workarounds.define.view.SelectionCard.SelectionCardPresenter;
-import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
+import in.workarounds.define.ui.view.SelectionCard.SelectionCardController;
+import in.workarounds.define.ui.view.SelectionCard.SelectionCardPresenter;
+import in.workarounds.define.ui.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.portal.Portal;
 
 /**

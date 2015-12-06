@@ -1,4 +1,4 @@
-package in.workarounds.define.view.SelectionCard;
+package in.workarounds.define.ui.view.SelectionCard;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.view.swipeselect.SelectableTextView;
+import in.workarounds.define.ui.view.swipeselect.SelectableTextView;
 
 /**
  * Created by manidesto on 30/11/15.

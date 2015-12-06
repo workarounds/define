@@ -1,4 +1,4 @@
-package in.workarounds.define.view.swipeselect;
+package in.workarounds.define.ui.view.swipeselect;
 
 import android.content.Context;
 import android.graphics.PointF;
