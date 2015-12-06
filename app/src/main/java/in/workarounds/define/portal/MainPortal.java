@@ -1,17 +1,14 @@
 package in.workarounds.define.portal;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
 import java.util.HashSet;
@@ -25,10 +22,10 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.ui.view.SelectionCard.SelectionCardController;
 import in.workarounds.define.ui.view.SelectionCard.SelectionCardPresenter;
 import in.workarounds.define.ui.view.slidingtabs.SlidingTabLayout;
+import in.workarounds.define.util.LogUtils;
 import in.workarounds.portal.Portal;
 
 /**
@@ -94,14 +91,6 @@ public class MainPortal extends Portal implements ComponentProvider, SelectionCa
     @Override
     public PortalComponent component() {
         return component;
-    }
-
-    @NonNull
-    @Override
-    protected WindowManager.LayoutParams getLayoutParams() {
-        WindowManager.LayoutParams params = super.getLayoutParams();
-        params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
-        return params;
     }
 
     private void initViews() {
