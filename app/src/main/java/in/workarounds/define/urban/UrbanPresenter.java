@@ -43,9 +43,6 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
     @Override
     public void dropView() {
         this.urbanMeaningPage = null;
-        if(subscription != null && !subscription.isUnsubscribed()){
-            subscription.unsubscribe();
-        }
     }
 
     @Override
@@ -109,6 +106,7 @@ public class UrbanPresenter implements MeaningPresenter, Observer<UrbanResult> {
                     DictionaryException.UNKNOWN,
                     "Sorry, something went wrong"
             );
+            Timber.e(e, "Unknown exception");
         }
         setDictionaryException(exception);
         showException();

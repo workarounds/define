@@ -44,9 +44,6 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
     @Override
     public void dropView() {
         this.livioMeaningPage = null;
-        if(subscription != null && !subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
-        }
     }
 
     @Override
@@ -105,6 +102,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
                     DictionaryException.UNKNOWN,
                     "Sorry, something went wrong"
             );
+            Timber.e(e, "Unknown exception");
         }
         setDictionaryException(exception);
         showException();

@@ -53,9 +53,6 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
     @Override
     public void dropView() {
         this.wordnetMeaningPage = null;
-        if(subscription != null && !subscription.isUnsubscribed()){
-            subscription.unsubscribe();
-        }
     }
 
     @Override
@@ -119,7 +116,7 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
                     DictionaryException.UNKNOWN,
                     "Sorry, something went wrong"
             );
-            Timber.e("Unknown exception: %s", e);
+            Timber.e(e, "Unknown exception");
         }
         setDictionaryException(exception);
         showException();
