@@ -15,10 +15,10 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.util.AndroidSchedulersUtil;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -69,7 +69,7 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
                     updateWordOnPage(w);
                 })
                 .flatMap(dictionary::resultsObservable)
-                .observeOn(AndroidSchedulersUtil.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
     }
 

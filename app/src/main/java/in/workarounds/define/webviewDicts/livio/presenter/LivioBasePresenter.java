@@ -7,12 +7,12 @@ import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.MeaningsController;
-import in.workarounds.define.util.AndroidSchedulersUtil;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
 import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -60,7 +60,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
                     updateWordOnPage(w);
                 })
                 .flatMap(w -> dictionary.resultsObservable(w, getPackageName()))
-                .observeOn(AndroidSchedulersUtil.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
     }
 

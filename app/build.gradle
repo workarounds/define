@@ -68,7 +68,7 @@ dependencies {
 
     //rx-java and rx-android
     compile 'io.reactivex:rxjava:1.0.16'
-    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxandroid:1.1.0'
 
     // Needed specifically for annotations in Java 1.6
     compile 'org.glassfish:javax.annotation:10.0-b28'
