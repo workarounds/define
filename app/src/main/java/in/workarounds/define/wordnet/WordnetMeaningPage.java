@@ -1,9 +1,11 @@
 package in.workarounds.define.wordnet;
 
 import android.content.Context;
+import android.support.annotation.IntDef;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,11 +19,19 @@ import in.workarounds.define.portal.ComponentProvider;
  * Created by madki on 26/09/15.
  */
 public class WordnetMeaningPage extends RelativeLayout {
+    private static final int ERROR = 1;
+    private static final int LOADING = 2;
+    private static final int MEANING_LIST = 3;
+
     @Inject
     WordnetPresenter presenter;
 
     private TextView title;
     private RecyclerView meanings;
+
+    private TextView error;
+    private View downloadButton;
+    private View loadingIndicator;
 
     public WordnetMeaningPage(Context context) {
         super(context);
@@ -46,16 +56,13 @@ public class WordnetMeaningPage extends RelativeLayout {
         inject();
 
         // find the views
-        title = (TextView) findViewById(R.id.tv_title);
-        meanings = (RecyclerView) findViewById(R.id.rv_meaning_list);
+        findTheViews();
+
+        downloadButton.setOnClickListener(v -> presenter.onDownloadClicked());
 
         // set up recycler view
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         meanings.setLayoutManager(layoutManager);
-        meanings.setAdapter(presenter.adapter());
-
-        // set title
-        title(presenter.word());
     }
 
     private void inject() {
@@ -64,9 +71,12 @@ public class WordnetMeaningPage extends RelativeLayout {
         }
     }
 
-    public void setWord(String word) {
-        presenter.onWordUpdated(word);
-        title(word);
+    private void findTheViews() {
+        title = (TextView) findViewById(R.id.tv_title);
+        meanings = (RecyclerView) findViewById(R.id.rv_meaning_list);
+        error = (TextView) findViewById(R.id.tv_load_status);
+        downloadButton = findViewById(R.id.btn_download_wordnet);
+        loadingIndicator = findViewById(R.id.pb_load_progress);
     }
 
     @Override
@@ -85,13 +95,58 @@ public class WordnetMeaningPage extends RelativeLayout {
         }
     }
 
+    public void setAdapter(WordnetMeaningAdapter adapter) {
+        meanings.setAdapter(adapter);
+    }
+
     public void title(String heading) {
         title.setText(heading);
     }
 
-    public String title() {
-        return title.getText().toString();
+    public void error(String msg) {
+        error.setText(msg);
+        showView(ERROR);
     }
 
+    public void meaningsLoading() {
+        showView(LOADING);
+    }
 
+    public void meaningsLoaded() {
+        showView(MEANING_LIST);
+    }
+
+    public void dictionaryNotAvailable() {
+        downloadButton.setVisibility(View.VISIBLE);
+    }
+
+    private void showView(@ViewEnum int view) {
+        switch (view) {
+            case ERROR:
+                changeViewVisibilities(true, false, false);
+                break;
+            case LOADING:
+                changeViewVisibilities(false, true, false);
+                break;
+            case MEANING_LIST:
+                changeViewVisibilities(false, false, true);
+                break;
+        }
+    }
+
+    private void changeViewVisibilities(boolean status, boolean progress, boolean list) {
+        error.setVisibility(status ? View.VISIBLE : View.GONE);
+
+        loadingIndicator.setVisibility(progress ? View.VISIBLE : View.GONE);
+
+        meanings.setVisibility(list ? View.VISIBLE : View.GONE);
+
+        if(list) {
+            downloadButton.setVisibility(View.GONE);
+        }
+    }
+
+    @IntDef({LOADING, ERROR, MEANING_LIST})
+    private @interface ViewEnum {
+    }
 }

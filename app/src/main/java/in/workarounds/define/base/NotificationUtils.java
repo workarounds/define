@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
-import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.portal.MainPortal;
 import in.workarounds.portal.Portal;
@@ -15,15 +15,14 @@ import in.workarounds.portal.Portal;
 /**
  * Created by Nithin on 29/10/15.
  */
-public enum NotificationUtils {
-
-    INSTANCE;
+public class NotificationUtils {
+    public static final int SILENT_NOTIFICATION_ID = 201;
+    public static final int SILENT_BACKUP_NOTIFICATION_ID = 202;
     private NotificationManager notificationManager;
     private Context context;
-    public static final int SILENT_NOTIFICATION_ID = 201;
 
-    NotificationUtils(){
-        context = DefineApp.getContext();
+    public NotificationUtils(Context context){
+        this.context = context;
         notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
@@ -36,20 +35,34 @@ public enum NotificationUtils {
         return notificationManager;
     }
 
+   public void cancelBackupNotification(){
+        getNotificationManager().cancel(SILENT_BACKUP_NOTIFICATION_ID);
+    }
+
+    public void sendSilentBackupNotification(String text){
+        sendNotification(text, SILENT_BACKUP_NOTIFICATION_ID, NotificationCompat.PRIORITY_DEFAULT);
+    }
+
     public void sendSilentMeaningNotification(String text){
-        sendMeaningNotification(text, NotificationCompat.PRIORITY_DEFAULT);
+        sendNotification(text,SILENT_NOTIFICATION_ID, NotificationCompat.PRIORITY_DEFAULT);
     }
 
     public void sendPriorityMeaningNotification(String text){
-        sendMeaningNotification(text, NotificationCompat.PRIORITY_HIGH);
+        sendNotification(text,SILENT_NOTIFICATION_ID, NotificationCompat.PRIORITY_HIGH);
     }
 
     public void sendMeaningNotification(String text,int priority){
+        sendNotification(text,SILENT_NOTIFICATION_ID, priority);
+    }
+
+    public void sendNotification(String text,int notificationid,int priority){
+        int color = ContextCompat.getColor(getContext(), R.color.theme_primary);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getContext())
                         .setAutoCancel(true)
                         .setSmallIcon(R.drawable.ic_notification_icon)
                         .setPriority(priority)
+                        .setColor(color)
                         .setVibrate(new long[0]) //mandatory for high priority,setting no vibration
                         .setContentTitle(getContext().getString(R.string.app_name))
                         .setContentText(getContext().getString(R.string.notification_content));
@@ -70,6 +83,6 @@ public enum NotificationUtils {
                 );
         mBuilder.setContentIntent(resultPendingIntent);
 
-        getNotificationManager().notify(SILENT_NOTIFICATION_ID, mBuilder.build());
+        getNotificationManager().notify(notificationid, mBuilder.build());
     }
 }

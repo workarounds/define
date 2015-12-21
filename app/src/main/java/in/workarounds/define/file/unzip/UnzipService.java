@@ -102,7 +102,7 @@ public class UnzipService extends Service {
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationBuilder = new NotificationCompat.Builder(this);
 
-        mNotificationBuilder.setSmallIcon(R.drawable.ic_stat_name);
+        mNotificationBuilder.setSmallIcon(R.drawable.ic_notification_icon);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mNotificationBuilder.setColor(ContextCompat.getColor(this, R.color.theme_primary));
         }
@@ -333,7 +333,7 @@ public class UnzipService extends Service {
         // TODO add pending intent ?
         mNotificationBuilder.setContentTitle(getResources().getString(R.string.unzip_noti_finish_title));
         mNotificationBuilder.setContentText(fileHelper.downloadFileName());
-        mNotificationBuilder.setProgress(100, 100, false);
+        mNotificationBuilder.setProgress(0, 0, false);
         mNotifyManager.notify(id, mNotificationBuilder.build());
     }
 

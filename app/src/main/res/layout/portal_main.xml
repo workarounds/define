@@ -7,54 +7,10 @@
     android:background="@color/translucent_black">
 
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_action_card"
+    <in.workarounds.define.ui.view.SelectionCard.SelectionCardView
+        android:id="@+id/selection_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_regular"
-        android:layout_marginRight="@dimen/margin_regular"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardCornerRadius="2dp">
-
-        <in.workarounds.define.view.MaxHeightScrollView
-            android:id="@+id/sv_text_container"
-            android:layout_width="match_parent"
-            android:padding="@dimen/margin_regular"
-            android:layout_marginBottom="@dimen/margin_regular"
-            android:scrollbarThumbVertical="@drawable/scrollbar_rounded"
-            android:fadeScrollbars="false"
-            android:scrollbarSize="3dp"
-            app:maxHeight="@dimen/bubble_card_height"
-            android:layout_height="match_parent">
-
-            <in.workarounds.define.view.swipeselect.SelectableTextView
-                android:id="@+id/tv_clip_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/padding_large"
-                android:paddingLeft="@dimen/padding_regular"
-                android:paddingRight="@dimen/padding_regular"
-                android:paddingTop="@dimen/padding_regular"
-                android:lineSpacingMultiplier="1.2"
-                android:textColor="@color/black"
-                app:font_variant="light"
-                android:textSize="18sp" />
-
-        </in.workarounds.define.view.MaxHeightScrollView>
-
-
-        <in.workarounds.typography.TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:paddingBottom="@dimen/padding_small"
-            android:paddingLeft="@dimen/padding_large"
-            android:paddingRight="@dimen/padding_large"
-            android:paddingTop="@dimen/padding_small"
-            android:text="@string/hint_tap_to_select"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/font_smaller" />
-    </android.support.v7.widget.CardView>
+        android:layout_height="wrap_content"/>
 
     <FrameLayout
         android:id="@+id/fl_close_container"
@@ -71,25 +27,19 @@
             android:textSize="@dimen/font_regular" />
 
     </FrameLayout>
-
-    <include android:id="@+id/button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cv_action_card"
-        layout="@layout/layout_action_buttons" />
-
     <RelativeLayout
         android:id="@+id/ll_meaning_pages_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         android:layout_above="@id/fl_close_container"
-        android:layout_below="@id/button_container"
+        android:layout_below="@id/selection_card"
+        android:layout_marginTop="@dimen/margin_regular"
         android:layout_marginLeft="@dimen/margin_regular"
         android:layout_marginRight="@dimen/margin_regular"
         >
 
-        <in.workarounds.define.view.slidingtabs.SlidingTabLayout
+        <in.workarounds.define.ui.view.slidingtabs.SlidingTabLayout
             android:id="@+id/sliding_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

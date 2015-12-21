@@ -1,91 +1,82 @@
 package in.workarounds.define.wordnet;
 
-import android.os.AsyncTask;
 import android.os.Build;
-import android.support.annotation.IntDef;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import edu.smu.tspell.wordnet.Synset;
-import in.workarounds.define.DefineApp;
-import in.workarounds.define.R;
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.MeaningPresenter;
-import in.workarounds.define.helper.DownloadResolver;
-import in.workarounds.define.portal.MainPortal;
+import in.workarounds.define.helper.ContextHelper;
+import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.util.LogUtils;
-import in.workarounds.typography.TextView;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 /**
  * Created by madki on 26/09/15.
  */
 @PerPortal
-public class WordnetPresenter implements MeaningPresenter{
-    private static final String TAG = LogUtils.makeLogTag(WordnetPresenter.class);
-    private static final int LOAD_STATUS = 1;
-    private static final int LOAD_PROGRESS = 2;
-    private static final int MEANING_LIST = 3;
-
+public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>>{
+    private MeaningsController controller;
     private DictionaryException dictionaryException;
     private WordnetDictionary dictionary;
     private WordnetMeaningPage wordnetMeaningPage;
     private String word;
     private WordnetMeaningAdapter adapter;
-    private TextView loadStatus;
-    private Button downloadButton;
-    private ProgressBar loadProgress;
-    private RecyclerView meaningList;
-    private MeaningsTask task;
+    private Subscription subscription;
+    private ContextHelper contextHelper;
 
     @Inject
-    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, MainPortal portal) {
+    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, MeaningsController controller, ContextHelper contextHelper) {
         this.dictionary = dictionary;
         this.adapter = adapter;
-        portal.addPresenter(this);
+        this.controller = controller;
+        this.contextHelper = contextHelper;
+        controller.addMeaningPresenter(this);
     }
 
     @Override
     public void addView(View view) {
         this.wordnetMeaningPage = (WordnetMeaningPage) view;
-        initViews();
-        setInitialViews();
+        initMeaningPage();
     }
 
     @Override
     public void dropView() {
         this.wordnetMeaningPage = null;
-        if(task != null) task.cancel(true);
-        dropViews();
     }
 
     @Override
     public void onWordUpdated(String word) {
-        if (word != null && !word.equals(this.word)) {
-            showProgress();
-            this.word = word;
-            if (wordnetMeaningPage != null) {
-                wordnetMeaningPage.title(word);
-            }
-            if(task != null) {
-                task.cancel(true);
-            }
+        Timber.d("Word updated : %s", word);
+        if(subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
 
-            task = new MeaningsTask();
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, word);
-            } else {
-                task.execute(word);
-            }
+        subscription = Observable.just(word)
+                .filter(w -> w != null && !w.equals(WordnetPresenter.this.word))
+                .doOnNext(w -> {
+                    onLoadingMeanings();
+                    updateWordOnPage(w);
+                })
+                .flatMap(dictionary::resultsObservable)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
+    }
+
+    private void updateWordOnPage(String word) {
+        this.word = word;
+        if (wordnetMeaningPage != null) {
+            wordnetMeaningPage.title(word);
         }
     }
 
@@ -97,139 +88,83 @@ public class WordnetPresenter implements MeaningPresenter{
         this.dictionaryException = dictionaryException;
     }
 
-    public String word() {
-        return word;
-    }
-
-    public WordnetMeaningAdapter adapter() {
-        return adapter;
-    }
-
     private void onResultsUpdated(List<Synset> results) {
         adapter.update(results);
         if(wordnetMeaningPage != null) {
-            downloadButton.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
             if (results != null && results.size() != 0) {
-                showList();
+                wordnetMeaningPage.meaningsLoaded();
             } else {
-                showStatus("Sorry, no results found.");
+                wordnetMeaningPage.error("Sorry, no results found.");
             }
         }
     }
 
-    private class MeaningsTask extends AsyncTask<String, Integer, List<Synset>> {
-        @Override
-        protected List<Synset> doInBackground(String... params) {
-            List<Synset> results = new ArrayList<>();
-            setDictionaryException(null);
-            try {
-                results = dictionary.results(params[0]);
-                setDictionaryException(null);
-            } catch (DictionaryException exception) {
-                exception.printStackTrace();
-                setDictionaryException(exception);
-            } catch (Exception exception){
-                exception.printStackTrace();
-                setDictionaryException(new DictionaryException(
-                        DictionaryException.UNKNOWN,"Sorry, something went wrong."));
-            }
-            return results;
-        }
+    @Override
+    public void onCompleted() {
+        setDictionaryException(null);
+    }
 
-        @Override
-        protected void onPostExecute(List<Synset> results) {
-            if(getDictionaryException() != null){
-                showException();
-            }else {
-                onResultsUpdated(results);
-            }
+    @Override
+    public void onError(Throwable e) {
+        DictionaryException exception;
+        if(e instanceof DictionaryException) {
+            exception = (DictionaryException) e;
+        } else {
+            //noinspection ThrowableInstanceNeverThrown
+            exception = new DictionaryException(
+                    DictionaryException.UNKNOWN,
+                    "Sorry, something went wrong"
+            );
+            Timber.e(e, "Unknown exception");
+        }
+        setDictionaryException(exception);
+        showException();
+    }
+
+    @Override
+    public void onNext(List<Synset> synsets) {
+        onResultsUpdated(synsets);
+    }
+
+    public void onDownloadClicked() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            contextHelper.openDictionariesActivity();
+            controller.onDownloadClicked();
+        }else {
+            contextHelper.startDownload(Constants.WORDNET);
         }
     }
 
-    private void initViews() {
-        loadStatus = (TextView) wordnetMeaningPage.findViewById(R.id.tv_load_status);
-        downloadButton = (Button) wordnetMeaningPage.findViewById(R.id.btn_download_wordnet);
-        loadProgress = (ProgressBar) wordnetMeaningPage.findViewById(R.id.pb_load_progress);
-        meaningList = (RecyclerView) wordnetMeaningPage.findViewById(R.id.rv_meaning_list);
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DownloadResolver
-                        .startDownload(Constants.WORDNET, DefineApp.getContext());
-            }
-        });
-    }
-
-    private void setInitialViews() {
+    private void initMeaningPage() {
+        wordnetMeaningPage.title(word);
+        wordnetMeaningPage.setAdapter(adapter);
         if (TextUtils.isEmpty(word)) {
-            showStatus("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
+            wordnetMeaningPage.error("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
         } else if (adapter != null && adapter.getItemCount() != 0) {
-            adapter.notifyDataSetChanged();
-            showList();
+            wordnetMeaningPage.meaningsLoaded();
         } else if (getDictionaryException() != null) {
             showException();
+        } else if(subscription != null && !subscription.isUnsubscribed()){
+            wordnetMeaningPage.meaningsLoading();
         } else {
-            showStatus("Sorry, no results found");
+            wordnetMeaningPage.error("Sorry, no results found");
         }
     }
 
-    private void dropViews() {
-        loadStatus = null;
-        downloadButton = null;
-        loadProgress = null;
-        meaningList = null;
-    }
-
-    private void showStatus(String status) {
-        loadStatus.setText(status);
-        showView(LOAD_STATUS);
+    private void onLoadingMeanings() {
+        if(wordnetMeaningPage != null) {
+            wordnetMeaningPage.meaningsLoading();
+        }
     }
 
     private void showException() {
         if(wordnetMeaningPage != null) {
-            showStatus(getDictionaryException().getMessage());
-            if(getDictionaryException().getType() == DictionaryException.DICTIONARY_NOT_FOUND) {
-                downloadButton.setVisibility(View.VISIBLE);
+            DictionaryException exception = getDictionaryException();
+            wordnetMeaningPage.error(exception.getMessage());
+            if(exception.getType() == DictionaryException.DICTIONARY_NOT_FOUND) {
+                wordnetMeaningPage.dictionaryNotAvailable();
             }
         }
-    }
-
-    private void showProgress() {
-        showView(LOAD_PROGRESS);
-    }
-
-    private void showList() {
-        showView(MEANING_LIST);
-    }
-
-    private void showView(@ViewEnum int view) {
-        switch (view) {
-            case LOAD_STATUS:
-                changeViewVisibilities(true, false, false);
-                break;
-            case LOAD_PROGRESS:
-                changeViewVisibilities(false, true, false);
-                break;
-            case MEANING_LIST:
-                changeViewVisibilities(false, false, true);
-                break;
-        }
-    }
-
-    private void changeViewVisibilities(boolean status, boolean progress, boolean list) {
-        if (loadStatus != null) {
-            loadStatus.setVisibility(status ? View.VISIBLE : View.GONE);
-        }
-        if (loadProgress != null) {
-            loadProgress.setVisibility(progress ? View.VISIBLE : View.GONE);
-        }
-        if (meaningList != null) {
-            meaningList.setVisibility(list ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    @IntDef({LOAD_PROGRESS, LOAD_STATUS, MEANING_LIST})
-    private @interface ViewEnum {
     }
 }

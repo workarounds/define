@@ -1,10 +1,13 @@
 package in.workarounds.define.ui.activity;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,12 +15,18 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -58,6 +67,9 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
      */
     private DownloadProgressThread mThread;
 
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE = 101;// stricly below 255
+
+    private boolean downloadPending = false;
     private ProgressBar unzipProgress;
     private ProgressBar downloadProgress;
     private TextView statusTv;
@@ -66,7 +78,8 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     private ImageView installLivioButton;
     private AsyncTask livioTask;
     private AsyncTask wordnetTask;
-    private static final String testWord = "define";
+    private AlertDialog permissionDialog;
+    private static final String[] testWords = new String[]{"define","pure","heavy","beat","apple","test"};
     @Inject
     WordnetDictionary wordnetDictionary;
     @Inject
@@ -122,6 +135,12 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     }
 
     private void setDictionaryFlags(){
+        if(livioTask != null){
+            livioTask.cancel(true);
+        }
+        if(wordnetTask != null){
+            wordnetTask.cancel(true);
+        }
         livioTask = new LivioMeaningsTask().execute();
         wordnetTask = new WordnetMeaningsTask().execute();
     }
@@ -131,7 +150,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         @Override
         protected Void doInBackground(String... params) {
             try {
-                livioDictionary.results(testWord);
+                livioDictionary.results(testWords[0], LivioDictionary.PackageName.ENGLISH);
             } catch (DictionaryException exception) {
                 livioException = exception;
             }
@@ -145,8 +164,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 installLivioButton.setOnClickListener(DictionariesActivity.this);
                 installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.theme_accent));
             } else {
-                installLivioButton.setImageResource(R.drawable.ic_tick);
-                installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
+                setLivioTick();
             }
         }
     }
@@ -156,7 +174,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         @Override
         protected Void doInBackground(String... params) {
             try {
-                wordnetDictionary.results(testWord);
+                wordnetDictionary.results(testWords[new Random().nextInt(5)]);
             } catch (DictionaryException exception) {
                 wordnetException = exception;
             }
@@ -170,11 +188,27 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.theme_accent));
                 downloadButton.setOnClickListener(DictionariesActivity.this);
                 cancelButton.setOnClickListener(DictionariesActivity.this);
+                if(downloadPending){
+                    downloadPending = false;
+                    initWordnetDownload();
+                }
             }else {
-                downloadButton.setImageResource(R.drawable.ic_tick);
-                downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
+                if(downloadPending){
+                    downloadPending = false;
+                }
+                setWordnetTick();
             }
         }
+    }
+
+    private void setWordnetTick(){
+        downloadButton.setImageResource(R.drawable.ic_tick);
+        downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
+    }
+
+    private void setLivioTick(){
+        installLivioButton.setImageResource(R.drawable.ic_tick);
+        installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
     }
 
     @Override
@@ -190,8 +224,6 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         statusTv.setVisibility(View.GONE);
 
         setDictionaryFlags();
-        //Set the user has visited dictionaries screen
-        PrefUtils.setDictionariesDone(true, this);
     }
 
     @Override
@@ -204,6 +236,9 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         super.onDestroy();
         if(mThread != null) {
             mThread.close();
+        }
+        if(permissionDialog != null){
+            permissionDialog.dismiss();
         }
         livioTask.cancel(true);
         wordnetTask.cancel(true);
@@ -279,7 +314,10 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
             unzipProgress.setProgress(progress);
         } else if(progress == 100) {
             unzipProgress.setVisibility(View.GONE);
-            statusTv.setText("Finished downloading dictionary");
+            downloadProgress.setVisibility(View.GONE);
+            statusTv.setVisibility(View.GONE);
+            downloadButton.setVisibility(View.VISIBLE);
+            setWordnetTick();
         }
     }
 
@@ -307,12 +345,76 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
      * function called on click of "Download Data" button calls
      * checkNetworkStatus and takes appropriate action
      */
-    private void downloadClick() {
+
+    private void downloadClick(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_STORAGE);
+        }else{
+            initWordnetDownload();
+        }
+    }
+
+    private void requestPermissionForStorageAfterNeverAllow(){
+        permissionDialog = new AlertDialog.Builder(DictionariesActivity.this).create();
+        permissionDialog.setTitle("Permissions");
+        permissionDialog.setMessage("The app needs storage permission to download and save wordnet data offline.Click ok->permissions->storage enable");
+        permissionDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        deniedPermissionForStorage();
+                    }
+                });
+        permissionDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.parse("package:" + getPackageName());
+                        intent.setData(uri);
+                        startActivity(intent);
+                    }
+                });
+        permissionDialog.show();
+    }
+
+    private void deniedPermissionForStorage(){
+        Toast.makeText(this, "Download failed! Permission Denied!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void initWordnetDownload(){
         downloadButton.setVisibility(View.GONE);
         cancelButton.setVisibility(View.VISIBLE);
         statusTv.setVisibility(View.VISIBLE);
         DownloadResolver.startDownload(Constants.WORDNET, this);
         mThread = DownloadResolver.setUpProgress(Constants.WORDNET, downloadProgress, statusTv, this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                boolean showRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0]);
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    downloadPending = true;
+                    setDictionaryFlags();
+                }else if(!showRationale){ // when user clicked never allow before
+                    requestPermissionForStorageAfterNeverAllow();
+                } else {
+                    deniedPermissionForStorage();
+                }
+            }
+        }
     }
 
     /**
@@ -343,8 +445,10 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     }
 
     public void next(){
+        //Set the user has visited dictionaries screen
+        PrefUtils.setDictionariesDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
-        finish();
+        finishOnStop = true;
     }
 }

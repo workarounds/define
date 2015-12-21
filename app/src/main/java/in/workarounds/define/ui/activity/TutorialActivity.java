@@ -20,7 +20,13 @@ public class TutorialActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_tutorial);
 
         findViewById(R.id.button_copy).setOnClickListener(this);
-        findViewById(R.id.btn_next).setOnClickListener(this);
+
+        View next = findViewById(R.id.btn_next);
+        next.setOnClickListener(this);
+
+        if(PrefUtils.getTutorialDone(this)){
+            next.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -40,7 +46,6 @@ public class TutorialActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        PrefUtils.setTutorialDone(true, this);
     }
 
     @Override
@@ -56,9 +61,10 @@ public class TutorialActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void next(){
+        PrefUtils.setTutorialDone(true, this);
         Intent intent = new Intent(this, SplashActivity.class);
         startActivity(intent);
-        finish();
+        finishOnStop = true;
     }
 
     public void onCopyClicked(){

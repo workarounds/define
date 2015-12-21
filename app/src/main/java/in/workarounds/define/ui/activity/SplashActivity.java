@@ -1,5 +1,6 @@
 package in.workarounds.define.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,6 @@ public class SplashActivity extends AppCompatActivity{
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-
         if(!PrefUtils.getDictionariesDone(this)){
             Intent dictionaries = new Intent(this, DictionariesActivity.class);
             startActivity(dictionaries);
@@ -36,8 +36,8 @@ public class SplashActivity extends AppCompatActivity{
             return;
         }
 
-        if(!PrefUtils.getSettingsDone(this)){
-            Intent settings = new Intent(this, UserPrefActivity.class);
+        if(!PrefUtils.getSortDone(this)){
+            Intent settings = new Intent(this, DictOrderActivity.class);
             startActivity(settings);
             finish();
             return;

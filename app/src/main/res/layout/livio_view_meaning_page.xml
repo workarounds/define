@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/cardview_light_background">
 
     <in.workarounds.typography.TextView
@@ -27,31 +27,29 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/margin_large"
-        android:paddingRight="@dimen/margin_large"
+        android:layout_centerInParent="true"
         android:paddingBottom="@dimen/bar_fat"
-        android:layout_centerInParent="true" >
+        android:paddingLeft="@dimen/margin_large"
+        android:paddingRight="@dimen/margin_large">
 
         <in.workarounds.typography.TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/tv_load_status"
-            android:visibility="gone"
-            android:gravity="center_horizontal"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:textColor="@color/light_gray"
-            android:layout_height="wrap_content" />
+            android:visibility="gone" />
 
         <in.workarounds.typography.Button
             android:id="@+id/btn_install_livio"
-            android:layout_below="@+id/tv_load_status"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"
-            android:layout_marginTop="8dp"
+            style="@style/PortalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_load_status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
             android:text="@string/btn_install_livio"
-            app:font_variant="light"
-            />
+            android:visibility="gone" />
 
     </RelativeLayout>
 

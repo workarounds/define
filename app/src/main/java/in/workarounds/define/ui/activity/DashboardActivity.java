@@ -19,6 +19,7 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
         findViewById(R.id.tutorial_container).setOnClickListener(this);
         findViewById(R.id.settings_container).setOnClickListener(this);
         findViewById(R.id.sort_dictionaries_container).setOnClickListener(this);
+        findViewById(R.id.permissions_container).setOnClickListener(this);
     }
 
     @Override
@@ -41,6 +42,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
             case R.id.settings_container:
                 startActivity(getSettingsIntent());
                 break;
+            case R.id.permissions_container:
+                startActivity(getPermissionsIntent());
+                break;
         }
     }
 
@@ -58,5 +62,9 @@ public class DashboardActivity extends BaseActivity implements View.OnClickListe
 
     private Intent getSettingsIntent(){
         return new Intent(this, UserPrefActivity.class);
+    }
+
+    private Intent getPermissionsIntent(){
+        return new Intent(this, PermissionsActivity.class);
     }
 }

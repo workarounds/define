@@ -27,7 +27,12 @@ public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
     private static final String TAG = LogUtils.makeLogTag(ClipboardService.class);
     private static boolean isRunning = false;
+<<<<<<< HEAD
     public static final String BUNDLE_SELECTED_TEXT_KEY = "BUNDLE_SELECTED_TEXT_KEY";
+=======
+    private Handler notificationHandler;
+    private Runnable notificationHandlerRunnable;
+>>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
 
     @Override
     public void onCreate() {
@@ -80,4 +85,46 @@ public class ClipboardService extends Service implements
             return null;
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    private void startActionResolver(String text) {
+        int state = PortalManager.getPortalState(this, MainPortal.class);
+
+        @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(this);
+        if(notifyMode == UserPrefActivity.OPTION_SILENT || notifyMode == UserPrefActivity.OPTION_PRIORITY) {
+//Set notification priority as high for priority mode, default for silent mode
+            int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
+                    ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
+
+            NotificationUtils notificationUtils = new NotificationUtils(this);
+            notificationUtils.sendMeaningNotification(text, priority);
+
+            if(PrefUtils.getNotificationAutoHideFlag(this)) {
+                notificationUtils.cancelBackupNotification();
+                notificationHandler.removeCallbacks(notificationHandlerRunnable);
+                notificationHandler.postDelayed(notificationHandlerRunnable, 10000);
+            }
+        }
+        else{
+            startPortal(text);
+        }
+    }
+
+    private void startPortal(String text){
+        Bundle bundle = new Bundle();
+        bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
+        Portal.with(this).data(bundle).send(MainPortal.class);
+    }
+
+    private void setNotificationClearer(){
+        notificationHandlerRunnable =  new Runnable() {
+            @Override
+            public void run() {
+                new NotificationUtils(ClipboardService.this).getNotificationManager().cancel(NotificationUtils.SILENT_NOTIFICATION_ID);
+            }
+        };
+    }
+}
+>>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
