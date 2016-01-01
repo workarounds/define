@@ -1,34 +1,21 @@
 package in.workarounds.define.portal;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
-import java.util.zip.Inflater;
-
-import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.base.NotificationUtils;
-import in.workarounds.define.network.DaggerNetworkComponent;
-import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.PrefUtils;
-import in.workarounds.portal.ParamUtils;
 import in.workarounds.portal.Portal;
 import in.workarounds.portal.PortalManager;
 import in.workarounds.portal.Portlet;
+import timber.log.Timber;
 
 /**
  * Created by Nithin on 30/10/15.
@@ -40,6 +27,11 @@ public class UtilPortlet extends Portlet {
 
     public UtilPortlet(Context base, int id) {
         super(base, id);
+    }
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         setContentView(R.layout.empty_view);
         setNotificationClearer();
     }
@@ -65,7 +57,8 @@ public class UtilPortlet extends Portlet {
             int priority =  (notifyMode == UserPrefActivity.OPTION_PRIORITY)
                     ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT;
 
-            NotificationUtils.INSTANCE.sendMeaningNotification(text, priority);
+            NotificationUtils notificationUtils = new NotificationUtils(this);
+            notificationUtils.sendMeaningNotification(text, priority);
 
             if(PrefUtils.getNotificationAutoHideFlag(this)) {
                 cancelCurrentNotificationClearer();
@@ -84,6 +77,7 @@ public class UtilPortlet extends Portlet {
     private void startPortal(String text){
         Bundle bundle = new Bundle();
         bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
+        Timber.d("Starting Portal");
         Portal.with(this).data(bundle).send(MainPortal.class);
     }
 
@@ -92,7 +86,7 @@ public class UtilPortlet extends Portlet {
         notificationHandlerRunnable =  new Runnable() {
             @Override
             public void run() {
-                NotificationUtils.INSTANCE.getNotificationManager().cancel(NotificationUtils.SILENT_NOTIFICATION_ID);
+                new NotificationUtils(getBaseContext()).getNotificationManager().cancel(NotificationUtils.SILENT_NOTIFICATION_ID);
             }
         };
     }

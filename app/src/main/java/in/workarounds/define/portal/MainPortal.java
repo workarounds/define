@@ -1,12 +1,6 @@
 package in.workarounds.define.portal;
 
 import android.content.Context;
-<<<<<<< HEAD
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.net.Uri;
-=======
->>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -14,14 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.View;
-<<<<<<< HEAD
-import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Toast;
-=======
 import android.view.ViewPropertyAnimator;
 import android.view.animation.DecelerateInterpolator;
->>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,16 +22,10 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.network.DaggerNetworkComponent;
 import in.workarounds.define.network.NetworkModule;
-<<<<<<< HEAD
-import in.workarounds.define.util.LogUtils;
-import in.workarounds.define.view.slidingtabs.SlidingTabLayout;
-import in.workarounds.define.view.swipeselect.SelectableTextView;
-=======
 import in.workarounds.define.ui.view.SelectionCard.SelectionCardController;
 import in.workarounds.define.ui.view.SelectionCard.SelectionCardPresenter;
 import in.workarounds.define.ui.view.slidingtabs.SlidingTabLayout;
 import in.workarounds.define.util.LogUtils;
->>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
 import in.workarounds.portal.Portal;
 
 /**
@@ -138,17 +120,8 @@ public class MainPortal extends Portal implements ComponentProvider, SelectionCa
 
         selectionCard.post(new Runnable() {
             @Override
-<<<<<<< HEAD
-            public void onWordSelected(String word) {
-                selectedText = word;
-                animateMeaningsContainer();
-                for (MeaningPresenter presenter : presenters) {
-                    presenter.onWordUpdated(word);
-                }
-=======
             public void run() {
                 animateSelectionCardIn();
->>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
             }
         });
         //pre-drawing the meaning container to reduce lag
@@ -162,31 +135,6 @@ public class MainPortal extends Portal implements ComponentProvider, SelectionCa
         }, SELECTION_CARD_ANIMATION_TIME + 50);
     }
 
-<<<<<<< HEAD
-    private void animateMeaningsContainer(){
-        if(meaningPagesContainer.getVisibility() != View.VISIBLE){
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                meaningPagesContainer.setAlpha(0);
-                meaningPagesContainer.setTranslationY(meaningPagesContainer.getHeight() / 3);
-                meaningPagesContainer.setVisibility(View.VISIBLE);
-                meaningPagesContainer.animate()
-                        .alpha(1)
-                        .withLayer()
-                        .translationY(0)
-                        .setDuration(350)
-                        .setInterpolator(new DecelerateInterpolator(4))
-                        .start();
-            } else {
-                meaningPagesContainer.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    private void extractClipText(Bundle bundle) {
-        if(bundle != null && bundle.containsKey(BUNDLE_KEY_CLIP_TEXT)) {
-            LogUtils.LOGD(TAG, "bundle clip text: " + bundle.getString(BUNDLE_KEY_CLIP_TEXT));
-            mClipText = bundle.getString(BUNDLE_KEY_CLIP_TEXT);
-=======
     private void animateSelectionCardIn(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             int translation = getResources().getDimensionPixelSize(R.dimen.bubble_card_height);
@@ -202,7 +150,6 @@ public class MainPortal extends Portal implements ComponentProvider, SelectionCa
                     .start();
         } else {
             selectionCard.setVisibility(View.VISIBLE);
->>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
         }
     }
 
@@ -337,6 +284,8 @@ public class MainPortal extends Portal implements ComponentProvider, SelectionCa
     }
 
     public void finishWithNotification() {
+        UtilPortlet portlet = (UtilPortlet) getPortlet(UtilPortlet.UTIL_PORTLET_ID);
+        if(portlet != null) portlet.cancelCurrentNotificationClearer(); //remove notification hide handler
         notificationUtils.sendSilentBackupNotification(clipText);
         animateOutAndFinish();
     }
@@ -347,14 +296,7 @@ public class MainPortal extends Portal implements ComponentProvider, SelectionCa
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     // called when someone is ringing to this phone
-<<<<<<< HEAD
-                    UtilPortlet portlet = (UtilPortlet) getPortlet(UtilPortlet.UTIL_PORTLET_ID);
-                    if(portlet != null) portlet.cancelCurrentNotificationClearer(); //remove notification hide handler
-                    NotificationUtils.INSTANCE.sendSilentMeaningNotification(mTvClipText.getText().toString());
-                    finish();
-=======
                     finishWithNotification();
->>>>>>> f9440bdbb1b12334b07174dee28b5f8fe6c26a7a
                     break;
             }
         }
