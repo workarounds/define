@@ -54,6 +54,10 @@ public class SelectionCardView extends FrameLayout implements View.OnClickListen
         selectableTextView.setSelectableText(text);
     }
 
+    public void selectText(String text) {
+        // TODO add method to selectableTextView to select given text, or store the range of the selected span in presenter
+    }
+
     public void selectAll() {
         selectableTextView.selectAll();
     }

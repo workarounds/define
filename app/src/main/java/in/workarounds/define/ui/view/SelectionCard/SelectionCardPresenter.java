@@ -10,15 +10,17 @@ import javax.inject.Inject;
 import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.ui.view.swipeselect.SelectableTextView;
+import timber.log.Timber;
 
 /**
  * Created by manidesto on 30/11/15.
  */
 @PerPortal
-public class SelectionCardPresenter implements SelectableTextView.OnWordSelectedListener{
+public class SelectionCardPresenter implements SelectableTextView.OnWordSelectedListener {
     String clipText;
     String selected;
-    @Nullable SelectionCardView selectionCardView;
+    @Nullable
+    SelectionCardView selectionCardView;
     SelectionCardController controller;
     ContextHelper contextHelper;
 
@@ -26,6 +28,7 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
     public SelectionCardPresenter(SelectionCardController controller, ContextHelper contextHelper) {
         this.controller = controller;
         this.contextHelper = contextHelper;
+        Timber.d("new SelectionCardPresenter");
     }
 
     @Override
@@ -35,9 +38,13 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
     }
 
     public void onClipTextChanged(@NonNull String clipText) {
-        this.clipText = clipText.trim();
         this.selected = null;
-        if(selectionCardView != null) {
+        setClipText(clipText);
+    }
+
+    private void setClipText(@NonNull String clipText) {
+        this.clipText = clipText.trim();
+        if (selectionCardView != null) {
             selectionCardView.setTextForSelection(this.clipText);
             if (isLessThanNWords(this.clipText, 3)) {
                 selectionCardView.selectAll();
@@ -47,8 +54,11 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
 
     public void addView(SelectionCardView selectionCardView) {
         this.selectionCardView = selectionCardView;
-        if(clipText != null) {
-            onClipTextChanged(clipText);
+        if (clipText != null) {
+            setClipText(clipText);
+        }
+        if (selected != null) {
+           selectionCardView.selectText(selected);
         }
     }
 
@@ -67,7 +77,7 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
     }
 
     public void onCopyClicked() {
-        if(selected != null) {
+        if (selected != null) {
             contextHelper.copyToClipboard(selected);
         }
         controller.onButtonClicked();
@@ -90,9 +100,10 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
 
     /**
      * Returns the selected text if any or the whole clipped text
+     *
      * @return selectedText if not null, clipText otherwise
      */
-    private String getTextInFocus(){
+    private String getTextInFocus() {
         return selected == null ? clipText : selected;
     }
 
@@ -101,8 +112,8 @@ public class SelectionCardPresenter implements SelectableTextView.OnWordSelected
         iterator.setText(text);
         iterator.first();
         int count = 0;
-        for(int end = iterator.next(); end != BreakIterator.DONE; end = iterator.next()){
-            if(++count > n) return false;
+        for (int end = iterator.next(); end != BreakIterator.DONE; end = iterator.next()) {
+            if (++count > n) return false;
         }
         return true;
     }
