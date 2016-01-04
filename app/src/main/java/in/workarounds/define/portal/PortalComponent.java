@@ -30,7 +30,7 @@ public interface PortalComponent {
 
     void inject(SelectionCardView selectionCardView);
 
-    void inject(MainPortal mainPortal);
+    void inject(MeaningPortal meaningPortal);
 
     LivioEnglishPresenter livioEnglishPresenter();
 

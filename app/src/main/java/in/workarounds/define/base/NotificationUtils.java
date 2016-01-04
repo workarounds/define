@@ -9,8 +9,10 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
 import in.workarounds.define.R;
-import in.workarounds.define.portal.MainPortal;
-import in.workarounds.portal.Portal;
+import in.workarounds.define.portal.MeaningPortal;
+import in.workarounds.define.portal.PortalId;
+import in.workarounds.define.service.DefinePortalService;
+import in.workarounds.portal.Portals;
 
 /**
  * Created by Nithin on 29/10/15.
@@ -69,11 +71,8 @@ public class NotificationUtils {
 // Creates an explicit intent for clipboard Service
 
         Bundle bundle = new Bundle();
-        bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
-        Intent resultIntent =
-                Portal.with(getContext())
-                        .data(bundle)
-                        .sendIntent(MainPortal.class);
+        bundle.putString(MeaningPortal.BUNDLE_KEY_CLIP_TEXT, text);
+        Intent resultIntent = Portals.openIntent(PortalId.MEANING_PORTAL, bundle, context, DefinePortalService.class);
         PendingIntent resultPendingIntent =
                 PendingIntent.getService(
                         getContext(),

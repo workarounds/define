@@ -5,51 +5,49 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.NotificationCompat;
-import android.view.View;
 
-import in.workarounds.define.R;
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
-import in.workarounds.portal.PortalManager;
-import in.workarounds.portal.Portlet;
 import timber.log.Timber;
 
 /**
  * Created by Nithin on 30/10/15.
  */
-public class UtilPortlet extends Portlet {
-    public static final int UTIL_PORTLET_ID = 101;
+public class UtilPortal extends Portal<DefinePortalAdapter> {
     private Handler notificationHandler;
     private Runnable notificationHandlerRunnable;
 
-    public UtilPortlet(Context base, int id) {
-        super(base, id);
+    public UtilPortal(Context base, DefinePortalAdapter portalAdapter) {
+        super(base, portalAdapter);
     }
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.empty_view);
         setNotificationClearer();
+        startActionResolver(getSelectedText(bundle));
     }
 
     @Override
     protected void setContentView(@LayoutRes int layoutId) {
         super.setContentView(layoutId);
-        mView.setVisibility(View.GONE);
     }
 
     @Override
-    protected void onData(Bundle data) {
+    protected boolean onData(Bundle data) {
         super.onData(data);
-        startActionResolver(data.getString(ClipboardService.BUNDLE_SELECTED_TEXT_KEY));
+        startActionResolver(getSelectedText(data));
+        return true;
+    }
+
+    private String getSelectedText(Bundle data) {
+        return data.getString(ClipboardService.BUNDLE_SELECTED_TEXT_KEY);
     }
 
     private void startActionResolver(String text) {
-        int state = PortalManager.getPortalState(this, MainPortal.class);
 
         @UserPrefActivity.NotifyMode int notifyMode = PrefUtils.getNotifyMode(this);
         if(notifyMode == UserPrefActivity.OPTION_SILENT || notifyMode == UserPrefActivity.OPTION_PRIORITY) {
@@ -76,9 +74,9 @@ public class UtilPortlet extends Portlet {
 
     private void startPortal(String text){
         Bundle bundle = new Bundle();
-        bundle.putString(MainPortal.BUNDLE_KEY_CLIP_TEXT, text);
+        bundle.putString(MeaningPortal.BUNDLE_KEY_CLIP_TEXT, text);
         Timber.d("Starting Portal");
-        Portal.with(this).data(bundle).send(MainPortal.class);
+        portalAdapter.open(PortalId.MEANING_PORTAL, bundle);
     }
 
     private void setNotificationClearer(){

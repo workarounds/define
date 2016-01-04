@@ -11,9 +11,9 @@ import in.workarounds.define.ui.view.SelectionCard.SelectionCardController;
  */
 @Module
 public class PortalModule {
-    private MainPortal portal;
+    private MeaningPortal portal;
 
-    public PortalModule(MainPortal portal) {
+    public PortalModule(MeaningPortal portal) {
         this.portal = portal;
     }
 

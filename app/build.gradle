@@ -26,7 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -42,7 +42,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/jaws-bin.jar')
     compile 'org.jsoup:jsoup:1.7.2'
-    compile 'in.workarounds.portal:portal:0.0.9'
+    compile 'in.workarounds.portal:portal:1.0.1'
     compile 'in.workarounds.typography:typography:0.0.8'
 
     //Support library

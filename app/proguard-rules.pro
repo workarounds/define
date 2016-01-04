@@ -34,7 +34,7 @@
 #your package path where your gson models are stored
 -keep class in.workarounds.define.urban.Meaning { *; }
 -keep class in.workarounds.define.urban.UrbanResult { *; }
--keep class in.workarounds.define.portal.MainPortal { *; }
+-keep class in.workarounds.define.portal.MeaningPortal { *; }
 -dontwarn in.workarounds.portal.**
 
 -keep class edu.smu.tspell.wordnet.** { *; }

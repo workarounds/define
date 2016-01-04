@@ -9,9 +9,9 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.webkit.URLUtil;
 
-import in.workarounds.define.portal.UtilPortlet;
+import in.workarounds.define.portal.PortalId;
 import in.workarounds.define.util.LogUtils;
-import in.workarounds.portal.Portlet;
+import in.workarounds.portal.Portals;
 import timber.log.Timber;
 
 public class ClipboardService extends Service implements
@@ -57,7 +57,7 @@ public class ClipboardService extends Service implements
             Bundle bundle = new Bundle();
             bundle.putString(BUNDLE_SELECTED_TEXT_KEY,text);
             Timber.d("Starting portlet");
-            Portlet.with(this).id(UtilPortlet.UTIL_PORTLET_ID).data(bundle).send(UtilPortlet.class);
+            Portals.open(PortalId.UTIL_PORTAL, bundle, this, DefinePortalService.class);
         }
     }
 

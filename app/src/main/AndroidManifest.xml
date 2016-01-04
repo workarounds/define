@@ -62,6 +62,9 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service android:name=".service.DefinePortalService"
+            android:enabled="true"
+            android:exported="false" />
 
         <receiver
             android:name=".receiver.BootUpReceiver"
