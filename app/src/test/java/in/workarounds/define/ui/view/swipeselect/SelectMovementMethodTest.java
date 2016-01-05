@@ -45,18 +45,33 @@ public class SelectMovementMethodTest {
 
         movementMethod.selectByRange(0, 5);
 
-        assertEquals(spanList.get(3).isSelected(), true);
+        for(int i = 0; i < 5; i++) {
+            assertEquals(true, spanList.get(i).isSelected());
+        }
+        assertEquals(false, spanList.get(5).isSelected());
+
+        movementMethod.selectByRange(5, 10);
+
+        for(int i = 5; i < 10; i++) {
+            assertEquals(true, spanList.get(i).isSelected());
+        }
+        assertEquals(false, spanList.get(10).isSelected());
     }
 
     private List<SelectSpan> getMockSpansFromText(String text) {
         List<SelectSpan> spanList = new ArrayList<>(text.length());
-        BreakIterator iterator = BreakIterator.getCharacterInstance();
+        BreakIterator iterator = BreakIterator.getWordInstance();
         iterator.setText(text);
         int start = 0;
+        int index = start;
         iterator.first();
-        for(int end = iterator.next(); end != BreakIterator.DONE; end = iterator.next()) {
-            SelectSpan selectSpan = new SelectSpan(start, start, end);
-            spanList.add(selectSpan);
+        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator
+                .next()) {
+            while(index < end){
+                SelectSpan selectSpan = new SelectSpan(index, start, end);
+                spanList.add(index, selectSpan);
+                index++;
+            }
         }
         return spanList;
     }
