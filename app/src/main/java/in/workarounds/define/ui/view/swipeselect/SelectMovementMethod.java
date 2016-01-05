@@ -38,8 +38,13 @@ public class SelectMovementMethod extends LinkMovementMethod{
 
     public void selectAll(){
         selectByRange(0, total.size());
+    }
+
+    public void selectByRange(int start, int end) throws IllegalArgumentException{
+        if(!isValidRange(start, end)) throw new IllegalArgumentException("(" + start + ", " + end + ") is not a valid range");
+        highlightByRange(start, end);
         selectableView.invalidate();
-        selectableView.onSelectionFinished(0, total.size());
+        selectableView.onSelectionFinished(start, end);
     }
 
     @Override
@@ -140,7 +145,7 @@ public class SelectMovementMethod extends LinkMovementMethod{
             start = temp;
         }
 
-        selectByRange(start, end);
+        highlightByRange(start, end);
 
         if(notify) {
             selectableView.onSelectionFinished(start, end);
@@ -148,12 +153,12 @@ public class SelectMovementMethod extends LinkMovementMethod{
     }
 
     private void selectWord(SelectSpan word) {
-        selectByRange(word.start, word.end);
+        highlightByRange(word.start, word.end);
 
         selectableView.onSelectionFinished(word.start, word.end);
     }
 
-    private void selectByRange(int start, int end){
+    private void highlightByRange(int start, int end){
         for (SelectSpan span : total) {
             boolean selected = span.index >= start
                     && span.index < end;
@@ -186,6 +191,12 @@ public class SelectMovementMethod extends LinkMovementMethod{
         float dy = event.getY() - touchDown.y;
         double dr = Math.sqrt(dx * dx + dy * dy);
         return dr <= MAX_CLICK_DISTANCE * density;
+    }
+
+    private boolean isValidRange(int start, int end) {
+        int size = total.size();
+        //start is inclusive, end is exclusive
+        return start >= 0 && end <= size;
     }
 
     public interface SelectableView {

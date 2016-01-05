@@ -45,6 +45,17 @@ public class SelectableTextView extends TextView implements SelectMovementMethod
         setMovementMethod(movementMethod);
     }
 
+    public void selectText(String needle) throws IllegalArgumentException{
+        String text = getText().toString();
+        int start = text.indexOf(needle);
+        if(start < 0) {
+            throw new IllegalArgumentException("'" + needle + "' does not exist in current text in the view : '" + text + "'");
+        }
+
+        int end = start + needle.length();
+        movementMethod.selectByRange(start, end);
+    }
+
     public void setSelectableText(String text) {
         BreakIterator iterator = BreakIterator.getWordInstance();
         setText(text, TextView.BufferType.SPANNABLE);
