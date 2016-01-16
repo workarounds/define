@@ -1,6 +1,5 @@
 package in.workarounds.define.portal;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.LayoutRes;
@@ -20,8 +19,8 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
     private Handler notificationHandler;
     private Runnable notificationHandlerRunnable;
 
-    public UtilPortal(Context base, DefinePortalAdapter portalAdapter) {
-        super(base, portalAdapter);
+    public UtilPortal(DefinePortalAdapter portalAdapter) {
+        super(portalAdapter);
     }
 
     @Override

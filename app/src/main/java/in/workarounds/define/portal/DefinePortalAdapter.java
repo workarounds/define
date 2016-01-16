@@ -11,8 +11,8 @@ import in.workarounds.portal.PortalAdapter;
  */
 public class DefinePortalAdapter extends PortalAdapter<DefinePortalService> {
 
-    public DefinePortalAdapter(DefinePortalService service) {
-        super(service);
+    public DefinePortalAdapter(DefinePortalService service, int themeId) {
+        super(service, themeId);
     }
 
     @Override
@@ -25,9 +25,9 @@ public class DefinePortalAdapter extends PortalAdapter<DefinePortalService> {
     protected Portal createPortal(int portalId) {
         switch (portalId) {
             case PortalId.MEANING_PORTAL:
-                return new MeaningPortal(getContext(), this);
+                return new MeaningPortal(this);
             case PortalId.UTIL_PORTAL:
-                return new UtilPortal(getContext(), this);
+                return new UtilPortal(this);
             default:
                 throw new IllegalStateException("Unknown portalId");
         }
