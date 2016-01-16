@@ -34,7 +34,6 @@
 #your package path where your gson models are stored
 -keep class in.workarounds.define.urban.Meaning { *; }
 -keep class in.workarounds.define.urban.UrbanResult { *; }
--keep class in.workarounds.define.portal.MeaningPortal { *; }
 -dontwarn in.workarounds.portal.**
 
 -keep class edu.smu.tspell.wordnet.** { *; }
@@ -47,3 +46,33 @@
 -keep public class org.jsoup.** {
 public *;
 }
+
+# retro lamba
+-dontwarn java.lang.invoke.*
+
+# rx java and rx android
+# rxjava
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    long producerNode;
+    long consumerNode;
+}
+
+# keeps source file names and lines, useful for debugging
+# -renamesourcefileattribute SourceFile
+# -keepattributes SourceFile,LineNumberTable
