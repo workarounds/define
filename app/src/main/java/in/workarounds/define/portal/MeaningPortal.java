@@ -150,7 +150,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
         pager.setAdapter(new MeaningPagerAdapter(this));
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
         if (slidingTabLayout != null) {
-            slidingTabLayout.setDistributeEvenly(true);
+            slidingTabLayout.setDistributeEvenly(false);
             slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.white));
             slidingTabLayout.setCustomTabView(R.layout.layout_sliding_tabs, R.id.tv_tab_header);
             slidingTabLayout.setViewPager(pager);
