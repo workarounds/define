@@ -42,6 +42,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
     private View meaningPagesContainer;
     private View selectionCard;
     private PortalComponent component;
+    private MeaningPagerAdapter pagerAdapter;
 
     private CallStateListener callStateListener;
     private TelephonyManager telephonyManager;
@@ -66,11 +67,14 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
 
         initComponents();
         meaningPresenters = new HashSet<>();
-        setContentView(R.layout.portal_main);
+
+        pagerAdapter = new MeaningPagerAdapter(this);
         selectionCardPresenter.onClipTextChanged(extractClipText(bundle));
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         callStateListener = new CallStateListener();
         telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
+
+        setContentView(R.layout.portal_main);
     }
 
     @Override
@@ -110,6 +114,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
         return true;
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -147,15 +152,15 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
             }
         });
         pager = (ViewPager) findViewById(R.id.vp_pages);
-        MeaningPagerAdapter adapter = new MeaningPagerAdapter(this);
-        pager.setAdapter(adapter);
+        pager.setAdapter(pagerAdapter);
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
         if (slidingTabLayout != null) {
-            slidingTabLayout.setDistributeEvenly((adapter.getCount() <= 3));
+            slidingTabLayout.setDistributeEvenly((pagerAdapter.getCount() <= 3));
             slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.white));
             slidingTabLayout.setCustomTabView(R.layout.layout_sliding_tabs, R.id.tv_tab_header);
             slidingTabLayout.setViewPager(pager);
         }
+        pager.setCurrentItem(pagerAdapter.getCurrentPosition());
 
         selectionCard.post(new Runnable() {
             @Override

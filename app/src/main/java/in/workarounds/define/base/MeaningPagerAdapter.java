@@ -15,6 +15,7 @@ import in.workarounds.define.wordnet.WordnetMeaningPage;
  * Created by madki on 27/09/15.
  */
 public class MeaningPagerAdapter extends PagerAdapter {
+    private int currentPos = 0;
 
     private Context context;
     private int[] order;
@@ -71,4 +72,13 @@ public class MeaningPagerAdapter extends PagerAdapter {
         return DictionaryConstants.dictNames[order[position]];
     }
 
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        this.currentPos = position;
+        super.setPrimaryItem(container, position, object);
+    }
+
+    public int getCurrentPosition() {
+        return currentPos;
+    }
 }
