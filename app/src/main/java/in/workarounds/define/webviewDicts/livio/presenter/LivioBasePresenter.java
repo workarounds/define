@@ -8,6 +8,7 @@ import in.workarounds.define.base.MeaningPresenter;
 import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
+import in.workarounds.define.webviewDicts.livio.LivioLanguages;
 import in.workarounds.define.webviewDicts.livio.LivioMeaningPage;
 import rx.Observable;
 import rx.Observer;
@@ -59,13 +60,12 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
                     onMeaningsLoading();
                     updateWordOnPage(w);
                 })
-                .flatMap(w -> dictionary.resultsObservable(w, getPackageName()))
+                .flatMap(w -> dictionary.resultsObservable(w, getLanguage()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
     }
 
-    @LivioDictionary.PACKAGE_NAME
-    protected abstract String getPackageName();
+    protected abstract LivioLanguages.Language getLanguage();
 
     public DictionaryException getDictionaryException() {
         return dictionaryException;
@@ -119,7 +119,7 @@ public abstract class LivioBasePresenter implements MeaningPresenter, Observer<S
     }
 
     public void installLivio() {
-        contextHelper.openPlayStore(getPackageName());
+        contextHelper.openPlayStore(getLanguage().packageName());
     }
 
     private void initMeaningPage() {

@@ -2,10 +2,12 @@ package in.workarounds.define.webviewDicts.livio.presenter;
 
 import javax.inject.Inject;
 
+import in.workarounds.define.DefineApp;
 import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
+import in.workarounds.define.webviewDicts.livio.LivioLanguages;
 
 /**
  * Created by madki on 07/11/15.
@@ -19,7 +21,8 @@ public class LivioSpanishPresenter extends LivioBasePresenter {
     }
 
     @Override
-    protected String getPackageName() {
-        return LivioDictionary.PackageName.SPANISH;
+    protected LivioLanguages.Language getLanguage() {
+        return LivioLanguages.spanish(DefineApp.getContext());
     }
+
 }

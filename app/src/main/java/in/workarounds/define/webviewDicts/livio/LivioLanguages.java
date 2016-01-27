@@ -42,6 +42,7 @@ public final class LivioLanguages {
             return context.getString(description);
         }
 
+        @LivioDictionary.PACKAGE_NAME
         public String packageName() {
             return packageName;
         }

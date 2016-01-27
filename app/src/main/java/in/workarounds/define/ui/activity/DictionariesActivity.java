@@ -155,13 +155,13 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     private void setDictionaryFlags() {
         List<LivioLanguages.Language> languages = adapter.languages();
         for (int i = 0; i < languages.size(); i++) {
-            subscriptions.add(getLivioSubscription(i, languages.get(i).packageName()));
+            subscriptions.add(getLivioSubscription(i, languages.get(i)));
         }
         subscriptions.add(getWordnetSubscription());
     }
 
-    private Subscription getLivioSubscription(int position, String packageName) {
-        return livioDictionary.resultsObservable(testWords[0], packageName)
+    private Subscription getLivioSubscription(int position, LivioLanguages.Language language) {
+        return livioDictionary.resultsObservable(testWords[0], language)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override

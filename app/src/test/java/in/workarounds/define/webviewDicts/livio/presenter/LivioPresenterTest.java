@@ -74,7 +74,7 @@ public class LivioPresenterTest {
     public void testResultsUpdated() throws Exception {
         String word = "Some word";
         String result = "<html></html>";
-        when(dictionary.resultsObservable(word, presenter.getPackageName())).thenReturn(Observable.just(result));
+        when(dictionary.resultsObservable(word, presenter.getLanguage())).thenReturn(Observable.just(result));
 
         presenter.addView(meaningPage);
         presenter.onWordUpdated(word);
@@ -88,7 +88,7 @@ public class LivioPresenterTest {
         presenter.onWordUpdated(word);
         verify(meaningPage).title(word);
         verify(meaningPage).meaningsLoading();
-        verify(dictionary).resultsObservable(word, presenter.getPackageName());
+        verify(dictionary).resultsObservable(word, presenter.getLanguage());
 
         reset(meaningPage);
         reset(dictionary);
@@ -97,7 +97,7 @@ public class LivioPresenterTest {
         presenter.onWordUpdated(word);
         verify(meaningPage, never()).title(anyString());
         verify(meaningPage, never()).meaningsLoading();
-        verify(dictionary, never()).resultsObservable(word, presenter.getPackageName());
+        verify(dictionary, never()).resultsObservable(word, presenter.getLanguage());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class LivioPresenterTest {
         //test error
         when(dictionary.resultsObservable(
                 word,
-                presenter.getPackageName()
+                presenter.getLanguage()
         )).thenReturn(Observable.error(e));
         presenter.addView(meaningPage);
         presenter.onWordUpdated(word);
@@ -123,7 +123,7 @@ public class LivioPresenterTest {
         //test empty result
         when(dictionary.resultsObservable(
                 someOtherWord,
-                presenter.getPackageName()
+                presenter.getLanguage()
         )).thenReturn(Observable.just(""));
         presenter.onWordUpdated(someOtherWord);
         verify(meaningPage).error(anyString());

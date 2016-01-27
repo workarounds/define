@@ -15,8 +15,6 @@ import org.jsoup.select.Elements;
 
 import javax.inject.Inject;
 
-import in.workarounds.define.DefineApp;
-import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.portal.PerPortal;
 import in.workarounds.define.util.PackageManagerUtils;
@@ -38,22 +36,22 @@ public class LivioDictionary {
     }
 
 
-    public String results(String word, @PACKAGE_NAME String packageName) throws DictionaryException {
-        if (!PackageManagerUtils.isAppInstalled(context, packageName)) {
+    public String results(String word, LivioLanguages.Language language) throws DictionaryException {
+        if (!PackageManagerUtils.isAppInstalled(context, language.packageName())) {
             throw new DictionaryException(
                     DictionaryException.DICTIONARY_NOT_FOUND,
-                    DefineApp.getContext().getString(R.string.exception_livio)
+                    language.installPrompt()
             );
         }
         String results = "";
         if (!TextUtils.isEmpty(word)) {
-            results = getHtml(word, packageName);
+            results = getHtml(word, language.packageName());
         }
         return results;
     }
 
-    public Observable<String> resultsObservable(String word, @PACKAGE_NAME String packageName) {
-        return Observable.fromCallable(() -> results(word, packageName))
+    public Observable<String> resultsObservable(String word, LivioLanguages.Language language) {
+        return Observable.fromCallable(() -> results(word, language))
                 .subscribeOn(Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR));
     }
 
