@@ -63,6 +63,8 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        if (portalAdapter != null) portalAdapter.startForeground();
+
         initComponents();
         meaningPresenters = new HashSet<>();
         setContentView(R.layout.portal_main);

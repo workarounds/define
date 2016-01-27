@@ -32,4 +32,8 @@ public class DefinePortalAdapter extends PortalAdapter<DefinePortalService> {
                 throw new IllegalStateException("Unknown portalId");
         }
     }
+
+    public void startForeground() {
+        service.startForeground();
+    }
 }

@@ -23,7 +23,6 @@ public class DefinePortalService extends PortalService<DefinePortalAdapter, Defi
     @Override
     public void onCreate() {
         super.onCreate();
-        startForeground(FOREGROUND_NOTIFICATION, getForegroundNotification());
     }
 
     @NonNull
@@ -35,6 +34,10 @@ public class DefinePortalService extends PortalService<DefinePortalAdapter, Defi
     @Override
     protected DefinePermissionHelper createPermissionHelper() {
         return new DefinePermissionHelper(this);
+    }
+
+    public void startForeground() {
+        startForeground(FOREGROUND_NOTIFICATION, getForegroundNotification());
     }
 
     private Notification getForegroundNotification() {
