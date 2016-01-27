@@ -9,14 +9,12 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.typography.TextView;
 
 /**
  * Created by madki on 20/09/15.
  */
 public class SelectableTextView extends TextView implements SelectMovementMethod.SelectableView{
-    private static final String TAG = LogUtils.makeLogTag(SelectableTextView.class);
     List<SelectSpan> total;
     SelectMovementMethod movementMethod;
 

@@ -4,10 +4,9 @@ import java.io.File;
 
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.util.FileUtils;
-import in.workarounds.define.util.LogUtils;
+import timber.log.Timber;
 
 public class FileHelper {
-    private static final String TAG = LogUtils.makeLogTag(FileHelper.class);
 
     // zip file extension
     private static final String ZIP_EXT    = ".zip";
@@ -124,7 +123,7 @@ public class FileHelper {
             case Constants.WIKTIONARY:
                 return WIKTIONARY_FOLDER + ZIP_EXT;
             default:
-                LogUtils.LOGE(TAG, "No such dictionary " + dictionaryName);
+                Timber.e("No such dictionary " + dictionaryName);
                 return null;
         }
     }

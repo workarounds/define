@@ -7,14 +7,12 @@ import com.squareup.okhttp.OkHttpClient;
 
 import dagger.Module;
 import dagger.Provides;
-import in.workarounds.define.util.LogUtils;
 
 /**
  * Created by madki on 26/09/15.
  */
 @Module
 public class NetworkModule {
-    private static final String TAG = LogUtils.makeLogTag(NetworkModule.class);
     private Context context;
 
     public NetworkModule(Context context) {

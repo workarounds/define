@@ -10,13 +10,11 @@ import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import in.workarounds.define.portal.PortalId;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.portal.Portals;
 import timber.log.Timber;
 
 public class ClipboardService extends Service implements
         ClipboardManager.OnPrimaryClipChangedListener {
-    private static final String TAG = LogUtils.makeLogTag(ClipboardService.class);
     private static boolean isRunning = false;
     public static final String BUNDLE_SELECTED_TEXT_KEY = "BUNDLE_SELECTED_TEXT_KEY";
 

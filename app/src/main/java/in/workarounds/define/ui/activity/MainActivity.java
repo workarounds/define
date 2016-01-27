@@ -5,11 +5,9 @@ import android.view.View;
 
 import in.workarounds.define.R;
 import in.workarounds.define.helper.SpeechHelper;
-import in.workarounds.define.util.LogUtils;
 
 
 public class MainActivity extends BaseActivity {
-    private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
     /**
      * Speech helper that starts and manages the TTS object
      */

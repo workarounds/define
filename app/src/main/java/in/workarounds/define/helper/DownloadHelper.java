@@ -4,14 +4,13 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
+import timber.log.Timber;
 
 /**
  * Created by madki on 17/05/15.
  */
 public class DownloadHelper {
-    private static final String TAG = LogUtils.makeLogTag(DownloadHelper.class);
 
     /**
      * returns the relevant request for given suffix
@@ -31,7 +30,7 @@ public class DownloadHelper {
                     FileHelper.getDownloadFileName(suffix));
             request.setVisibleInDownloadsUi(false);
         } else {
-            LogUtils.LOGE(TAG, "No URL provided for download : " + suffix);
+            Timber.e("No URL provided for download : " + suffix);
         }
         return request;
     }

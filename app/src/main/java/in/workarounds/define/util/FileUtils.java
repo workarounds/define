@@ -4,11 +4,12 @@ import android.os.Environment;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 /**
  * Created by madki on 14/05/15.
  */
 public class FileUtils {
-    private static final String TAG = LogUtils.makeLogTag(FileUtils.class);
 
     /**
      * @param fileString path as: "sdcard/some/path"
@@ -35,9 +36,9 @@ public class FileUtils {
         File file = new File(filePath);
 
         if (!file.isDirectory()) {
-            LogUtils.LOGD(TAG, "Creating file: " + file.getAbsolutePath());
+            Timber.d("Creating file: " + file.getAbsolutePath());
             if(!file.mkdirs()) {
-                LogUtils.LOGE(TAG, "Unable to create: " + file.getAbsolutePath());
+                Timber.e("Unable to create: " + file.getAbsolutePath());
             }
         }
     }

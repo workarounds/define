@@ -10,14 +10,13 @@ import android.widget.TextView;
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.ui.activity.DictionariesActivity;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
+import timber.log.Timber;
 
 /**
  * Created by madki on 17/05/15.
  */
 public class DownloadResolver {
-    private static final String TAG = LogUtils.makeLogTag(DownloadResolver.class);
 
     public static final String[] ALL_DOWNLOADS = new String[] {Constants.WORDNET};
 
@@ -48,7 +47,7 @@ public class DownloadResolver {
                 context.startActivity(activityIntent);
                 break;
             default:
-                LogUtils.LOGW(TAG, "No relevant download found for " + id + " doing nothing on notification click");
+                Timber.w("No relevant download found for " + id + " doing nothing on notification click");
                 break;
         }
     }
@@ -66,7 +65,7 @@ public class DownloadResolver {
                 context.startService(intent);
                 break;
             default:
-                LogUtils.LOGW(TAG, "No relevant download found for " + id + " doing nothing on download complete");
+                Timber.w("No relevant download found for " + id + " doing nothing on download complete");
                 break;
         }
     }
@@ -95,7 +94,7 @@ public class DownloadResolver {
             manager.remove(downloadId);
             PrefUtils.removeDownloadId(id, context);
         } else {
-            LogUtils.LOGE(TAG, "download " + id + "isn't running. Doing nothing");
+            Timber.e("download " + id + "isn't running. Doing nothing");
         }
     }
 
@@ -123,7 +122,7 @@ public class DownloadResolver {
         if(id != null) {
             onNotificationClicked(id, context);
         } else {
-            LogUtils.LOGE(TAG, "No download present with downloadId " + downloadId + "doing nothing on Notification clicked");
+            Timber.e("No download present with downloadId " + downloadId + "doing nothing on Notification clicked");
         }
     }
 
@@ -137,7 +136,7 @@ public class DownloadResolver {
         if(id != null) {
             onDownloadFinished(id, context);
         } else {
-            LogUtils.LOGE(TAG, "No download present with downloadId " + downloadId + "doing nothing on Download finish");
+            Timber.e("No download present with downloadId " + downloadId + "doing nothing on Download finish");
         }
     }
 

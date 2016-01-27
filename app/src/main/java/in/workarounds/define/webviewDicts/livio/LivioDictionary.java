@@ -19,7 +19,6 @@ import in.workarounds.define.DefineApp;
 import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PackageManagerUtils;
 import rx.Observable;
 import rx.schedulers.Schedulers;
@@ -29,7 +28,6 @@ import rx.schedulers.Schedulers;
  */
 @PerPortal
 public class LivioDictionary {
-    private static final String TAG = LogUtils.makeLogTag(LivioDictionary.class);
     public static final String providerName = "DictionaryProvider";
 
     private Context context;

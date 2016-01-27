@@ -31,15 +31,14 @@ import in.workarounds.define.R;
 import in.workarounds.define.api.Constants;
 import in.workarounds.define.file.FileHelper;
 import in.workarounds.define.util.FileUtils;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.wordnet.WordnetFileHelper;
+import timber.log.Timber;
 
 /**
  * Created by madki on 14/05/15.
  */
 public class UnzipService extends Service {
-    private static final String TAG = LogUtils.makeLogTag(UnzipService.class);
 
     /**
      * constants for messages
@@ -115,10 +114,10 @@ public class UnzipService extends Service {
             if(dictName != null) {
                 startUnzipTask(dictName);
             } else {
-                LogUtils.LOGE(TAG, "No dictionary name sent to unzip");
+                Timber.e("No dictionary name sent to unzip");
             }
         } else {
-            LogUtils.LOGE(TAG, "Intent is null !");
+            Timber.e("Intent is null !");
         }
         return Service.START_STICKY;
     }
@@ -146,7 +145,7 @@ public class UnzipService extends Service {
      */
     public void sendToActivity(Message message) {
         if(!mBound) {
-            LogUtils.LOGE(TAG, "No activity bound to send message");
+            Timber.e("No activity bound to send message");
         } else {
             try {
                 mActivity.send(message);
@@ -162,7 +161,7 @@ public class UnzipService extends Service {
      */
     private void startUnzipTask(String dictName) {
         if(mTasks.containsKey(dictName)) {
-            LogUtils.LOGW(TAG, "Unzipping already in progress. Ignoring unzip command");
+            Timber.w("Unzipping already in progress. Ignoring unzip command");
         } else {
             UnzipTask asyncTask = new UnzipTask();
             mTasks.put(dictName, asyncTask);
@@ -192,10 +191,10 @@ public class UnzipService extends Service {
             stopSelf();
         } else {
             if(mBound) {
-                LogUtils.LOGD(TAG, "An activity is still bound not stopping service");
+                Timber.d("An activity is still bound not stopping service");
             }
             if(mTasks.size() != 0) {
-                LogUtils.LOGD(TAG, "Tasks still in progress not stopping service");
+                Timber.d("Tasks still in progress not stopping service");
             }
         }
     }
@@ -231,7 +230,7 @@ public class UnzipService extends Service {
                         super.handleMessage(msg);
                 }
             } else {
-                LogUtils.LOGE(TAG, "no service to deliver messages");
+                Timber.e("no service to deliver messages");
             }
         }
     }
@@ -263,7 +262,7 @@ public class UnzipService extends Service {
                     ZipInputStream zin = new ZipInputStream(fin);
                     ZipEntry zipEntry = null;
                     while ((zipEntry = zin.getNextEntry()) != null) {
-                        LogUtils.LOGV(TAG, "Unzipping " + zipEntry.getName());
+                        Timber.v("Unzipping " + zipEntry.getName());
                         if (zipEntry.isDirectory()) {
                             FileUtils.assertDir(FileHelper.rootFile() + File.separator
                                     + zipEntry.getName());
@@ -286,10 +285,10 @@ public class UnzipService extends Service {
                     zin.close();
                     zip.close();
                 } catch (Exception e) {
-                    LogUtils.LOGE(TAG, "unzip error", e);
+                    Timber.e("unzip error", e);
                 }
             } else {
-                LogUtils.LOGE(TAG, "Zip file not found for " + params[0]);
+                Timber.e("Zip file not found for " + params[0]);
             }
             return params[0];
         }
@@ -302,9 +301,9 @@ public class UnzipService extends Service {
             onProgressUpdate(100f);
             if(zipFile != null) {
                 if(zipFile.delete()) {
-                    LogUtils.LOGD(TAG, "deleted zip file for " + dictName);
+                    Timber.d("deleted zip file for " + dictName);
                 } else {
-                    LogUtils.LOGE(TAG, "Couldn't delete zip file for " + dictName);
+                    Timber.e("Couldn't delete zip file for " + dictName);
                 }
             }
             mTasks.remove(dictName);
@@ -341,7 +340,7 @@ public class UnzipService extends Service {
         if(fileName.equals(Constants.WORDNET)) {
             return wordnetHelper.get();
         } else {
-            LogUtils.LOGE(TAG, "No file helper found for : " + fileName);
+            Timber.e("No file helper found for : " + fileName);
             return null;
         }
     }

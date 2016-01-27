@@ -16,7 +16,6 @@ import in.workarounds.define.R;
 import in.workarounds.define.base.DictionaryException;
 import in.workarounds.define.base.IWordnetDictionary;
 import in.workarounds.define.portal.PerPortal;
-import in.workarounds.define.util.LogUtils;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
@@ -25,7 +24,6 @@ import rx.schedulers.Schedulers;
  */
 @PerPortal
 public class WordnetDictionary implements IWordnetDictionary {
-    private static final String TAG = LogUtils.makeLogTag(WordnetDictionary.class);
     private static final String WORDNET_DATABASE_DIR = "wordnet.database.dir";
     private WordNetDatabase database;
 

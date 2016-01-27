@@ -9,14 +9,13 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
+import timber.log.Timber;
 
 /**
  * Created by madki on 21/05/15.
  */
 public class DownloadProgressThread extends Thread {
-    private static final String TAG = LogUtils.makeLogTag(DownloadProgressThread.class);
     private boolean mRunning = false;
     private WeakReference<ProgressBar> mProgressBar;
     private WeakReference<TextView> mTextView;
@@ -92,7 +91,7 @@ public class DownloadProgressThread extends Thread {
                     });
                 }
                 close();
-                LogUtils.LOGE(TAG, "No download with that query");
+                Timber.e("No download with that query");
             }
 
             cursor.close();

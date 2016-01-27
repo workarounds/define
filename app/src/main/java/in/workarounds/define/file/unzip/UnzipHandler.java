@@ -5,13 +5,13 @@ import android.os.Message;
 
 import java.lang.ref.WeakReference;
 
-import in.workarounds.define.util.LogUtils;
+import timber.log.Timber;
+
 
 /**
  * Created by madki on 30/09/15.
  */
 public class UnzipHandler extends Handler {
-    private static final String TAG = LogUtils.makeLogTag(UnzipHandler.class);
 
     private WeakReference<HandlerCallback> callback;
     public static final int MSG_UNZIP_PROGRESS = 1;
@@ -27,13 +27,13 @@ public class UnzipHandler extends Handler {
             switch (msg.what) {
                 case MSG_UNZIP_PROGRESS:
                     handlerCallback.onUnzipProgressUpdate(msg.arg1);
-                    LogUtils.LOGD(TAG, "Unzip progress: " + msg.arg1);
+                    Timber.d("Unzip progress: " + msg.arg1);
                     break;
                 default:
                     super.handleMessage(msg);
             }
         } else {
-            LogUtils.LOGE(TAG, "No callback passed to handler");
+            Timber.e("No callback passed to handler");
             super.handleMessage(msg);
         }
     }

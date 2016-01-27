@@ -6,7 +6,6 @@ import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
 
-import in.workarounds.define.util.LogUtils;
 
 /**
  * Created by madki on 14/05/15.
@@ -23,7 +22,6 @@ import in.workarounds.define.util.LogUtils;
  * </p>
  */
 public class SpeechHelper {
-    private static final String TAG = LogUtils.makeLogTag(SpeechHelper.class);
     private static final String TTS_ID = "selected_word";
 
     private Context mContext;

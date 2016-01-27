@@ -37,19 +37,18 @@ import in.workarounds.define.file.unzip.UnzipHandler;
 import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.helper.DownloadProgressThread;
 import in.workarounds.define.helper.DownloadResolver;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.util.ViewUtils;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
 import in.workarounds.define.webviewDicts.livio.LivioModule;
 import in.workarounds.define.wordnet.WordnetDictionary;
 import in.workarounds.define.wordnet.WordnetModule;
+import timber.log.Timber;
 
 /**
  * Created by madki on 30/09/15.
  */
 public class DictionariesActivity extends BaseActivity implements UnzipHandler.HandlerCallback, View.OnClickListener {
-    private static final String TAG = LogUtils.makeLogTag(DictionariesActivity.class);
     /**
      * Messenger that delivers messages to UnzipService when bound
      */
@@ -291,7 +290,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
      */
     private void sendToUnzipService(Message message) {
         if(!mBound) {
-            LogUtils.LOGE(TAG, "Service not bound");
+            Timber.e("Service not bound");
         } else {
             try {
                 mUnzipService.send(message);
@@ -337,7 +336,7 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                 next();
                 break;
             default:
-                LogUtils.LOGE(TAG, "No actionable define for this click");
+                Timber.e("No actionable define for this click");
         }
     }
 

@@ -25,14 +25,13 @@ import in.workarounds.define.network.NetworkModule;
 import in.workarounds.define.ui.view.SelectionCard.SelectionCardController;
 import in.workarounds.define.ui.view.SelectionCard.SelectionCardPresenter;
 import in.workarounds.define.ui.view.slidingtabs.SlidingTabLayout;
-import in.workarounds.define.util.LogUtils;
 import in.workarounds.portal.MainPortal;
+import timber.log.Timber;
 
 /**
  * Created by madki on 20/09/15.
  */
 public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements ComponentProvider, SelectionCardController, MeaningsController {
-    private static final String TAG = LogUtils.makeLogTag(MeaningPortal.class);
     public static final String BUNDLE_KEY_CLIP_TEXT = "bundle_key_clip_text";
     private static final int SELECTION_CARD_ANIMATION_TIME = 350;
     private static final int MEANING_PAGE_ANIMATION_TIME = 350;
@@ -234,7 +233,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
 
     private String extractClipText(Bundle bundle) {
         if (bundle != null && bundle.containsKey(BUNDLE_KEY_CLIP_TEXT)) {
-            LogUtils.LOGD(TAG, "bundle clip text: " + bundle.getString(BUNDLE_KEY_CLIP_TEXT));
+            Timber.d("bundle clip text: " + bundle.getString(BUNDLE_KEY_CLIP_TEXT));
             clipText = bundle.getString(BUNDLE_KEY_CLIP_TEXT);
             return clipText;
         }
@@ -288,7 +287,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
                 presenter.onWordUpdated(selectedText);
             }
         } else {
-            LogUtils.LOGE(TAG, "Presenter already added");
+            Timber.e("Presenter already added");
         }
     }
 
@@ -296,7 +295,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
     public void removeMeaningPresenter(MeaningPresenter presenter) {
         boolean removed = meaningPresenters.remove(presenter);
         if (!removed) {
-            LogUtils.LOGE(TAG, "Presenter not added. Cannot remove");
+            Timber.e("Presenter not added. Cannot remove");
         }
     }
 
