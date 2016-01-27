@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lv_english_name">Livio English</string>
+    <string name="lv_english_description">Free offline English dictionary app based on English Wiktionary</string>
+    <string name="lv_english_install">Please install Livio English dictionary from playstore</string>
+
+    <string name="lv_french_name">Livio French</string>
+    <string name="lv_french_description">Free offline French dictionary app based on French Wiktionary</string>
+    <string name="lv_french_install">Please install Livio French dictionary from playstore</string>
+
+    <string name="lv_german_name">Livio German</string>
+    <string name="lv_german_description">Free offline German dictionary app based on German Wiktionary</string>
+    <string name="lv_german_install">Please install Livio German dictionary from playstore</string>
+
+    <string name="lv_italian_name">Livio Italian</string>
+    <string name="lv_italian_description">Free offline Italian dictionary app based on Italian Wiktionary</string>
+    <string name="lv_italian_install">Please install Livio Italian dictionary from playstore</string>
+
+    <string name="lv_spanish_name">Livio Spanish</string>
+    <string name="lv_spanish_description">Free offline Spanish dictionary app based on Spanish Wiktionary</string>
+    <string name="lv_spanish_install">Please install Livio Spanish dictionary from playstore</string>
+
+</resources>
