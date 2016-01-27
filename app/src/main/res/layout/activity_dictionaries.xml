@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -18,250 +19,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:textColor="@android:color/white"
-            tools:text="Define"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="Define" />
 
         <in.workarounds.typography.Button
             android:id="@+id/btn_next"
+            style="?android:borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
-            android:textColor="@color/white"
-            style="?android:borderlessButtonStyle"
             android:text="@string/menu_next"
-            />
+            android:textColor="@color/white" />
 
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
-        android:id="@+id/sv_dictionaries_container"
-        android:layout_below="@id/toolbar"
-        android:layout_alignParentBottom="true"
+    <ListView
+        android:id="@+id/list_livio_dicts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical">
-            <in.workarounds.typography.TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
-                android:text="@string/get_offline_dictionaries"
-                app:font_variant="Semibold"
-                android:textColor="@color/black"
-                android:textAllCaps="true"
-                android:background="#F3F3F3"
-                android:textSize="@dimen/font_regular"
-                />
-
-            <RelativeLayout
-                android:id="@+id/livio_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_regular"
-                android:paddingStart="@dimen/padding_regular"
-                >
-
-                <in.workarounds.typography.TextView
-                    android:id="@+id/tv_livio_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@+id/btn_install_livio"
-                    android:layout_toStartOf="@id/btn_install_livio"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:text="@string/title_livio_dictionary"
-                    android:textSize="@dimen/font_medium"
-                    android:textColor="@color/dark_gray"
-                    app:font_variant="semibold" />
-
-                <in.workarounds.typography.TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_livio_title"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:layout_marginStart="@dimen/margin_medium"
-                    android:layout_marginBottom="@dimen/margin_medium"
-                    android:layout_toLeftOf="@+id/btn_install_livio"
-                    android:layout_toStartOf="@id/btn_install_livio"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:text="@string/description_livio_dictionary" />
-
-                <ImageView
-                    android:id="@+id/btn_install_livio"
-                    android:layout_width="@dimen/icon_large"
-                    android:layout_height="@dimen/icon_large"
-                    android:padding="@dimen/padding_medium"
-                    android:background="?android:selectableItemBackground"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:tint="@color/theme_accent"
-                    />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/lighter_gray"
-                android:layout_marginLeft="@dimen/margin_large"
-                />
-
-            <RelativeLayout
-                android:id="@+id/wordnet_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_regular"
-                android:paddingStart="@dimen/padding_regular"
-                >
-
-                <in.workarounds.typography.TextView
-                    android:id="@+id/tv_wordnet_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@+id/btn_download_wordnet"
-                    android:layout_toStartOf="@+id/btn_download_wordnet"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:text="@string/title_wordnet_dictionary"
-                    android:textSize="@dimen/font_medium"
-                    android:textColor="@color/dark_gray"
-                    app:font_variant="semibold" />
-
-                <in.workarounds.typography.TextView
-                    android:id="@+id/tv_description_wordnet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_wordnet_title"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:layout_marginStart="@dimen/margin_medium"
-                    android:layout_marginBottom="@dimen/margin_medium"
-                    android:layout_toLeftOf="@+id/btn_download_wordnet"
-                    android:layout_toStartOf="@+id/btn_download_wordnet"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:maxWidth="320dp"
-                    android:text="@string/description_wordnet_dictionary" />
-                <ProgressBar
-                    android:id="@+id/pb_download"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_description_wordnet"
-                    android:indeterminate="false"
-                    android:max="100"
-                    android:padding="5dp"
-                    android:visibility="gone" />
-
-                <ProgressBar
-                    android:id="@+id/pb_unzip"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_description_wordnet"
-                    android:indeterminate="false"
-                    android:max="100"
-                    android:padding="5dp"
-                    android:visibility="gone" />
-
-                <in.workarounds.typography.TextView
-                    android:id="@+id/tv_progress_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_regular"
-                    android:layout_alignParentBottom="true"
-                    android:layout_below="@id/tv_description_wordnet"
-                    android:layout_marginTop="@dimen/margin_large"
-                    app:font_variant="light"
-                    tools:text="Download in progress"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/btn_download_wordnet"
-                    android:layout_width="@dimen/icon_large"
-                    android:layout_height="@dimen/icon_large"
-                    android:padding="@dimen/padding_medium"
-                    android:background="?android:selectableItemBackground"
-                    android:tint="@color/theme_accent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    />
-
-                <ImageView
-                    android:id="@+id/btn_cancel_download_wordnet"
-                    android:layout_width="@dimen/icon_large"
-                    android:layout_height="@dimen/icon_large"
-                    android:padding="@dimen/padding_medium"
-                    android:src="@drawable/ic_cancel"
-                    android:visibility="gone"
-                    android:tint="@color/red"
-                    android:background="?android:selectableItemBackground"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    />
-
-
-            </RelativeLayout>
-
-            <in.workarounds.typography.TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_medium"
-                android:text="@string/online_dictionaries"
-                app:font_variant="Semibold"
-                android:textColor="@color/black"
-                android:background="#F3F3F3"
-                android:textAllCaps="true"
-                android:textSize="@dimen/font_regular"
-                />
-
-            <RelativeLayout
-                android:id="@+id/urban_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_regular"
-                android:paddingStart="@dimen/padding_regular"
-                >
-
-                <in.workarounds.typography.TextView
-                    android:id="@+id/tv_urban_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_margin="@dimen/margin_medium"
-                    android:text="@string/title_urban_dictionary"
-                    android:textSize="@dimen/font_medium"
-                    android:textColor="@color/dark_gray"
-                    app:font_variant="semibold" />
-
-                <in.workarounds.typography.TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_urban_title"
-                    android:layout_marginLeft="@dimen/margin_medium"
-                    android:layout_marginStart="@dimen/margin_medium"
-                    android:layout_marginBottom="@dimen/margin_medium"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:maxWidth="320dp"
-                    android:text="@string/description_livio_dictionary" />
-            </RelativeLayout>
-
-
-        </LinearLayout>
-
-    </ScrollView>
 </RelativeLayout>

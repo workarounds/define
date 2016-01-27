@@ -19,8 +19,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,9 +39,11 @@ import in.workarounds.define.file.unzip.UnzipHandler;
 import in.workarounds.define.file.unzip.UnzipService;
 import in.workarounds.define.helper.DownloadProgressThread;
 import in.workarounds.define.helper.DownloadResolver;
+import in.workarounds.define.ui.adapter.LivioListAdapter;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.define.util.ViewUtils;
 import in.workarounds.define.webviewDicts.livio.LivioDictionary;
+import in.workarounds.define.webviewDicts.livio.LivioLanguages;
 import in.workarounds.define.webviewDicts.livio.LivioModule;
 import in.workarounds.define.wordnet.WordnetDictionary;
 import in.workarounds.define.wordnet.WordnetModule;
@@ -76,9 +80,10 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     private ProgressBar unzipProgress;
     private ProgressBar downloadProgress;
     private TextView statusTv;
+    private ListView livioList;
+    private LivioListAdapter adapter;
     private ImageView downloadButton;
     private ImageView cancelButton;
-    private ImageView installLivioButton;
     private AlertDialog permissionDialog;
     private static final String[] testWords = new String[]{"define", "pure", "heavy", "beat", "apple", "test"};
     @Inject
@@ -99,16 +104,26 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
         setContentView(R.layout.activity_dictionaries);
         subscriptions = new CompositeSubscription();
 
-        statusTv = (TextView) findViewById(R.id.tv_progress_status);
-        unzipProgress = (ProgressBar) findViewById(R.id.pb_unzip);
-        downloadProgress = (ProgressBar) findViewById(R.id.pb_download);
+        adapter = new LivioListAdapter(this);
+        livioList = (ListView) findViewById(R.id.list_livio_dicts);
+
+        View header = LayoutInflater.from(this).inflate(R.layout.list_livio_header, livioList, false);
+        View footer = LayoutInflater.from(this).inflate(R.layout.list_livio_footer, livioList, false);
+
+        livioList.addHeaderView(header);
+        livioList.addFooterView(footer);
+
+        livioList.setAdapter(adapter);
+
+        statusTv = (TextView) header.findViewById(R.id.tv_progress_status);
+        unzipProgress = (ProgressBar) header.findViewById(R.id.pb_unzip);
+        downloadProgress = (ProgressBar) header.findViewById(R.id.pb_download);
 
         ViewUtils.setColorOfProgressBar(unzipProgress, ContextCompat.getColor(this, R.color.theme_primary));
         ViewUtils.setColorOfProgressBar(downloadProgress, ContextCompat.getColor(this, R.color.theme_primary));
 
-        downloadButton = (ImageView) findViewById(R.id.btn_download_wordnet);
-        cancelButton = (ImageView) findViewById(R.id.btn_cancel_download_wordnet);
-        installLivioButton = (ImageView) findViewById(R.id.btn_install_livio);
+        downloadButton = (ImageView) header.findViewById(R.id.btn_download_wordnet);
+        cancelButton = (ImageView) header.findViewById(R.id.btn_cancel_download_wordnet);
 
         inject();
 
@@ -138,7 +153,15 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
     }
 
     private void setDictionaryFlags() {
-        Subscription s1 = livioDictionary.resultsObservable(testWords[0], LivioDictionary.PackageName.ENGLISH)
+        List<LivioLanguages.Language> languages = adapter.languages();
+        for (int i = 0; i < languages.size(); i++) {
+            subscriptions.add(getLivioSubscription(i, languages.get(i).packageName()));
+        }
+        subscriptions.add(getWordnetSubscription());
+    }
+
+    private Subscription getLivioSubscription(int position, String packageName) {
+        return livioDictionary.resultsObservable(testWords[0], packageName)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
@@ -148,17 +171,18 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
 
                     @Override
                     public void onError(Throwable e) {
-                        installLivioButton.setImageResource(R.drawable.ic_play_store);
-                        installLivioButton.setOnClickListener(DictionariesActivity.this);
-                        installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.theme_accent));
+                        adapter.setStatus(position, false);
                     }
 
                     @Override
                     public void onNext(String s) {
-                        setLivioTick();
+                        adapter.setStatus(position, true);
                     }
                 });
-        Subscription s2 = wordnetDictionary.resultsObservable(testWords[new Random().nextInt(5)])
+    }
+
+    private Subscription getWordnetSubscription() {
+        return wordnetDictionary.resultsObservable(testWords[new Random().nextInt(5)])
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Synset>>() {
                     @Override
@@ -186,21 +210,12 @@ public class DictionariesActivity extends BaseActivity implements UnzipHandler.H
                         setWordnetTick();
                     }
                 });
-
-        subscriptions.add(s1);
-        subscriptions.add(s2);
     }
-
 
 
     private void setWordnetTick() {
         downloadButton.setImageResource(R.drawable.ic_tick);
         downloadButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
-    }
-
-    private void setLivioTick() {
-        installLivioButton.setImageResource(R.drawable.ic_tick);
-        installLivioButton.setColorFilter(ContextCompat.getColor(DictionariesActivity.this, R.color.green));
     }
 
     @Override

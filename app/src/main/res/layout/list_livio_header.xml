@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <in.workarounds.typography.TextView
+        app:font_variant="Semibold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F3F3F3"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/get_offline_dictionaries"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_regular" />
+
+
+    <RelativeLayout
+        android:id="@+id/wordnet_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_regular"
+        android:paddingStart="@dimen/padding_regular">
+
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_wordnet_title"
+            app:font_variant="semibold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_toLeftOf="@+id/btn_download_wordnet"
+            android:layout_toStartOf="@+id/btn_download_wordnet"
+            android:text="@string/title_wordnet_dictionary"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/font_medium" />
+
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_description_wordnet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/tv_wordnet_title"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginLeft="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_toLeftOf="@+id/btn_download_wordnet"
+            android:layout_toStartOf="@+id/btn_download_wordnet"
+            android:maxWidth="320dp"
+            android:text="@string/description_wordnet_dictionary" />
+
+        <ProgressBar
+            android:id="@+id/pb_download"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_description_wordnet"
+            android:indeterminate="false"
+            android:max="100"
+            android:padding="5dp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/pb_unzip"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_description_wordnet"
+            android:indeterminate="false"
+            android:max="100"
+            android:padding="5dp"
+            android:visibility="gone" />
+
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_progress_status"
+            app:font_variant="light"
+            tools:text="Download in progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/tv_description_wordnet"
+            android:layout_marginTop="@dimen/margin_large"
+            android:padding="@dimen/padding_regular"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/btn_download_wordnet"
+            android:layout_width="@dimen/icon_large"
+            android:layout_height="@dimen/icon_large"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?android:selectableItemBackground"
+            android:padding="@dimen/padding_medium"
+            android:tint="@color/theme_accent" />
+
+        <ImageView
+            android:id="@+id/btn_cancel_download_wordnet"
+            android:layout_width="@dimen/icon_large"
+            android:layout_height="@dimen/icon_large"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?android:selectableItemBackground"
+            android:padding="@dimen/padding_medium"
+            android:src="@drawable/ic_cancel"
+            android:tint="@color/red"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:background="@color/lighter_gray" />
+
+</LinearLayout>
