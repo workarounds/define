@@ -14,12 +14,14 @@ import in.workarounds.define.portal.PortalId;
 import in.workarounds.define.service.DefinePortalService;
 import in.workarounds.portal.Portals;
 
+import static in.workarounds.define.constants.NotificationId.SILENT_BACKUP_NOTIFICATION;
+import static in.workarounds.define.constants.NotificationId.SILENT_NOTIFICATION;
+
 /**
  * Created by Nithin on 29/10/15.
  */
 public class NotificationUtils {
-    public static final int SILENT_NOTIFICATION_ID = 201;
-    public static final int SILENT_BACKUP_NOTIFICATION_ID = 202;
+
     private NotificationManager notificationManager;
     private Context context;
 
@@ -38,23 +40,23 @@ public class NotificationUtils {
     }
 
    public void cancelBackupNotification(){
-        getNotificationManager().cancel(SILENT_BACKUP_NOTIFICATION_ID);
+        getNotificationManager().cancel(SILENT_BACKUP_NOTIFICATION);
     }
 
     public void sendSilentBackupNotification(String text){
-        sendNotification(text, SILENT_BACKUP_NOTIFICATION_ID, NotificationCompat.PRIORITY_DEFAULT);
+        sendNotification(text, SILENT_BACKUP_NOTIFICATION, NotificationCompat.PRIORITY_DEFAULT);
     }
 
     public void sendSilentMeaningNotification(String text){
-        sendNotification(text,SILENT_NOTIFICATION_ID, NotificationCompat.PRIORITY_DEFAULT);
+        sendNotification(text, SILENT_NOTIFICATION, NotificationCompat.PRIORITY_DEFAULT);
     }
 
     public void sendPriorityMeaningNotification(String text){
-        sendNotification(text,SILENT_NOTIFICATION_ID, NotificationCompat.PRIORITY_HIGH);
+        sendNotification(text, SILENT_NOTIFICATION, NotificationCompat.PRIORITY_HIGH);
     }
 
     public void sendMeaningNotification(String text,int priority){
-        sendNotification(text,SILENT_NOTIFICATION_ID, priority);
+        sendNotification(text, SILENT_NOTIFICATION, priority);
     }
 
     public void sendNotification(String text,int notificationid,int priority){

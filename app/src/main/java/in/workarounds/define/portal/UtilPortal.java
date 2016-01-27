@@ -12,6 +12,8 @@ import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
 import timber.log.Timber;
 
+import static in.workarounds.define.constants.NotificationId.SILENT_NOTIFICATION;
+
 /**
  * Created by Nithin on 30/10/15.
  */
@@ -83,7 +85,7 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
         notificationHandlerRunnable =  new Runnable() {
             @Override
             public void run() {
-                new NotificationUtils(getBaseContext()).getNotificationManager().cancel(NotificationUtils.SILENT_NOTIFICATION_ID);
+                new NotificationUtils(getBaseContext()).getNotificationManager().cancel(SILENT_NOTIFICATION);
             }
         };
     }
