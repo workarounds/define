@@ -13,6 +13,7 @@ import in.workarounds.portal.Portal;
 import timber.log.Timber;
 
 import static in.workarounds.define.constants.NotificationId.SILENT_NOTIFICATION;
+import static in.workarounds.define.portal.PortalId.UTIL_PORTAL;
 
 /**
  * Created by Nithin on 30/10/15.
@@ -66,7 +67,6 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
         } else {
             startPortal(text);
         }
-        portalAdapter.close(PortalId.UTIL_PORTAL);
     }
 
     public void cancelCurrentNotificationClearer(){
@@ -82,6 +82,9 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
 
     private void setNotificationClearer(){
         notificationHandler = new Handler();
-        notificationHandlerRunnable = () -> new NotificationUtils(getBaseContext()).getNotificationManager().cancel(SILENT_NOTIFICATION);
+        notificationHandlerRunnable = () -> {
+            new NotificationUtils(getBaseContext()).getNotificationManager().cancel(SILENT_NOTIFICATION);
+            portalAdapter.close(UTIL_PORTAL);
+        };
     }
 }

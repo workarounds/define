@@ -14,6 +14,8 @@ import in.workarounds.define.portal.PortalId;
 import in.workarounds.define.service.DefinePortalService;
 import in.workarounds.portal.Portals;
 
+import static in.workarounds.define.constants.NotificationId.PENDING_DELETE_INTENT;
+import static in.workarounds.define.constants.NotificationId.PENDING_MEANING_INTENT;
 import static in.workarounds.define.constants.NotificationId.SILENT_BACKUP_NOTIFICATION;
 import static in.workarounds.define.constants.NotificationId.SILENT_NOTIFICATION;
 
@@ -26,7 +28,7 @@ public class NotificationUtils {
     private Context context;
 
     public NotificationUtils(Context context){
-        this.context = context;
+        this.context = context.getApplicationContext();
         notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
@@ -59,7 +61,7 @@ public class NotificationUtils {
         sendNotification(text, SILENT_NOTIFICATION, priority);
     }
 
-    public void sendNotification(String text,int notificationid,int priority){
+    public void sendNotification(String text, int notificationid, int priority){
         int color = ContextCompat.getColor(getContext(), R.color.theme_primary);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(getContext())
@@ -78,11 +80,19 @@ public class NotificationUtils {
         PendingIntent resultPendingIntent =
                 PendingIntent.getService(
                         getContext(),
-                        0,
+                        PENDING_MEANING_INTENT,
                         resultIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
+        PendingIntent deleteIntent =
+                PendingIntent.getService(
+                        getContext(),
+                        PENDING_DELETE_INTENT,
+                        Portals.closeManagerIntent(getContext(), DefinePortalService.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
         mBuilder.setContentIntent(resultPendingIntent);
+        mBuilder.setDeleteIntent(deleteIntent);
 
         getNotificationManager().notify(notificationid, mBuilder.build());
     }
