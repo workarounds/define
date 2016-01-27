@@ -47,6 +47,11 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
     private CallStateListener callStateListener;
     private TelephonyManager telephonyManager;
 
+    // to remember state, so that animations won't take place
+    // when rotated. Animation in happens only once
+    private boolean cardAnimatedIn = false;
+    private boolean meaningsAnimatedIn = false;
+
     @Inject
     SelectionCardPresenter selectionCardPresenter;
     @Inject
@@ -145,12 +150,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
 //            meaningPagesContainer.setVisibility(View.INVISIBLE);
 //        }
 
-        mPortalContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateOutAndFinish();
-            }
-        });
+        mPortalContainer.setOnClickListener(v -> animateOutAndFinish());
         pager = (ViewPager) findViewById(R.id.vp_pages);
         pager.setAdapter(pagerAdapter);
         SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
@@ -162,25 +162,17 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
         }
         pager.setCurrentItem(pagerAdapter.getCurrentPosition());
 
-        selectionCard.post(new Runnable() {
-            @Override
-            public void run() {
-                animateSelectionCardIn();
-            }
-        });
+        selectionCard.post(this::animateSelectionCardIn);
         //pre-drawing the meaning container to reduce lag
-        selectionCard.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (meaningPagesContainer.getVisibility() == View.GONE) {
-                    meaningPagesContainer.setVisibility(View.INVISIBLE);
-                }
+        selectionCard.postDelayed(() -> {
+            if (meaningPagesContainer.getVisibility() == View.GONE) {
+                meaningPagesContainer.setVisibility(View.INVISIBLE);
             }
         }, SELECTION_CARD_ANIMATION_TIME + 50);
     }
 
     private void animateSelectionCardIn() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && !cardAnimatedIn) {
             int translation = getResources().getDimensionPixelSize(R.dimen.bubble_card_height);
             selectionCard.setAlpha(0);
             selectionCard.setTranslationY(-translation);
@@ -192,6 +184,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
                     .setDuration(SELECTION_CARD_ANIMATION_TIME)
                     .setInterpolator(new DecelerateInterpolator(3))
                     .start();
+            cardAnimatedIn = true;
         } else {
             selectionCard.setVisibility(View.VISIBLE);
         }
@@ -230,12 +223,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
         }
     }
 
-    private Runnable finishRunnable = new Runnable() {
-        @Override
-        public void run() {
-            finish();
-        }
-    };
+    private Runnable finishRunnable = this::finish;
 
     private String extractClipText(Bundle bundle) {
         if (bundle != null && bundle.containsKey(BUNDLE_KEY_CLIP_TEXT)) {
@@ -249,7 +237,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
 
     private void showMeaningContainer() {
         if (meaningPagesContainer.getVisibility() != View.VISIBLE) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && !meaningsAnimatedIn) {
                 meaningPagesContainer.setAlpha(0);
                 meaningPagesContainer.setTranslationY(meaningPagesContainer.getHeight() / 3);
                 meaningPagesContainer.setVisibility(View.VISIBLE);
@@ -260,6 +248,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
                         .setDuration(MEANING_PAGE_ANIMATION_TIME)
                         .setInterpolator(new DecelerateInterpolator(4))
                         .start();
+                meaningsAnimatedIn = true;
             } else {
                 meaningPagesContainer.setVisibility(View.VISIBLE);
             }
