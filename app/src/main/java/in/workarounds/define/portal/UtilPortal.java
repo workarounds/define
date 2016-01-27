@@ -63,10 +63,10 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
                 cancelCurrentNotificationClearer();
                 notificationHandler.postDelayed(notificationHandlerRunnable, 10000);
             }
-        }
-        else{
+        } else {
             startPortal(text);
         }
+        portalAdapter.close(PortalId.UTIL_PORTAL);
     }
 
     public void cancelCurrentNotificationClearer(){
@@ -82,11 +82,6 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
 
     private void setNotificationClearer(){
         notificationHandler = new Handler();
-        notificationHandlerRunnable =  new Runnable() {
-            @Override
-            public void run() {
-                new NotificationUtils(getBaseContext()).getNotificationManager().cancel(SILENT_NOTIFICATION);
-            }
-        };
+        notificationHandlerRunnable = () -> new NotificationUtils(getBaseContext()).getNotificationManager().cancel(SILENT_NOTIFICATION);
     }
 }
