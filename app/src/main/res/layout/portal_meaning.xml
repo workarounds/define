@@ -15,11 +15,12 @@
 
     <FrameLayout
         android:id="@+id/fl_close_container"
+        style="@style/height_footer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_footer_close"
         android:layout_alignParentBottom="true">
 
         <in.workarounds.typography.TextView
+            style="@style/visibility_footer_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

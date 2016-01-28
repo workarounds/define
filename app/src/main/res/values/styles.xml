@@ -72,4 +72,12 @@
     <style name="width_match_parent_max_480">
         <item name="android:layout_width">match_parent</item>
     </style>
+
+     <style name="height_footer">
+        <item name="android:layout_height">@dimen/height_footer_close</item>
+    </style>
+
+    <style name="visibility_footer_text">
+        <item name="android:visibility">visible</item>
+    </style>
 </resources>

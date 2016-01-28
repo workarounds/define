@@ -3,4 +3,12 @@
     <style name="width_match_parent_max_480">
         <item name="android:layout_width">480dp</item>
     </style>
+
+    <style name="height_footer">
+        <item name="android:layout_height">@dimen/margin_regular</item>
+    </style>
+
+    <style name="visibility_footer_text">
+        <item name="android:visibility">gone</item>
+    </style>
 </resources>
