@@ -77,7 +77,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
         callStateListener = new CallStateListener();
         telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
 
-        setContentView(R.layout.portal_main);
+        setContentView(R.layout.portal_meaning);
     }
 
     @Override
