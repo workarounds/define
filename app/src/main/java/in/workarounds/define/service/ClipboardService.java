@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,8 +22,8 @@ import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portals;
 import timber.log.Timber;
 
-import static in.workarounds.define.constants.NotificationId.CLIP_SERVICE_NOTIFICATION;
-import static in.workarounds.define.constants.NotificationId.PENDING_CLIP_SERVICE_NOTIFICATION;
+import static in.workarounds.define.constants.NotificationId.FOREGROUND_NOTIFICATION;
+import static in.workarounds.define.constants.NotificationId.PENDING_FOREGROUND_NOTIFICATION;
 import static in.workarounds.define.util.PrefUtils.KEY_NOTIFICATION_CLIPBOARD_SERVICE;
 
 public class ClipboardService extends Service implements
@@ -42,7 +43,7 @@ public class ClipboardService extends Service implements
     }
 
     private void startForeground() {
-        startForeground(CLIP_SERVICE_NOTIFICATION, getForegroundNotification());
+        startForeground(FOREGROUND_NOTIFICATION, getClipServiceNotification(this));
     }
 
     private ClipboardManager getClipboardManager() {
@@ -98,17 +99,17 @@ public class ClipboardService extends Service implements
         }
     }
 
-    private Notification getForegroundNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+    public static Notification getClipServiceNotification(Context context) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.clip_service_notification))
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.clip_service_notification))
                 .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setColor(ContextCompat.getColor(this, R.color.portal_foreground_notification));
+                .setColor(ContextCompat.getColor(context, R.color.portal_foreground_notification));
         PendingIntent prefActivityIntent = PendingIntent.getActivity(
-                this,
-                PENDING_CLIP_SERVICE_NOTIFICATION,
-                new Intent(this, UserPrefActivity.class),
+                context,
+                PENDING_FOREGROUND_NOTIFICATION,
+                new Intent(context, UserPrefActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 

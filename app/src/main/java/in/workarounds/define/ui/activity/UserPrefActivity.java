@@ -1,5 +1,6 @@
 package in.workarounds.define.ui.activity;
 
+import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -12,8 +13,12 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import in.workarounds.define.R;
+import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.util.PrefUtils;
 
 /**
@@ -124,6 +129,7 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
 
+        findViewById(R.id.test_service).setOnClickListener((v) -> isServiceRunning(ClipboardService.class.getName()));
         direct.setOnClickListener(this);
         priority.setOnClickListener(this);
         silent.setOnClickListener(this);
@@ -171,5 +177,21 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
 
     @IntDef({OPTION_DIRECT, OPTION_PRIORITY, OPTION_SILENT})
     public @interface NotifyMode {
+    }
+
+    private boolean isServiceRunning(String serviceName){
+        boolean serviceRunning = false;
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> l = am.getRunningServices(50);
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : l) {
+            if (runningServiceInfo.service.getClassName().equals(serviceName)) {
+                serviceRunning = true;
+
+                if (runningServiceInfo.foreground) {
+                    Toast.makeText(this, "Yay! In foregeound", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        return serviceRunning;
     }
 }

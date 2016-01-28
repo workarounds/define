@@ -1,136 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/theme_primary"
-        android:theme="@style/MyToolBar">
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/theme_primary"
+            android:theme="@style/MyToolBar">
+
+            <in.workarounds.typography.TextView
+                android:id="@+id/tv_app_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                tools:text="Define" />
+
+            <in.workarounds.typography.Button
+                android:id="@+id/btn_next"
+                style="?android:borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="@string/menu_next"
+                android:textColor="@color/white" />
+
+        </android.support.v7.widget.Toolbar>
 
         <in.workarounds.typography.TextView
-            android:id="@+id/tv_app_title"
+            android:id="@+id/tv_pref_name_notification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            tools:text="Define" />
+            android:layout_margin="@dimen/margin_large"
+            android:text="@string/pref_name_notification"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_medium" />
 
-        <in.workarounds.typography.Button
-            android:id="@+id/btn_next"
-            style="?android:borderlessButtonStyle"
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_regular"
+            android:paddingRight="@dimen/padding_regular">
+
+            <in.workarounds.typography.RadioButton
+                android:id="@+id/rb_option_silent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_regular"
+                android:layout_marginRight="@dimen/margin_regular"
+                android:padding="@dimen/padding_regular"
+                android:text="@string/option_silent"
+                android:textSize="@dimen/font_regular" />
+
+            <in.workarounds.typography.RadioButton
+                android:id="@+id/rb_option_priority"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_regular"
+                android:layout_marginRight="@dimen/margin_regular"
+                android:padding="@dimen/padding_regular"
+                android:text="@string/option_priority"
+                android:textSize="@dimen/font_regular" />
+
+            <in.workarounds.typography.RadioButton
+                android:id="@+id/rb_option_direct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_regular"
+                android:layout_marginRight="@dimen/margin_regular"
+                android:padding="@dimen/padding_regular"
+                android:text="@string/option_direct"
+                android:textSize="@dimen/font_regular" />
+        </RadioGroup>
+
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_mode_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:padding="@dimen/padding_medium"
+            tools:text="@string/notify_tutorial_priority" />
+
+        <in.workarounds.typography.AppCompatButton
+            android:id="@+id/button_test"
+            style="@style/ColoredButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:text="@string/menu_next"
-            android:textColor="@color/white" />
+            android:layout_gravity="center_horizontal"
+            android:text="@string/button_test" />
 
-    </android.support.v7.widget.Toolbar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/margin_large"
+            android:background="@color/lighter_gray" />
 
-    <in.workarounds.typography.TextView
-        android:id="@+id/tv_pref_name_notification"
-        android:text="@string/pref_name_notification"
-        android:textSize="@dimen/font_medium"
-        android:layout_margin="@dimen/margin_large"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <RadioGroup
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/padding_regular"
-        android:paddingRight="@dimen/padding_regular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <in.workarounds.typography.RadioButton
-            android:id="@+id/rb_option_silent"
-            android:text="@string/option_silent"
-            android:textSize="@dimen/font_regular"
-            android:layout_marginLeft="@dimen/margin_regular"
-            android:layout_marginRight="@dimen/margin_regular"
-            android:padding="@dimen/padding_regular"
+        <in.workarounds.typography.TextView
+            android:id="@+id/tv_pref_other_settings"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <in.workarounds.typography.RadioButton
-            android:id="@+id/rb_option_priority"
-            android:text="@string/option_priority"
-            android:textSize="@dimen/font_regular"
-            android:layout_marginLeft="@dimen/margin_regular"
-            android:layout_marginRight="@dimen/margin_regular"
-            android:padding="@dimen/padding_regular"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_large"
+            android:text="@string/pref_other_settings"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_medium" />
+
+        <in.workarounds.typography.CheckBox
+            android:id="@+id/notification_autocancel_checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <in.workarounds.typography.RadioButton
-            android:id="@+id/rb_option_direct"
-            android:text="@string/option_direct"
-            android:textSize="@dimen/font_regular"
-            android:layout_marginLeft="@dimen/margin_regular"
-            android:layout_marginRight="@dimen/margin_regular"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
             android:padding="@dimen/padding_regular"
+            android:text="@string/notification_auto_hide"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_regular" />
+
+
+        <in.workarounds.typography.CheckBox
+            android:id="@+id/notification_clip_service_checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RadioGroup>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:padding="@dimen/padding_regular"
+            android:text="@string/notification_clip_service"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_regular" />
 
-    <in.workarounds.typography.TextView
-        android:id="@+id/tv_mode_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_small"
-        android:padding="@dimen/padding_medium"
-        tools:text="@string/notify_tutorial_priority"
-        />
-    <in.workarounds.typography.AppCompatButton
-        android:id="@+id/button_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/button_test"
-        style="@style/ColoredButton"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="@dimen/margin_large"
-        android:background="@color/lighter_gray"
-        />
-
-    <in.workarounds.typography.TextView
-        android:id="@+id/tv_pref_other_settings"
-        android:text="@string/pref_other_settings"
-        android:textSize="@dimen/font_medium"
-        android:layout_margin="@dimen/margin_large"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <in.workarounds.typography.CheckBox
-        android:id="@+id/notification_autocancel_checkbox"
-        android:textSize="@dimen/font_regular"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_regular"
-        android:layout_marginLeft="@dimen/margin_large"
-        android:layout_marginRight="@dimen/margin_large"
-        android:text="@string/notification_auto_hide"
-        />
-
-
-    <in.workarounds.typography.CheckBox
-        android:id="@+id/notification_clip_service_checkbox"
-        android:textSize="@dimen/font_regular"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_regular"
-        android:layout_marginLeft="@dimen/margin_large"
-        android:layout_marginRight="@dimen/margin_large"
-        android:text="@string/notification_clip_service"
-        />
-</LinearLayout>
+        <Button
+            android:id="@+id/test_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TestService" />
+    </LinearLayout>
+</ScrollView>
