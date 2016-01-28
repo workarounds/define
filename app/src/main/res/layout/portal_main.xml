@@ -9,8 +9,9 @@
 
     <in.workarounds.define.ui.view.SelectionCard.SelectionCardView
         android:id="@+id/selection_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        style="@style/width_match_parent_max_480"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
 
     <FrameLayout
         android:id="@+id/fl_close_container"
@@ -27,17 +28,18 @@
             android:textSize="@dimen/font_regular" />
 
     </FrameLayout>
+
     <RelativeLayout
         android:id="@+id/ll_meaning_pages_container"
-        android:layout_width="match_parent"
+        style="@style/width_match_parent_max_480"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:layout_above="@id/fl_close_container"
         android:layout_below="@id/selection_card"
-        android:layout_marginTop="@dimen/margin_regular"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/margin_regular"
         android:layout_marginRight="@dimen/margin_regular"
-        >
+        android:layout_marginTop="@dimen/margin_regular"
+        android:visibility="gone">
 
         <in.workarounds.define.ui.view.slidingtabs.SlidingTabLayout
             android:id="@+id/sliding_tab_layout"
@@ -49,16 +51,14 @@
             android:id="@+id/vp_pages"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_below="@id/sliding_tab_layout"
             android:layout_alignParentBottom="true"
-            />
+            android:layout_below="@id/sliding_tab_layout" />
 
         <View
-            android:layout_below="@id/sliding_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="6dp"
-            android:background="@drawable/shadow_bottom"
-            />
+            android:layout_below="@id/sliding_tab_layout"
+            android:background="@drawable/shadow_bottom" />
     </RelativeLayout>
 
 </RelativeLayout>
