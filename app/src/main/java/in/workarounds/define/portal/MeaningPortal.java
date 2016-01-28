@@ -36,8 +36,6 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
     private static final int SELECTION_CARD_ANIMATION_TIME = 350;
     private static final int MEANING_PAGE_ANIMATION_TIME = 350;
 
-    private ViewPager pager;
-
     private View mPortalContainer;
     private View meaningPagesContainer;
     private View selectionCard;
@@ -151,16 +149,8 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
 //        }
 
         mPortalContainer.setOnClickListener(v -> animateOutAndFinish());
-        pager = (ViewPager) findViewById(R.id.vp_pages);
-        pager.setAdapter(pagerAdapter);
-        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
-        if (slidingTabLayout != null) {
-            slidingTabLayout.setDistributeEvenly((pagerAdapter.getCount() <= 3));
-            slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.white));
-            slidingTabLayout.setCustomTabView(R.layout.layout_sliding_tabs, R.id.tv_tab_header);
-            slidingTabLayout.setViewPager(pager);
-        }
-        pager.setCurrentItem(pagerAdapter.getCurrentPosition());
+
+        setUpViewPager();
 
         selectionCard.post(this::animateSelectionCardIn);
         //pre-drawing the meaning container to reduce lag
@@ -169,6 +159,23 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
                 meaningPagesContainer.setVisibility(View.INVISIBLE);
             }
         }, SELECTION_CARD_ANIMATION_TIME + 50);
+    }
+
+    private void setUpViewPager() {
+        ViewPager pager = (ViewPager) findViewById(R.id.vp_pages);
+        pager.setAdapter(pagerAdapter);
+        setUpTabs(pager);
+        pager.setCurrentItem(pagerAdapter.getCurrentPosition());
+    }
+
+    private void setUpTabs(ViewPager pager) {
+        SlidingTabLayout slidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tab_layout);
+        if (slidingTabLayout != null) {
+            slidingTabLayout.setDistributeEvenly((pagerAdapter.getCount() <= 3));
+            slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.white));
+            slidingTabLayout.setCustomTabView(R.layout.layout_sliding_tabs, R.id.tv_tab_header);
+            slidingTabLayout.setViewPager(pager);
+        }
     }
 
     private void animateSelectionCardIn() {
