@@ -3,8 +3,6 @@
     android:id="@+id/selection_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/margin_regular"
-    android:layout_marginRight="@dimen/margin_regular"
     app:cardBackgroundColor="@color/cardview_light_background"
     app:cardCornerRadius="2dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
