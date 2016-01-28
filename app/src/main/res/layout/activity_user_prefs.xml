@@ -125,22 +125,5 @@
             android:textColor="@color/black"
             android:textSize="@dimen/font_regular" />
 
-
-        <in.workarounds.typography.CheckBox
-            android:id="@+id/notification_clip_service_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_large"
-            android:layout_marginRight="@dimen/margin_large"
-            android:padding="@dimen/padding_regular"
-            android:text="@string/notification_clip_service"
-            android:textColor="@color/black"
-            android:textSize="@dimen/font_regular" />
-
-        <Button
-            android:id="@+id/test_service"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TestService" />
     </LinearLayout>
 </ScrollView>

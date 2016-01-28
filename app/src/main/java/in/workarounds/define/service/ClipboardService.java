@@ -7,7 +7,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -18,32 +17,31 @@ import android.webkit.URLUtil;
 import in.workarounds.define.R;
 import in.workarounds.define.portal.PortalId;
 import in.workarounds.define.ui.activity.UserPrefActivity;
-import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portals;
 import timber.log.Timber;
 
-import static in.workarounds.define.constants.NotificationId.FOREGROUND_NOTIFICATION;
-import static in.workarounds.define.constants.NotificationId.PENDING_FOREGROUND_NOTIFICATION;
-import static in.workarounds.define.util.PrefUtils.KEY_NOTIFICATION_CLIPBOARD_SERVICE;
+import static in.workarounds.define.constants.NotificationId.CLIP_SERVICE_NOTIFICATION;
+import static in.workarounds.define.constants.NotificationId.PENDING_CLIP_SERVICE_NOTIFICATION;
 
 public class ClipboardService extends Service implements
-        ClipboardManager.OnPrimaryClipChangedListener,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        ClipboardManager.OnPrimaryClipChangedListener {
     private static boolean isRunning = false;
     public static final String BUNDLE_SELECTED_TEXT_KEY = "BUNDLE_SELECTED_TEXT_KEY";
 
     @Override
     public void onCreate() {
         isRunning = true;
-        if (PrefUtils.getNotifyClipboardService(this)) startForeground();
-        PrefUtils.addListener(this, this);
+
+        startForeground();
 
         ClipboardManager clipboardManager = getClipboardManager();
         clipboardManager.addPrimaryClipChangedListener(this);
     }
 
     private void startForeground() {
-        startForeground(FOREGROUND_NOTIFICATION, getClipServiceNotification(this));
+        startForeground(CLIP_SERVICE_NOTIFICATION, getClipServiceNotification(this));
+        Intent intent = new Intent(this, ClearNotificationService.class);
+        startService(intent);
     }
 
     private ClipboardManager getClipboardManager() {
@@ -91,14 +89,6 @@ public class ClipboardService extends Service implements
         }
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(KEY_NOTIFICATION_CLIPBOARD_SERVICE)) {
-            if (PrefUtils.getNotifyClipboardService(this)) startForeground();
-            else stopForeground(true);
-        }
-    }
-
     public static Notification getClipServiceNotification(Context context) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_notification_icon)
@@ -108,7 +98,7 @@ public class ClipboardService extends Service implements
                 .setColor(ContextCompat.getColor(context, R.color.portal_foreground_notification));
         PendingIntent prefActivityIntent = PendingIntent.getActivity(
                 context,
-                PENDING_FOREGROUND_NOTIFICATION,
+                PENDING_CLIP_SERVICE_NOTIFICATION,
                 new Intent(context, UserPrefActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT
         );

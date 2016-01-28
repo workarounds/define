@@ -1,7 +1,6 @@
 package in.workarounds.define.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -10,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import in.workarounds.define.R;
 import in.workarounds.define.portal.DefinePermissionHelper;
 import in.workarounds.define.portal.DefinePortalAdapter;
-import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.PortalService;
 import in.workarounds.portal.Portals;
 
@@ -62,11 +60,6 @@ public class DefinePortalService extends PortalService<DefinePortalAdapter, Defi
 
     @Override
     public void onDestroy() {
-        if(PrefUtils.getNotifyClipboardService(this)) {
-            stopForeground(false);
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
-                    .notify(FOREGROUND_NOTIFICATION, ClipboardService.getClipServiceNotification(this));
-        }
         super.onDestroy();
     }
 }

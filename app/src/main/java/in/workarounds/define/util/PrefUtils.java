@@ -21,7 +21,6 @@ public class PrefUtils {
     public static final String KEY_DICTIONARY_ORDER = "key_dictionary_order";
     private static final String KEY_NOTIFICATION_AUTO_HIDE = "key_notification_auto_hide";
     private static final String DELIMITER = ",";
-    public static final String KEY_NOTIFICATION_CLIPBOARD_SERVICE = "key_notification_clipboard_service";
     public static final int DEFAULT_NOTIFY_MODE = UserPrefActivity.OPTION_PRIORITY;
 
     private static final String KEY_WORDNET_UNZIPPED = "key_wordnet_unzipped";
@@ -183,18 +182,6 @@ public class PrefUtils {
             }
         }
         return string;
-    }
-
-    public static void setNotifyClipboardService(boolean value, Context context) {
-        getSharedPreferences(context)
-                .edit()
-                .putBoolean(KEY_NOTIFICATION_CLIPBOARD_SERVICE, value)
-                .apply();
-    }
-
-    public static boolean getNotifyClipboardService(Context context) {
-        return getSharedPreferences(context)
-                .getBoolean(KEY_NOTIFICATION_CLIPBOARD_SERVICE, false);
     }
 
     public static void addListener(SharedPreferences.OnSharedPreferenceChangeListener listener,

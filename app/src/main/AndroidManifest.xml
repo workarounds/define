@@ -66,6 +66,10 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service android:name=".service.ClearNotificationService"
+            android:enabled="true"
+            android:exported="false" />
+
         <receiver
             android:name=".receiver.BootUpReceiver"
             android:enabled="true"
