@@ -105,14 +105,14 @@ public class ClipboardService extends Service implements
                 .setContentText(getString(R.string.clip_service_notification))
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setColor(ContextCompat.getColor(this, R.color.portal_foreground_notification));
-        PendingIntent deleteIntent = PendingIntent.getService(
+        PendingIntent prefActivityIntent = PendingIntent.getActivity(
                 this,
                 PENDING_CLIP_SERVICE_NOTIFICATION,
                 new Intent(this, UserPrefActivity.class),
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 
-        builder.setContentIntent(deleteIntent);
+        builder.setContentIntent(prefActivityIntent);
         return builder.build();
     }
 }
