@@ -120,4 +120,17 @@
         android:layout_marginRight="@dimen/margin_large"
         android:text="@string/notification_auto_hide"
         />
+
+
+    <in.workarounds.typography.CheckBox
+        android:id="@+id/notification_clip_service_checkbox"
+        android:textSize="@dimen/font_regular"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_regular"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_large"
+        android:text="@string/notification_clip_service"
+        />
 </LinearLayout>

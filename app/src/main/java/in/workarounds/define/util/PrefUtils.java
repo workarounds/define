@@ -21,6 +21,7 @@ public class PrefUtils {
     public static final String KEY_DICTIONARY_ORDER = "key_dictionary_order";
     private static final String KEY_NOTIFICATION_AUTO_HIDE = "key_notification_auto_hide";
     private static final String DELIMITER = ",";
+    public static final String KEY_NOTIFICATION_CLIPBOARD_SERVICE = "key_notification_clipboard_service";
     public static final int DEFAULT_NOTIFY_MODE = UserPrefActivity.OPTION_PRIORITY;
 
     private static final String KEY_WORDNET_UNZIPPED = "key_wordnet_unzipped";
@@ -30,21 +31,24 @@ public class PrefUtils {
     private static SharedPreferences mSharedPreferences;
 
     public static SharedPreferences getSharedPreferences(Context context) {
-        if(mSharedPreferences==null) {
-            mSharedPreferences = context.getApplicationContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-        }
+        if (mSharedPreferences == null) mSharedPreferences = createSharedPreferences(context);
         return mSharedPreferences;
+    }
+
+    private static SharedPreferences createSharedPreferences(Context context) {
+        return context.getApplicationContext()
+                .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
     }
 
     public static void setNotifyMode(@UserPrefActivity.NotifyMode int mode, Context context) {
         getSharedPreferences(context).edit().putInt(KEY_NOTIFY_MODE, mode).apply();
     }
 
-    public static int getNotifyMode( Context context) {
+    public static int getNotifyMode(Context context) {
         boolean belowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
         int defaultNotifyMode = belowLollipop ? UserPrefActivity.OPTION_DIRECT : DEFAULT_NOTIFY_MODE;
         int notifyMode = getSharedPreferences(context).getInt(KEY_NOTIFY_MODE, defaultNotifyMode);
-        if(belowLollipop && notifyMode == UserPrefActivity.OPTION_PRIORITY){
+        if (belowLollipop && notifyMode == UserPrefActivity.OPTION_PRIORITY) {
             setNotifyMode(UserPrefActivity.OPTION_DIRECT, context);
             return UserPrefActivity.OPTION_DIRECT;
         }
@@ -70,9 +74,9 @@ public class PrefUtils {
         editor.apply();
     }
 
-    public static void setUnzipped(String key, boolean unzipped, Context context){
+    public static void setUnzipped(String key, boolean unzipped, Context context) {
         String prefKey = getPrefKeyUnzipped(key);
-        if(prefKey != null){
+        if (prefKey != null) {
             SharedPreferences prefs = getSharedPreferences(context);
             prefs.edit().putBoolean(prefKey, unzipped).apply();
         }
@@ -83,55 +87,55 @@ public class PrefUtils {
         return prefKey != null && getSharedPreferences(context).getBoolean(prefKey, false);
     }
 
-    public static void setSortDone(boolean done, Context context){
+    public static void setSortDone(boolean done, Context context) {
         getSharedPreferences(context)
                 .edit()
                 .putBoolean(KEY_SORT_DONE, done)
                 .apply();
     }
 
-    public static boolean getSortDone(Context context){
+    public static boolean getSortDone(Context context) {
         return getSharedPreferences(context).getBoolean(KEY_SORT_DONE, false);
     }
 
-    public static void setTutorialDone(boolean done, Context context){
+    public static void setTutorialDone(boolean done, Context context) {
         getSharedPreferences(context)
                 .edit()
                 .putBoolean(KEY_TUTORIAL_DONE, done)
                 .apply();
     }
 
-    public static boolean getTutorialDone(Context context){
+    public static boolean getTutorialDone(Context context) {
         return getSharedPreferences(context).getBoolean(KEY_TUTORIAL_DONE, false);
     }
 
-    public static void setDictionariesDone(boolean done, Context context){
+    public static void setDictionariesDone(boolean done, Context context) {
         getSharedPreferences(context)
                 .edit()
                 .putBoolean(KEY_DICTIONARIES_DONE, done)
                 .apply();
     }
 
-    public static boolean getDictionariesDone(Context context){
+    public static boolean getDictionariesDone(Context context) {
         return getSharedPreferences(context).getBoolean(KEY_DICTIONARIES_DONE, false);
     }
 
-    public static void setNotificationAutoHideFlag(boolean done, Context context){
+    public static void setNotificationAutoHideFlag(boolean done, Context context) {
         getSharedPreferences(context)
                 .edit()
                 .putBoolean(KEY_NOTIFICATION_AUTO_HIDE, done)
                 .apply();
     }
 
-    public static boolean getNotificationAutoHideFlag(Context context){
+    public static boolean getNotificationAutoHideFlag(Context context) {
         return getSharedPreferences(context).getBoolean(KEY_NOTIFICATION_AUTO_HIDE, true);
     }
 
     @Nullable
-    private static String getPrefKeyUnzipped(String dictionaryKey){
-        if(dictionaryKey == null){
+    private static String getPrefKeyUnzipped(String dictionaryKey) {
+        if (dictionaryKey == null) {
             return null;
-        } else if(dictionaryKey.equals(Constants.WORDNET)){
+        } else if (dictionaryKey.equals(Constants.WORDNET)) {
             return KEY_WORDNET_UNZIPPED;
         } else {
             return null;
@@ -140,7 +144,7 @@ public class PrefUtils {
 
     public static int[] getDictionaryOrder(Context context) {
         String order = getSharedPreferences(context).getString(KEY_DICTIONARY_ORDER, null);
-        if(order != null) {
+        if (order != null) {
             return stringToIntArray(order.split(DELIMITER));
 
         }
@@ -155,7 +159,7 @@ public class PrefUtils {
 
     private static int[] stringToIntArray(String[] stringArray) {
         int[] intArray = new int[stringArray.length];
-        for(int i=0; i<stringArray.length; i++) {
+        for (int i = 0; i < stringArray.length; i++) {
             intArray[i] = Integer.valueOf(stringArray[i]);
         }
         return intArray;
@@ -163,7 +167,7 @@ public class PrefUtils {
 
     private static String[] intToStringArray(int[] intArray) {
         String[] stringArray = new String[intArray.length];
-        for(int i=0; i<intArray.length; i++) {
+        for (int i = 0; i < intArray.length; i++) {
             stringArray[i] = Integer.toString(intArray[i]);
         }
         return stringArray;
@@ -172,12 +176,34 @@ public class PrefUtils {
     private static String arrayToString(String[] stringArray) {
         String string = null;
         for (String s : stringArray) {
-            if(string == null) {
+            if (string == null) {
                 string = s;
             } else {
                 string = string + DELIMITER + s;
             }
         }
         return string;
+    }
+
+    public static void setNotifyClipboardService(boolean value, Context context) {
+        getSharedPreferences(context)
+                .edit()
+                .putBoolean(KEY_NOTIFICATION_CLIPBOARD_SERVICE, value)
+                .apply();
+    }
+
+    public static boolean getNotifyClipboardService(Context context) {
+        return getSharedPreferences(context)
+                .getBoolean(KEY_NOTIFICATION_CLIPBOARD_SERVICE, false);
+    }
+
+    public static void addListener(SharedPreferences.OnSharedPreferenceChangeListener listener,
+                                   Context context) {
+        getSharedPreferences(context).registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public static void removeListener(SharedPreferences.OnSharedPreferenceChangeListener listener,
+                                      Context context) {
+        getSharedPreferences(context).unregisterOnSharedPreferenceChangeListener(listener);
     }
 }

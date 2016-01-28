@@ -88,6 +88,7 @@
     <string name="notify_tutorial_direct">A cancellable popup is directly shown whenever text is copied</string>
 
     <string name="notification_auto_hide">Auto hide notifications after 10s</string>
+    <string name="notification_clip_service">If Define is not triggered every time you copy, turn on this notification to ensure consistency.</string>
 
     <!-- Permissions-->
     <string name="permissions_page_description">For optimal performance we need the following permissions. Grant the required permissions for the app to function as expected</string>
@@ -120,4 +121,5 @@
     <string name="overlay_permission_rationale">Define needs this permission to show the meanings on top of the current app, without having to navigate you from it.</string>
     <string name="overlay_permission_granted_notification">Permission granted, tap to define</string>
     <string name="foreground_notification">Showing meanings. Tap to close</string>
+    <string name="clip_service_notification">Waiting for words to define</string>
 </resources>

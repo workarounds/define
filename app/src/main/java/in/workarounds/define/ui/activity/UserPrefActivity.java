@@ -98,6 +98,7 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         RadioButton silent = (RadioButton) findViewById(R.id.rb_option_silent);
         RadioButton priority = (RadioButton) findViewById(R.id.rb_option_priority);
         CheckBox notificationAutoHide = (CheckBox) findViewById(R.id.notification_autocancel_checkbox);
+        CheckBox notificationClipService = (CheckBox) findViewById(R.id.notification_clip_service_checkbox);
         description = (TextView) findViewById(R.id.tv_mode_description);
 
         boolean belowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
@@ -127,8 +128,12 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         priority.setOnClickListener(this);
         silent.setOnClickListener(this);
         notificationAutoHide.setOnClickListener(this);
+        notificationClipService.setOnClickListener((v) -> {
+            PrefUtils.setNotifyClipboardService(((CheckBox) v).isChecked(), UserPrefActivity.this);
+        });
 
         notificationAutoHide.setChecked(PrefUtils.getNotificationAutoHideFlag(this));
+        notificationClipService.setChecked(PrefUtils.getNotifyClipboardService(this));
         findViewById(R.id.button_test).setOnClickListener(this);
     }
 
