@@ -107,16 +107,21 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
 
     @Override
     protected boolean onHomePressed() {
-        finish();
+        animateOutAndFinish();
         return true;
     }
 
     @Override
     protected boolean onRecentAppsPressed() {
-        finish();
+        animateOutAndFinish();
         return true;
     }
 
+    @Override
+    protected boolean onBackPressed() {
+        animateOutAndFinish();
+        return true;
+    }
 
     @Override
     protected void onDestroy() {
@@ -228,6 +233,12 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
         } else {
             finish();
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        portalAdapter.closeManager();
     }
 
     private Runnable finishRunnable = this::finish;
