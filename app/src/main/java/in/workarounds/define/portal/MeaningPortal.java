@@ -75,7 +75,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
         selectionCardPresenter.onClipTextChanged(extractClipText(bundle));
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         callStateListener = new CallStateListener();
-        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
+        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         setContentView(R.layout.portal_meaning);
     }
@@ -121,7 +121,7 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        telephonyManager.listen(callStateListener, PhoneStateListener.LISTEN_NONE);
     }
 
     private void initComponents() {
