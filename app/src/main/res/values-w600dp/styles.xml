@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <style name="width_match_parent_max_480">
+        <item name="android:layout_width">480dp</item>
+    </style>
+
+     <style name="height_footer">
+        <item name="android:layout_height">@dimen/height_footer_close</item>
+    </style>
+
+    <style name="visibility_footer_text">
+        <item name="android:visibility">visible</item>
+    </style>
+</resources>
