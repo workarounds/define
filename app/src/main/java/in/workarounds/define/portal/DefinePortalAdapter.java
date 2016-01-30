@@ -6,6 +6,9 @@ import in.workarounds.define.service.DefinePortalService;
 import in.workarounds.portal.Portal;
 import in.workarounds.portal.PortalAdapter;
 
+import static in.workarounds.define.portal.PortalId.MEANING_PORTAL;
+import static in.workarounds.define.portal.PortalId.UTIL_PORTAL;
+
 /**
  * Created by madki on 05/01/16.
  */
@@ -24,10 +27,10 @@ public class DefinePortalAdapter extends PortalAdapter<DefinePortalService> {
     @Override
     protected Portal createPortal(int portalId) {
         switch (portalId) {
-            case PortalId.MEANING_PORTAL:
-                return new MeaningPortal(this);
-            case PortalId.UTIL_PORTAL:
-                return new UtilPortal(this);
+            case MEANING_PORTAL:
+                return new MeaningPortal(this, MEANING_PORTAL);
+            case UTIL_PORTAL:
+                return new UtilPortal(this, UTIL_PORTAL);
             default:
                 throw new IllegalStateException("Unknown portalId");
         }

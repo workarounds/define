@@ -22,8 +22,8 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
     private Handler notificationHandler;
     private Runnable notificationHandlerRunnable;
 
-    public UtilPortal(DefinePortalAdapter portalAdapter) {
-        super(portalAdapter);
+    public UtilPortal(DefinePortalAdapter portalAdapter, int portalId) {
+        super(portalAdapter, portalId);
     }
 
     @Override

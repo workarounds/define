@@ -59,8 +59,8 @@ public class MeaningPortal extends MainPortal<DefinePortalAdapter> implements Co
     String clipText;
     private Set<MeaningPresenter> meaningPresenters;
 
-    public MeaningPortal(DefinePortalAdapter portalAdapter) {
-        super(portalAdapter);
+    public MeaningPortal(DefinePortalAdapter portalAdapter, int portalId) {
+        super(portalAdapter, portalId);
     }
 
     @Override
