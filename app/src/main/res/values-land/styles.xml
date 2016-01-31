@@ -2,6 +2,8 @@
 <resources>
     <style name="width_match_parent_max_480">
         <item name="android:layout_width">480dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_regular</item>
+        <item name="android:layout_marginRight">@dimen/margin_regular</item>
     </style>
 
     <style name="height_footer">
