@@ -9,7 +9,7 @@
 
     <in.workarounds.define.ui.view.SelectionCard.SelectionCardView
         android:id="@+id/selection_card"
-        style="@style/width_match_parent_max_480"
+        style="@style/width_match_parent_max_width"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true" />
 
@@ -32,7 +32,7 @@
 
     <RelativeLayout
         android:id="@+id/ll_meaning_pages_container"
-        style="@style/width_match_parent_max_480"
+        style="@style/width_match_parent_max_width"
         android:layout_height="match_parent"
         android:layout_above="@id/fl_close_container"
         android:layout_below="@id/selection_card"

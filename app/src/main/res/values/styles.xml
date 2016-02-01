@@ -69,7 +69,7 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="width_match_parent_max_480">
+    <style name="width_match_parent_max_width">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">@dimen/margin_regular</item>
         <item name="android:layout_marginRight">@dimen/margin_regular</item>
