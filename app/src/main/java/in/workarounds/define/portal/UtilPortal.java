@@ -5,11 +5,16 @@ import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.concurrent.TimeUnit;
+
 import in.workarounds.define.base.NotificationUtils;
 import in.workarounds.define.service.ClipboardService;
 import in.workarounds.define.ui.activity.UserPrefActivity;
 import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portal;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
 import static in.workarounds.define.constants.NotificationId.SILENT_NOTIFICATION;
@@ -18,9 +23,11 @@ import static in.workarounds.define.portal.PortalId.UTIL_PORTAL;
 /**
  * Created by Nithin on 30/10/15.
  */
-public class UtilPortal extends Portal<DefinePortalAdapter> {
+public class UtilPortal extends Portal<DefinePortalAdapter> implements rx.Observer<Bundle> {
     private Handler notificationHandler;
     private Runnable notificationHandlerRunnable;
+    private PublishSubject<Bundle> copySubject;
+    private Subscription subscription;
 
     public UtilPortal(DefinePortalAdapter portalAdapter, int portalId) {
         super(portalAdapter, portalId);
@@ -30,7 +37,10 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setNotificationClearer();
-        startActionResolver(getSelectedText(bundle));
+        copySubject = PublishSubject.create();
+        subscription = copySubject.debounce(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(this);
+        copySubject.onNext(bundle);
     }
 
     @Override
@@ -41,7 +51,7 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
     @Override
     protected boolean onData(Bundle data) {
         super.onData(data);
-        startActionResolver(getSelectedText(data));
+        copySubject.onNext(data);
         return true;
     }
 
@@ -86,5 +96,26 @@ public class UtilPortal extends Portal<DefinePortalAdapter> {
             new NotificationUtils(getBaseContext()).getNotificationManager().cancel(SILENT_NOTIFICATION);
             portalAdapter.close(UTIL_PORTAL);
         };
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        subscription.unsubscribe();
+    }
+
+    @Override
+    public void onCompleted() {
+
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        Timber.e(e.getMessage());
+    }
+
+    @Override
+    public void onNext(Bundle bundle) {
+        startActionResolver(getSelectedText(bundle));
     }
 }
