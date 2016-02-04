@@ -23,7 +23,7 @@ import static in.workarounds.define.portal.PortalId.UTIL_PORTAL;
 /**
  * Created by Nithin on 30/10/15.
  */
-public class UtilPortal extends Portal<DefinePortalAdapter> implements rx.Observer<Bundle> {
+public class UtilPortal extends Portal<DefinePortalAdapter>{
     private Handler notificationHandler;
     private Runnable notificationHandlerRunnable;
     private PublishSubject<Bundle> copySubject;
@@ -39,7 +39,10 @@ public class UtilPortal extends Portal<DefinePortalAdapter> implements rx.Observ
         setNotificationClearer();
         copySubject = PublishSubject.create();
         subscription = copySubject.debounce(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .subscribe(this);
+                .subscribe(
+                        (data) -> startActionResolver(getSelectedText(data)),
+                        (e) -> Timber.e(e.getMessage())
+                );
         copySubject.onNext(bundle);
     }
 
@@ -102,20 +105,5 @@ public class UtilPortal extends Portal<DefinePortalAdapter> implements rx.Observ
     protected void onDestroy() {
         super.onDestroy();
         subscription.unsubscribe();
-    }
-
-    @Override
-    public void onCompleted() {
-
-    }
-
-    @Override
-    public void onError(Throwable e) {
-        Timber.e(e.getMessage());
-    }
-
-    @Override
-    public void onNext(Bundle bundle) {
-        startActionResolver(getSelectedText(bundle));
     }
 }
