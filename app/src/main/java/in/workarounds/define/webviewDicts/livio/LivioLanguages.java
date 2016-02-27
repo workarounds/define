@@ -51,6 +51,15 @@ public final class LivioLanguages {
             return context.getString(installPrompt);
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if(!(o instanceof Language)) {
+                return false;
+            } else {
+                Language language = (Language) o;
+                return packageName.equals(language.packageName);
+            }
+        }
     }
 
     public static List<Language> all(Context context) {
