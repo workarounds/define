@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import edu.smu.tspell.wordnet.Synset;
 import in.workarounds.define.R;
 import in.workarounds.define.portal.ComponentProvider;
 
@@ -25,6 +28,8 @@ public class WordnetMeaningPage extends RelativeLayout {
 
     @Inject
     WordnetPresenter presenter;
+    @Inject
+    WordnetMeaningAdapter adapter;
 
     private TextView title;
     private RecyclerView meanings;
@@ -63,6 +68,7 @@ public class WordnetMeaningPage extends RelativeLayout {
         // set up recycler view
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         meanings.setLayoutManager(layoutManager);
+        meanings.setAdapter(adapter);
     }
 
     private void inject() {
@@ -95,10 +101,6 @@ public class WordnetMeaningPage extends RelativeLayout {
         }
     }
 
-    public void setAdapter(WordnetMeaningAdapter adapter) {
-        meanings.setAdapter(adapter);
-    }
-
     public void title(String heading) {
         title.setText(heading);
     }
@@ -108,12 +110,13 @@ public class WordnetMeaningPage extends RelativeLayout {
         showView(ERROR);
     }
 
-    public void meaningsLoading() {
-        showView(LOADING);
+    public void meanings(List<Synset> meanings) {
+        adapter.update(meanings);
+        showView(MEANING_LIST);
     }
 
-    public void meaningsLoaded() {
-        showView(MEANING_LIST);
+    public void meaningsLoading() {
+        showView(LOADING);
     }
 
     public void dictionaryNotAvailable() {

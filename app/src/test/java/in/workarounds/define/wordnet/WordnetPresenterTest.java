@@ -43,9 +43,6 @@ public class WordnetPresenterTest {
     WordnetDictionary dictionary;
 
     @Mock
-    WordnetMeaningAdapter adapter;
-
-    @Mock
     MeaningsController controller;
 
     @Mock
@@ -62,7 +59,7 @@ public class WordnetPresenterTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         RxAndroidPlugins.getInstance().registerSchedulersHook(schedulerHook);
-        presenter = new WordnetPresenter(dictionary, adapter, controller, contextHelper);
+        presenter = new WordnetPresenter(dictionary, controller, contextHelper);
     }
 
     @Test
@@ -89,9 +86,7 @@ public class WordnetPresenterTest {
 
         presenter.addView(meaningPage);
         presenter.onWordUpdated(word);
-        verify(adapter).update(results);
-        verify(adapter).notifyDataSetChanged();
-        verify(meaningPage).meaningsLoaded();
+        verify(meaningPage).meanings(results);
     }
 
     @Test

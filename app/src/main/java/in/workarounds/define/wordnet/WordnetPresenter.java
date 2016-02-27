@@ -4,6 +4,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,7 +17,6 @@ import in.workarounds.define.helper.ContextHelper;
 import in.workarounds.define.portal.MeaningsController;
 import in.workarounds.define.portal.PerPortal;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -25,20 +25,22 @@ import timber.log.Timber;
  * Created by madki on 26/09/15.
  */
 @PerPortal
-public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>>{
+public class WordnetPresenter implements MeaningPresenter{
     private MeaningsController controller;
-    private DictionaryException dictionaryException;
     private WordnetDictionary dictionary;
     private WordnetMeaningPage wordnetMeaningPage;
-    private String word;
-    private WordnetMeaningAdapter adapter;
     private Subscription subscription;
     private ContextHelper contextHelper;
 
+    //State
+    private String word;
+    private List<Synset> meanings = Collections.emptyList();
+    private boolean loading = false;
+    private DictionaryException exception;
+
     @Inject
-    public WordnetPresenter(WordnetDictionary dictionary, WordnetMeaningAdapter adapter, MeaningsController controller, ContextHelper contextHelper) {
+    public WordnetPresenter(WordnetDictionary dictionary, MeaningsController controller, ContextHelper contextHelper) {
         this.dictionary = dictionary;
-        this.adapter = adapter;
         this.controller = controller;
         this.contextHelper = contextHelper;
         controller.addMeaningPresenter(this);
@@ -47,7 +49,8 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
     @Override
     public void addView(View view) {
         this.wordnetMeaningPage = (WordnetMeaningPage) view;
-        initMeaningPage();
+
+        updateView();
     }
 
     @Override
@@ -64,67 +67,13 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
 
         subscription = Observable.just(word)
                 .filter(w -> w != null && !w.equals(WordnetPresenter.this.word))
-                .doOnNext(w -> {
-                    onLoadingMeanings();
-                    updateWordOnPage(w);
-                })
+                .doOnNext(this::onLoadingMeanings)
                 .flatMap(dictionary::resultsObservable)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this);
-    }
-
-    private void updateWordOnPage(String word) {
-        this.word = word;
-        if (wordnetMeaningPage != null) {
-            wordnetMeaningPage.title(word);
-        }
-    }
-
-    public DictionaryException getDictionaryException() {
-        return dictionaryException;
-    }
-
-    public void setDictionaryException(DictionaryException dictionaryException) {
-        this.dictionaryException = dictionaryException;
-    }
-
-    private void onResultsUpdated(List<Synset> results) {
-        adapter.update(results);
-        if(wordnetMeaningPage != null) {
-            adapter.notifyDataSetChanged();
-            if (results != null && results.size() != 0) {
-                wordnetMeaningPage.meaningsLoaded();
-            } else {
-                wordnetMeaningPage.error("Sorry, no results found.");
-            }
-        }
-    }
-
-    @Override
-    public void onCompleted() {
-        setDictionaryException(null);
-    }
-
-    @Override
-    public void onError(Throwable e) {
-        DictionaryException exception;
-        if(e instanceof DictionaryException) {
-            exception = (DictionaryException) e;
-        } else {
-            //noinspection ThrowableInstanceNeverThrown
-            exception = new DictionaryException(
-                    DictionaryException.UNKNOWN,
-                    "Sorry, something went wrong"
-            );
-            Timber.e(e, "Unknown exception");
-        }
-        setDictionaryException(exception);
-        showException();
-    }
-
-    @Override
-    public void onNext(List<Synset> synsets) {
-        onResultsUpdated(synsets);
+                .subscribe(
+                        this::onResultsUpdated,
+                        this::onError
+                );
     }
 
     public void onDownloadClicked() {
@@ -136,34 +85,58 @@ public class WordnetPresenter implements MeaningPresenter, Observer<List<Synset>
         }
     }
 
-    private void initMeaningPage() {
-        wordnetMeaningPage.title(word);
-        wordnetMeaningPage.setAdapter(adapter);
-        if (TextUtils.isEmpty(word)) {
-            wordnetMeaningPage.error("Please select a word to define. Tap on a word to select one. Or swipe to select multiple words.");
-        } else if (adapter != null && adapter.getItemCount() != 0) {
-            wordnetMeaningPage.meaningsLoaded();
-        } else if (getDictionaryException() != null) {
-            showException();
-        } else if(subscription != null && !subscription.isUnsubscribed()){
-            wordnetMeaningPage.meaningsLoading();
+    private void onLoadingMeanings(String word) {
+        this.word = word;
+        loading = true;
+        exception = null;
+        meanings = Collections.emptyList();
+
+        updateView();
+    }
+
+    private void onResultsUpdated(List<Synset> results) {
+        loading = false;
+        meanings = results;
+        exception = null;
+
+        updateView();
+    }
+
+    private void onError(Throwable e) {
+        loading = false;
+        meanings = Collections.emptyList();
+        if(e instanceof DictionaryException) {
+            exception = (DictionaryException) e;
         } else {
-            wordnetMeaningPage.error("Sorry, no results found");
+            //noinspection ThrowableInstanceNeverThrown
+            exception = new DictionaryException(
+                    DictionaryException.UNKNOWN,
+                    UNKNOWN_ERROR
+            );
+            Timber.e(e, "Unknown exception");
         }
+
+        updateView();
     }
 
-    private void onLoadingMeanings() {
-        if(wordnetMeaningPage != null) {
+    private void updateView() {
+        if(wordnetMeaningPage == null) return;
+
+        wordnetMeaningPage.title(word);
+        if(TextUtils.isEmpty(word)) {
+            wordnetMeaningPage.error(NO_WORD_SELECTED_ERROR);
+        } else if(loading) {
             wordnetMeaningPage.meaningsLoading();
-        }
-    }
-
-    private void showException() {
-        if(wordnetMeaningPage != null) {
-            DictionaryException exception = getDictionaryException();
+        } else if(exception != null) {
             wordnetMeaningPage.error(exception.getMessage());
             if(exception.getType() == DictionaryException.DICTIONARY_NOT_FOUND) {
                 wordnetMeaningPage.dictionaryNotAvailable();
+            }
+        } else {
+            if(meanings.size() == 0) {
+                wordnetMeaningPage.error(NO_RESULTS_FOUND_ERROR);
+            } else {
+                wordnetMeaningPage.meanings(meanings);
             }
         }
     }
