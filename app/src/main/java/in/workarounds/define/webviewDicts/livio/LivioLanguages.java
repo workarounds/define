@@ -18,28 +18,26 @@ public final class LivioLanguages {
 
     public static class Language {
 
-        private final int name;
-        private final int description;
+        private final String name;
+        private final String description;
         private final String packageName;
-        private final int installPrompt;
-        private Context context;
+        private final String installPrompt;
 
         private Language(@StringRes int name, @StringRes int description,
                          String packageName, @StringRes int installPrompt, Context context) {
 
-            this.name = name;
-            this.description = description;
+            this.name = context.getString(name);
+            this.description = context.getString(description);
             this.packageName = packageName;
-            this.installPrompt = installPrompt;
-            this.context = context;
+            this.installPrompt = context.getString(installPrompt);
         }
 
         public String name() {
-            return context.getString(name);
+            return name;
         }
 
         public String description() {
-            return context.getString(description);
+            return description;
         }
 
         @LivioDictionary.PACKAGE_NAME
@@ -48,7 +46,7 @@ public final class LivioLanguages {
         }
 
         public String installPrompt() {
-            return context.getString(installPrompt);
+            return installPrompt;
         }
 
         @Override
