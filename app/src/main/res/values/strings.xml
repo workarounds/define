@@ -78,6 +78,8 @@
 
     <string name="reorder_or_remove_dictionaries">Reorder or remove tabs</string>
 
+    <string name="share_using">Share using</string>
+
     <string name="button_test">TEST</string>
     <string name="button_search">SEARCH</string>
     <string name="button_copy">COPY</string>

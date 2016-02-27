@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
+import in.workarounds.define.R;
 import in.workarounds.define.ui.activity.DashboardActivity;
 import in.workarounds.define.ui.activity.DictionariesActivity;
 import in.workarounds.define.ui.activity.UserPrefActivity;
@@ -57,7 +58,11 @@ public class ContextHelper {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_TEXT, text);
         intent.setType("text/plain");
-        startActivity(intent);
+        Intent sharingIntent = Intent.createChooser(
+                intent,
+                context.getResources().getString(R.string.share_using)
+        );
+        startActivity(sharingIntent);
     }
 
     public void openSettings() {
