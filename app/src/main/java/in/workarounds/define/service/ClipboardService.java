@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -25,7 +26,7 @@ import static in.workarounds.define.constants.NotificationId.CLIP_SERVICE_NOTIFI
 import static in.workarounds.define.constants.NotificationId.PENDING_CLIP_SERVICE_NOTIFICATION;
 
 public class ClipboardService extends Service implements
-        ClipboardManager.OnPrimaryClipChangedListener {
+        ClipboardManager.OnPrimaryClipChangedListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static boolean isRunning = false;
     public static final String BUNDLE_SELECTED_TEXT_KEY = "BUNDLE_SELECTED_TEXT_KEY";
 
@@ -73,6 +74,13 @@ public class ClipboardService extends Service implements
         }
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (PrefUtils.KEY_ENSURE_FOREGROUND.equals(key)) {
+            onEnsureForegroundChanged();
+        }
+    }
+
     private String getClipData() {
         ClipData clipData = getClipboardManager().getPrimaryClip();
         ClipData.Item item = clipData.getItemAt(0);
@@ -89,12 +97,7 @@ public class ClipboardService extends Service implements
         onEnsureForegroundChanged();
 
         // register listener for preference
-        PrefUtils.getSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-                    if (PrefUtils.KEY_ENSURE_FOREGROUND.equals(key)) {
-                        onEnsureForegroundChanged();
-                    }
-                });
+        PrefUtils.getSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
     }
 
     private void onEnsureForegroundChanged() {

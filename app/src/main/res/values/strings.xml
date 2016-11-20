@@ -93,7 +93,7 @@
     <string name="notification_clip_service">If Define is not triggered every time you copy, turn on this notification to ensure consistency.</string>
 
     <string name="ensure_foreground">Ensure app stays alive</string>
-    <string name="adds_permanent_notification">Adds permanent notification without icon</string>
+    <string name="adds_permanent_notification">Adds a permanent notification without icon</string>
 
     <!-- Permissions-->
     <string name="permissions_page_description">For optimal performance we need the following permissions. Grant the required permissions for the app to function as expected</string>
