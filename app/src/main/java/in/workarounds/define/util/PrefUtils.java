@@ -19,6 +19,7 @@ public class PrefUtils {
     public static final String KEY_DICTIONARIES_DONE = "key_dictionaries_done";
     public static final String KEY_SORT_DONE = "key_sort_done";
     public static final String KEY_DICTIONARY_ORDER = "key_dictionary_order";
+    public static final String KEY_ENSURE_FOREGROUND = "key_ensure_foreground";
     private static final String KEY_NOTIFICATION_AUTO_HIDE = "key_notification_auto_hide";
     private static final String DELIMITER = ",";
     public static final int DEFAULT_NOTIFY_MODE = UserPrefActivity.OPTION_PRIORITY;
@@ -154,6 +155,17 @@ public class PrefUtils {
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(KEY_DICTIONARY_ORDER, arrayToString(intToStringArray(order)));
         editor.apply();
+    }
+
+    public static boolean getEnsureForeground(Context context) {
+        return getSharedPreferences(context).getBoolean(KEY_ENSURE_FOREGROUND, false);
+    }
+
+    public static void setEnsureForeground(Context context, boolean ensureForeground) {
+        getSharedPreferences(context)
+                .edit()
+                .putBoolean(KEY_ENSURE_FOREGROUND, ensureForeground)
+                .apply();
     }
 
     private static int[] stringToIntArray(String[] stringArray) {

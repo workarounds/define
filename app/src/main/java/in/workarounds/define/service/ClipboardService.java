@@ -17,6 +17,7 @@ import android.webkit.URLUtil;
 import in.workarounds.define.R;
 import in.workarounds.define.portal.PortalId;
 import in.workarounds.define.ui.activity.UserPrefActivity;
+import in.workarounds.define.util.PrefUtils;
 import in.workarounds.portal.Portals;
 import timber.log.Timber;
 
@@ -32,16 +33,10 @@ public class ClipboardService extends Service implements
     public void onCreate() {
         isRunning = true;
 
-        startForeground();
+        handleEnsureForegroundSetting();
 
         ClipboardManager clipboardManager = getClipboardManager();
         clipboardManager.addPrimaryClipChangedListener(this);
-    }
-
-    private void startForeground() {
-        startForeground(CLIP_SERVICE_NOTIFICATION, getClipServiceNotification(this));
-        Intent intent = new Intent(this, ClearNotificationService.class);
-        startService(intent);
     }
 
     private ClipboardManager getClipboardManager() {
@@ -86,6 +81,27 @@ public class ClipboardService extends Service implements
             return text.toString();
         } else {
             return null;
+        }
+    }
+
+    private void handleEnsureForegroundSetting() {
+        // apply current preference value
+        onEnsureForegroundChanged();
+
+        // register listener for preference
+        PrefUtils.getSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+                    if (PrefUtils.KEY_ENSURE_FOREGROUND.equals(key)) {
+                        onEnsureForegroundChanged();
+                    }
+                });
+    }
+
+    private void onEnsureForegroundChanged() {
+        if (PrefUtils.getEnsureForeground(this)) {
+            startForeground(CLIP_SERVICE_NOTIFICATION, getClipServiceNotification(this));
+        } else {
+            stopForeground(true);
         }
     }
 

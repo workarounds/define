@@ -125,5 +125,25 @@
             android:textColor="@color/black"
             android:textSize="@dimen/font_regular" />
 
+        <in.workarounds.typography.CheckBox
+            android:id="@+id/ensure_foreground_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:padding="@dimen/padding_regular"
+            android:text="@string/ensure_foreground"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_regular" />
+        <in.workarounds.typography.TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_huge"
+            android:layout_marginStart="@dimen/margin_huge"
+            android:paddingLeft="@dimen/margin_regular"
+            android:paddingRight="@dimen/margin_regular"
+            android:text="@string/adds_permanent_notification"
+            android:textSize="@dimen/font_smaller"
+            />
     </LinearLayout>
 </ScrollView>

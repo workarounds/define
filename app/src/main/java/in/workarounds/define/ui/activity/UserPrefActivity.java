@@ -90,6 +90,8 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
             next();
         } else if(id == R.id.notification_autocancel_checkbox){
             PrefUtils.setNotificationAutoHideFlag(((CheckBox) v).isChecked(), this);
+        } else if (id == R.id.ensure_foreground_checkbox) {
+            PrefUtils.setEnsureForeground(this, ((CheckBox) v).isChecked());
         }
     }
 
@@ -98,6 +100,7 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         RadioButton silent = (RadioButton) findViewById(R.id.rb_option_silent);
         RadioButton priority = (RadioButton) findViewById(R.id.rb_option_priority);
         CheckBox notificationAutoHide = (CheckBox) findViewById(R.id.notification_autocancel_checkbox);
+        CheckBox ensureForeground = (CheckBox) findViewById(R.id.ensure_foreground_checkbox);
         description = (TextView) findViewById(R.id.tv_mode_description);
 
         boolean belowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
@@ -127,8 +130,10 @@ public class UserPrefActivity extends BaseActivity implements View.OnClickListen
         priority.setOnClickListener(this);
         silent.setOnClickListener(this);
         notificationAutoHide.setOnClickListener(this);
+        ensureForeground.setOnClickListener(this);
 
         notificationAutoHide.setChecked(PrefUtils.getNotificationAutoHideFlag(this));
+        ensureForeground.setChecked(PrefUtils.getEnsureForeground(this));
         findViewById(R.id.button_test).setOnClickListener(this);
     }
 
